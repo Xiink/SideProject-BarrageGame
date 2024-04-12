@@ -10,13 +10,13 @@ jobs:
     steps:
       # 查看repo
       - name: Checkout repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           lfs: true # 使用 LFS
 
       # (可選) Cache可以讓你之後Build更快
       - name: Cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: Library
           key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
