@@ -1,5 +1,3 @@
-
-using FluentAssertions;
 using Game.Scripts.Battle.Misc;
 using Zenject;
 
