@@ -14,6 +14,8 @@ namespace Game.Scripts.Players.Handlers
 
         public void Tick()
         {
+            if(_mover.Moveable == false) return;
+
             var moveSpeed = _mover.GetStatFinalValue(StatNames.MoveSpeed);
             var movement = _timeProvider.GetDeltaTime() * moveSpeed * _playerInputState.MoveDirection;
             var newPos = movement + _mover.GetPosition();

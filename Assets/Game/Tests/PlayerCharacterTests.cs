@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Game.Scripts.Battle.Misc;
+using Game.Scripts.Battle.States;
 using Game.Scripts.Names;
 using Game.Scripts.Players.Handlers;
 using Game.Scripts.Players.Main;
@@ -19,9 +20,12 @@ namespace Game.Tests
             var statDatas = new List<Stat.Data> { new Stat.Data(StatNames.MoveSpeed,999) };
             Bind_Instance(new PlayerCharacter.Data() {statDatas = statDatas});
 
-            Bind_Instance(new PlayerCharacter.Data());
-            Bind_InterfacesAndSelfTo_From_NewGameObject<PlayerCharacter>();
+            var moveHandler = Given_A_PlayerMoveHandler();
             var playerCharacter = Resolve<PlayerCharacter>();
+            // Bind_Instance(new PlayerCharacter.Data());
+            // Bind_InterfacesAndSelfTo_From_NewGameObject<PlayerCharacter>();
+            // var playerCharacter = Resolve<PlayerCharacter>();
+
 
             playerCharacter.Stats.CountShouldBe(1);
         }
@@ -33,13 +37,30 @@ namespace Game.Tests
             Bind_Instance(new PlayerCharacter.Data() { statDatas = statDatas });
 
             var moveHandler = Given_A_PlayerMoveHandler();
-
             var playerCharacter = Resolve<PlayerCharacter>();
 
             moveHandler.Tick();
             playerCharacter.Trans.ShouldTransformPositionBe(1, 1);
             moveHandler.Tick();
             playerCharacter.Trans.ShouldTransformPositionBe(2, 2);
+
+        }
+
+        [Test(Description = "遊戲暫停，玩家無法移動角色")]
+        public void BattlePause_Cannot_MovePlayerCharacter()
+        {
+            var gameState = Bind_And_Resolve<GameState>();
+            Bind_InterfacesTo<Moveable>();
+
+            var moverHandler = Given_A_PlayerMoveHandler();
+
+            var playerCharacter = Resolve<PlayerCharacter>();
+            gameState.SetPauseState(true);
+            moverHandler.Tick();
+            playerCharacter.Trans.ShouldTransformPositionBe(0,0);
+            gameState.SetPauseState(false);
+            moverHandler.Tick();
+            playerCharacter.Trans.ShouldTransformPositionBe(1,1);
 
         }
 
@@ -71,11 +92,11 @@ namespace Game.Tests
 
         private PlayerCharacter NewPlayerCharacter()
         {
-            // if (HasBinding<IMoveable>() == false)
-            // {
-            //     var moveable = Bind_Mock_And_Resolve<IMoveable>();
-            //     moveable.GetState().Returns(true);
-            // }
+            if (HasBinding<IMoveable>() == false)
+            {
+                var moveable = Bind_Mock_And_Resolve<IMoveable>();
+                moveable.GetState().Returns(true);
+            }
 
             Bind_Instance(new PlayerCharacter.Data());
             Bind_InterfacesAndSelfTo_From_NewGameObject<PlayerCharacter>();

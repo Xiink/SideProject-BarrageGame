@@ -6,6 +6,10 @@ namespace Game.Scripts.Players.Main
 {
     public class PlayerCharacterInstaller : MonoInstaller
     {
+        public PlayerCharacterInstaller()
+        {
+        }
+
         public override void InstallBindings()
         {
             Container.Bind<PlayerInputState>().AsSingle();

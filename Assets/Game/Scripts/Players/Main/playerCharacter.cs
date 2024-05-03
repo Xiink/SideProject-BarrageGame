@@ -15,7 +15,9 @@ namespace Game.Scripts.Players.Main
     {
         #region Public Variables
 
-        public bool Moveable { get; }
+        [Inject] private IMoveable _moveable;
+
+        public bool Moveable => _moveable.GetState();
 
         /// <summary>
         /// 角色身上擁有的屬性
