@@ -1,4 +1,5 @@
 using Game.Scripts.Battle.Misc;
+using Game.Scripts.Bullet;
 using Game.Scripts.Players.Handlers;
 using Zenject;
 
@@ -16,6 +17,7 @@ namespace Game.Scripts.Players.Main
 
             Container.BindInterfacesTo<PlayerInputHandler>().AsSingle();
             Container.BindInterfacesTo<PlayerMoveHandler>().AsSingle().WithArguments(GetComponent<IMover>());
+            Container.BindInterfacesTo<BulletSpawner>().AsSingle().WithArguments(GetComponent<IMover>());
 
             Container.BindExecutionOrder<PlayerInputHandler>(-10000);
         }

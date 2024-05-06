@@ -16,3 +16,4 @@ MonoBehaviour:
     statDatas:
     - name: MoveSpeed
       amount: 30
+  test: {fileID: 2650404766671773707, guid: bac26955b9b8e6746b630e5a639d74ca, type: 3}
