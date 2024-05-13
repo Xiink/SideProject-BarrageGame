@@ -15,8 +15,8 @@ namespace Game.Scripts.Battle.Main
         public override void InstallBindings()
         {
             // Container.BindInstance(_bullet).IfNotBound();
-            Container.BindFactory<float,BulletTypes, Bullet.Bullet, Bullet.Bullet.Factory>()
-                .FromPoolableMemoryPool<float,BulletTypes, Bullet.Bullet, BulletScriptPool>(poolBinder => poolBinder
+            Container.BindFactory<BulletTypes, Bullet.Bullet, Bullet.Bullet.Factory>()
+                .FromPoolableMemoryPool<BulletTypes, Bullet.Bullet, BulletScriptPool>(poolBinder => poolBinder
                     .WithInitialSize(20)
                     .FromComponentInNewPrefab(_bullet));
 
@@ -33,7 +33,7 @@ namespace Game.Scripts.Battle.Main
             Container.BindExecutionOrder<InputHandler>(-100000);
         }
 
-        class BulletScriptPool : MonoPoolableMemoryPool<float,BulletTypes, IMemoryPool,Bullet.Bullet>
+        class BulletScriptPool : MonoPoolableMemoryPool<BulletTypes, IMemoryPool,Bullet.Bullet>
         {
         }
     }

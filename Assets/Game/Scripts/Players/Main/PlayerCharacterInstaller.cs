@@ -17,7 +17,7 @@ namespace Game.Scripts.Players.Main
 
             Container.BindInterfacesTo<PlayerInputHandler>().AsSingle();
             Container.BindInterfacesTo<PlayerMoveHandler>().AsSingle().WithArguments(GetComponent<IMover>());
-            Container.BindInterfacesTo<BulletSpawner>().AsSingle().WithArguments(GetComponent<IMover>());
+            Container.BindInterfacesTo<PlayerShootHandler>().AsSingle().WithArguments(GetComponent<IMover>());
 
             Container.BindExecutionOrder<PlayerInputHandler>(-10000);
         }

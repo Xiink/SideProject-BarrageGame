@@ -12,5 +12,6 @@ namespace Game.Scripts.Values
         };
 
         public static ValueDropdownList<string> GetAllStatNames => GetBaseStatNames;
+
     }
 }

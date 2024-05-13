@@ -13,6 +13,8 @@ namespace Game.Scripts.Players.Handlers
         {
             _playerInputState.SetHor(Input.GetAxisRaw("Horizontal"));
             _playerInputState.SetVer(Input.GetAxisRaw("Vertical"));
+
+            _playerInputState.SetShootMouseDown(Input.GetMouseButtonDown(0));
         }
     }
 }
