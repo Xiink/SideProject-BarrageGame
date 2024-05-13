@@ -17,9 +17,10 @@ namespace Game.Scripts.Bullet
 
         public void Fire()
         {
-            var bullet = _bulletFactory.Create(1);
+            var bullet = _bulletFactory.Create(1,BulletTypes.FromPlayer);
 
-            bullet.transform.position = _player.GetPosition();
+            bullet.transform.position = (Vector3)_player.GetPosition() - _player.transform.right;
+            bullet.transform.rotation = _player.rigidbody.rotation;
         }
 
         public void Tick()

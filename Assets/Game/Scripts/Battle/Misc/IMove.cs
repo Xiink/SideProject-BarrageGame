@@ -6,6 +6,8 @@ namespace Game.Scripts.Battle.Misc
     {
         public Transform transform { get; }
 
+        public Rigidbody rigidbody { get; }
+
         public float GetStatFinalValue(string statName);
 
         bool Moveable { get; }

@@ -35,6 +35,17 @@ namespace Game.Scripts.Players.Main
             }
         }
 
+        public Rigidbody rigib { get; set; }
+
+        public Rigidbody rigidbody
+        {
+            get
+            {
+                if (rigib == null) rigib = this.GetComponent<Rigidbody>();
+                return rigib;
+            }
+        }
+
         #endregion
 
         #region Private Variables

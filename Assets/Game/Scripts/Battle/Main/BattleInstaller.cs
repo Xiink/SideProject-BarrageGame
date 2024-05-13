@@ -9,20 +9,23 @@ namespace Game.Scripts.Battle.Main
 {
     public class BattleInstaller : MonoInstaller
     {
-        public GameObject test;
+        public GameObject _bullet;
+        public Camera mainCamera;
 
         public override void InstallBindings()
         {
-            Container.BindInstance(test).IfNotBound();
-            Container.BindFactory<float, Bullet.Bullet, Bullet.Bullet.Factory>()
-                .FromPoolableMemoryPool<float, Bullet.Bullet, TestScriptPool>(poolBinder => poolBinder
+            // Container.BindInstance(_bullet).IfNotBound();
+            Container.BindFactory<float,BulletTypes, Bullet.Bullet, Bullet.Bullet.Factory>()
+                .FromPoolableMemoryPool<float,BulletTypes, Bullet.Bullet, BulletScriptPool>(poolBinder => poolBinder
                     .WithInitialSize(20)
-                    .FromComponentInNewPrefab(test));
+                    .FromComponentInNewPrefab(_bullet));
 
+            Container.BindInstance<Camera>(mainCamera);
             Container.Bind<GameState>().AsSingle();
             Container.Bind<InputState>().AsSingle();
 
             Container.BindInterfacesAndSelfTo<TimeProvider>().AsSingle();
+            Container.BindInterfacesAndSelfTo<CameraProvider>().AsSingle();
             Container.BindInterfacesAndSelfTo<Moveable>().AsSingle();
             Container.BindInterfacesTo<InputHandler>().AsSingle();
             Container.BindInterfacesTo<GamePauseHandler>().AsSingle();
@@ -30,7 +33,7 @@ namespace Game.Scripts.Battle.Main
             Container.BindExecutionOrder<InputHandler>(-100000);
         }
 
-        class TestScriptPool : MonoPoolableMemoryPool<float, IMemoryPool,Bullet.Bullet>
+        class BulletScriptPool : MonoPoolableMemoryPool<float,BulletTypes, IMemoryPool,Bullet.Bullet>
         {
         }
     }
