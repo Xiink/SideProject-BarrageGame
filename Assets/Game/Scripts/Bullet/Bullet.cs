@@ -73,7 +73,41 @@ namespace Game.Scripts.Bullet
 
         public void OnTriggerEnter(Collider other)
         {
+            Debug.Log("Enter");
             var enemy = other.GetComponent<Enemy.Enemy>();
+            if (enemy != null && _type == BulletTypes.FromPlayer)
+            {
+                enemy.Die();
+                _pool.Despawn(this);
+            }
+        }
+
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            Debug.Log("Enter");
+            var enemy = other.GetComponent<Enemy.Enemy>();
+            if (enemy != null && _type == BulletTypes.FromPlayer)
+            {
+                enemy.Die();
+                _pool.Despawn(this);
+            }
+        }
+
+        private void OnCollisionEnter(Collision other)
+        {
+            Debug.Log("CollisionEnter");
+            var enemy = other.gameObject.GetComponent<Enemy.Enemy>();
+            if (enemy != null && _type == BulletTypes.FromPlayer)
+            {
+                enemy.Die();
+                _pool.Despawn(this);
+            }
+        }
+
+        private void OnCollisionEnter2D(Collision2D other)
+        {
+            Debug.Log("CollisionEnter2D");
+            var enemy = other.gameObject.GetComponent<Enemy.Enemy>();
             if (enemy != null && _type == BulletTypes.FromPlayer)
             {
                 enemy.Die();

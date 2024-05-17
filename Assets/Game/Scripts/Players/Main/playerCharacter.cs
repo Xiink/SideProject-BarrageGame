@@ -15,25 +15,12 @@ namespace Game.Scripts.Players.Main
     {
         #region Public Variables
 
-        [Inject] private IMoveable _moveable;
-
         public bool Moveable => _moveable.GetState();
 
         /// <summary>
         /// 角色身上擁有的屬性
         /// </summary>
         public ReadOnlyCollection<Stat> Stats => _stats.Contents;
-
-        public Transform trans { get; set; }
-
-        public Transform Trans
-        {
-            get
-            {
-                if (trans == null) trans = transform;
-                return trans;
-            }
-        }
 
         public Rigidbody rigib { get; set; }
 
@@ -46,9 +33,22 @@ namespace Game.Scripts.Players.Main
             }
         }
 
+        public Transform trans { get; set; }
+
+        public Transform Trans
+        {
+            get
+            {
+                if (trans == null) trans = transform;
+                return trans;
+            }
+        }
+
         #endregion
 
         #region Private Variables
+
+        [Inject] private IMoveable _moveable;
 
         [Inject] private Data _data;
 
