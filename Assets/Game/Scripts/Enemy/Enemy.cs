@@ -1,15 +1,19 @@
 using System;
 using System.Collections.Generic;
 using Game.Scripts.Battle.Misc;
+using Game.Scripts.Enemy.Data;
 using Game.Scripts.Helpers;
 using Game.Scripts.RPG;
+using PlasticGui.Configuration.CloudEdition.Welcome;
 using rStarUtility.Generic.Infrastructure;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.UIElements;
 using Zenject;
 
 namespace Game.Scripts.Enemy
 {
+    [ExecuteInEditMode]
     public class Enemy : MonoBehaviour,IMover
     {
         #region Public Variables
@@ -27,18 +31,27 @@ namespace Game.Scripts.Enemy
                 return trans;
             }
         }
-
         #endregion
+
+        public SpriteRenderer sprit;
+
+        public int testint => _data.value;
 
         #region Private Variables
 
-        [Inject] private Data _data;
+        [Inject]
+        public EnemyData _data { get; private set; }
 
         private GenericRepository<Stat> _stats = new GenericRepository<Stat>();
 
         #endregion
 
         #region Public Methods
+
+        private void Awake()
+        {
+            Debug.Log(testint);
+        }
 
         public void Die()
         {
@@ -89,39 +102,88 @@ namespace Game.Scripts.Enemy
         [Inject]
         private void Init()
         {
+            // this.GetComponent<MeshRenderer>().sharedMaterial.SetColor("_Color",_data.ColorOptions);
             InitStats();
         }
 
         private void InitStats()
         {
-            _data.statDatas.ForEach(data => _stats.Add(new Stat(data)));
+            // _data.statDatas.ForEach(data => _stats.Add(new Stat(data)));
         }
 
         #endregion
 
         #region Nested Types
 
+        // [Inject]
+        // private void Update()
+        // {
+        //     UpdateData();
+        // }
+        //
+        // [Inject]
+        // private void UpdateData()
+        // {
+        //     // Debug.Log(_data);
+        //     this.GetComponent<MeshRenderer>().sharedMaterial.SetColor("_Color",_data.ColorOptions);
+        // }
+
         [Serializable]
         public class Data
         {
-            #region Public Variables
-            [ValidateInput(nameof(StatDataValidation), ContinuousValidationCheck = true)]
-            public List<Stat.Data> statDatas = new List<Stat.Data>();
-
-            public Material _Material;
-
-            #endregion
-
-            #region Private Methods
-
-            private bool StatDataValidation(List<Stat.Data> datas, ref string errorMessage)
-            {
-                return ValidationHelper.StatDataValidation(datas, ref errorMessage);
-            }
-
-            #endregion
+            [PreviewField]
+            public Sprite sprite;
         }
+        // {
+            // #region Public Variables
+            // [ValidateInput(nameof(StatDataValidation), ContinuousValidationCheck = true)]
+            // public List<Stat.Data> statDatas = new List<Stat.Data>();
+            //
+            // public Material _Material;
+            //
+            // #endregion
+            //
+            // #region Private Methods
+            //
+            // private bool StatDataValidation(List<Stat.Data> datas, ref string errorMessage)
+            // {
+            //     return ValidationHelper.StatDataValidation(datas, ref errorMessage);
+            // }
+
+            // #endregion
+
+            // [HorizontalGroup("Split")]
+            // [FoldoutGroup("Split/Domain Data")]
+            // [LabelWidth(100)]
+            // public float Life;
+            // [FoldoutGroup("Split/Domain Data")]
+            // [LabelWidth(100)]
+            // public float MP;
+            // [FoldoutGroup("Split/Domain Data")]
+            // [LabelWidth(100)]
+            // public float Offset;
+            //
+            // [LabelText("Size")]
+            // [HorizontalGroup("Split/Domain Data/Group 1", LabelWidth = 20)]
+            // public Label Size ;
+            // [HorizontalGroup("Split/Domain Data/Group 1")]
+            // public float x;
+            // [HorizontalGroup("Split/Domain Data/Group 1")]
+            // public float y;
+            //
+            // [FoldoutGroup("Split/Visual Data")]
+            // public string DisplayName;
+            // [FoldoutGroup("Split/Visual Data")]
+            // public Material EnemyMaterial;
+            //
+            // [FoldoutGroup("Behaviour")]
+            // [ValueDropdown("@GetAllPhases.GetAllPhaseNames", ExpandAllMenuItems = true,
+            //     IsUniqueList = true,
+            //     DropdownHeight = 250, DropdownWidth = 300)]
+            // public string Behaviour;
+        // }
 
         #endregion
+
     }
 }

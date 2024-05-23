@@ -39,8 +39,6 @@ namespace Game.Scripts.Enemy.States
 
             Actions.Enqueue("Delay");
             Actions.Enqueue("SquareMove");
-
-            Debug.Log(Actions.Count);
         }
 
 

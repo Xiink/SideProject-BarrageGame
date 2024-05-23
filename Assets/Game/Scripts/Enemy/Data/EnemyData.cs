@@ -1,46 +1,56 @@
 using System;
+using System.Collections.Generic;
 using Sirenix.OdinInspector;
+using Sirenix.Serialization;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Zenject;
+using Game.Scripts.Enemy.Values;
 
 namespace Game.Scripts.Enemy.Data
 {
     [CreateAssetMenu(fileName = "EnemyDataContainer", menuName = "EnemyDataContainer",order = 0)]
     public class EnemyData : ScriptableObjectInstaller
     {
-        [BoxGroup("Domain Data")]
-        [LabelWidth(100)]
-        public float Life;
-        [BoxGroup("Domain Data")]
-        [LabelWidth(100)]
-        public float MP;
-        [BoxGroup("Domain Data")]
-        [LabelWidth(100)]
-        public float Offset;
-
-        [LabelText("Size")]
-        [HorizontalGroup("Domain Data/Group 1", LabelWidth = 20)]
-        public Label Size ;
-        [HorizontalGroup("Domain Data/Group 1")]
-        public float x;
-        [HorizontalGroup("Domain Data/Group 1")]
-        public float y;
-        // [BoxGroup("Domain Data")]
-
+        // [HorizontalGroup("Split")]
+        // [FoldoutGroup("Split/Domain Data")]
+        // [LabelWidth(100)]
+        // public float Life;
+        // [FoldoutGroup("Split/Domain Data")]
+        // [LabelWidth(100)]
+        // public float MP;
+        // [FoldoutGroup("Split/Domain Data")]
+        // [LabelWidth(100)]
+        // public float Offset;
+        //
+        // [LabelText("Size")]
+        // [HorizontalGroup("Split/Domain Data/Group 1", LabelWidth = 20)]
+        // public Label Size ;
+        // [HorizontalGroup("Split/Domain Data/Group 1")]
+        // public float x;
+        // [HorizontalGroup("Split/Domain Data/Group 1")]
+        // public float y;
+        //
+        // [FoldoutGroup("Split/Visual Data")]
+        // public string DisplayName;
+        // [FoldoutGroup("Split/Visual Data")]
+        // public Material EnemyMaterial;
+        //
+        //
+        // [FoldoutGroup("Behaviour")]
+        // [ValueDropdown("@GetAllPhases.GetAllPhaseNames", ExpandAllMenuItems = true,
+        //     IsUniqueList = true,
+        //     DropdownHeight = 250, DropdownWidth = 300)]
+        // public string Behaviour;
 
         [SerializeField]
-        private Enemy.Data _data;
+        public Enemy.Data _data;
+
+        public int value = 0;
 
         public override void InstallBindings()
         {
-            Container.BindInstance(_data);
-        }
-
-        // [Serializable]
-        public class TestOffset
-        {
-
+            Container.BindInstance(this).AsSingle();
         }
     }
 }
