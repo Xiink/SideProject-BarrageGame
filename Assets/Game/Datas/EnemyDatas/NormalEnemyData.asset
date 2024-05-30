@@ -12,12 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0941221bc99640e896df665645a6ead2, type: 3}
   m_Name: NormalEnemyData
   m_EditorClassIdentifier: 
-  Life: 0
-  MP: 0
-  Offset: 0
-  x: 0
-  y: 0
-  DisplayName: 
-  EnemyMaterial: {fileID: 0}
-  Behaviour: "\u7B2C\u4E09\u968E\u6BB5"
-  sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
+  _domaindata: {fileID: 11400000, guid: eee2cc7da3bddef4e90dc5bb0544acea, type: 2}
+  _visualData: {fileID: 11400000, guid: 61269a6a74b30e5428845058d23fc2cb, type: 2}
+  Behaviour: "\u7B2C\u4E94\u968E\u6BB5"

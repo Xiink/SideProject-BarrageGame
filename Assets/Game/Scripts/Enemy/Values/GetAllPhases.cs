@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Game.Scripts.Enemy.Phases;
 using Sirenix.OdinInspector;
 using Sirenix.Utilities.Editor;
 using UnityEngine;
@@ -15,12 +16,12 @@ namespace Game.Scripts.Enemy.Values
         public static ValueDropdownList<string> Get()
         {
             result.Clear();
-            var allAssets = AssetUtilities.GetAllAssetsOfType(typeof(Phases), "Assets/Game/Datas/EnemyDatas/Phase");
+            var allAssets = AssetUtilities.GetAllAssetsOfType(typeof(Phase), "Assets/Game/Datas/EnemyDatas/Phase");
             var phases = allAssets.GetEnumerator();
 
             while (phases.MoveNext())
             {
-                var phase = (Phases)phases.Current;
+                var phase = (Phase)phases.Current;
                 result.Add(phase.DesplayName);
             }
 

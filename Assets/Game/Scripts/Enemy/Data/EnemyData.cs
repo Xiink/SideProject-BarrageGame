@@ -6,51 +6,35 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using Zenject;
 using Game.Scripts.Enemy.Values;
+using Assets.Game.Scripts.Enemy.Data;
 
 namespace Game.Scripts.Enemy.Data
 {
     [CreateAssetMenu(fileName = "EnemyDataContainer", menuName = "EnemyDataContainer",order = 0)]
     public class EnemyData : ScriptableObjectInstaller
     {
-        // [HorizontalGroup("Split")]
-        // [FoldoutGroup("Split/Domain Data")]
-        // [LabelWidth(100)]
-        // public float Life;
-        // [FoldoutGroup("Split/Domain Data")]
-        // [LabelWidth(100)]
-        // public float MP;
-        // [FoldoutGroup("Split/Domain Data")]
-        // [LabelWidth(100)]
-        // public float Offset;
-        //
-        // [LabelText("Size")]
-        // [HorizontalGroup("Split/Domain Data/Group 1", LabelWidth = 20)]
-        // public Label Size ;
-        // [HorizontalGroup("Split/Domain Data/Group 1")]
-        // public float x;
-        // [HorizontalGroup("Split/Domain Data/Group 1")]
-        // public float y;
-        //
-        // [FoldoutGroup("Split/Visual Data")]
-        // public string DisplayName;
-        // [FoldoutGroup("Split/Visual Data")]
-        // public Material EnemyMaterial;
-        //
-        //
-        // [FoldoutGroup("Behaviour")]
-        // [ValueDropdown("@GetAllPhases.GetAllPhaseNames", ExpandAllMenuItems = true,
-        //     IsUniqueList = true,
-        //     DropdownHeight = 250, DropdownWidth = 300)]
-        // public string Behaviour;
+        [HorizontalGroup("Split")]
+        [FoldoutGroup("Split/Domain Data")]
+        [InlineEditor(InlineEditorObjectFieldModes.Hidden)]
+        [HideLabel]
+        public DomainData _domaindata;
 
-        [SerializeField]
-        public Enemy.Data _data;
 
-        public int value = 0;
+        [HorizontalGroup("Split")]
+        [FoldoutGroup("Split/Visual Data")]
+        [InlineEditor(InlineEditorObjectFieldModes.Hidden)]
+        [HideLabel]
+        public VisualData _visualData;
+
+        [FoldoutGroup("Behaviour")]
+        [ValueDropdown("@GetAllPhases.GetAllPhaseNames", ExpandAllMenuItems = true,
+        IsUniqueList = true,
+        DropdownHeight = 250, DropdownWidth = 300)]
+        public string Behaviour;
 
         public override void InstallBindings()
         {
-            Container.BindInstance(this).AsSingle();
+            Container.BindInstance(this);
         }
     }
 }

@@ -35,12 +35,10 @@ namespace Game.Scripts.Enemy
 
         public SpriteRenderer sprit;
 
-        public int testint => _data.value;
-
         #region Private Variables
 
         [Inject]
-        public EnemyData _data { get; private set; }
+        public EnemyData _data;
 
         private GenericRepository<Stat> _stats = new GenericRepository<Stat>();
 
@@ -48,10 +46,10 @@ namespace Game.Scripts.Enemy
 
         #region Public Methods
 
-        private void Awake()
-        {
-            Debug.Log(testint);
-        }
+        //private void Awake()
+        //{
+        //    Debug.Log(testint);
+        //}
 
         public void Die()
         {
@@ -108,6 +106,9 @@ namespace Game.Scripts.Enemy
 
         private void InitStats()
         {
+            Debug.Log(_data._domaindata.Life);
+            Debug.Log(_data._domaindata.MP);
+            Debug.Log(_data._domaindata.Offset);
             // _data.statDatas.ForEach(data => _stats.Add(new Stat(data)));
         }
 
@@ -126,61 +127,6 @@ namespace Game.Scripts.Enemy
         // {
         //     // Debug.Log(_data);
         //     this.GetComponent<MeshRenderer>().sharedMaterial.SetColor("_Color",_data.ColorOptions);
-        // }
-
-        [Serializable]
-        public class Data
-        {
-            [PreviewField]
-            public Sprite sprite;
-        }
-        // {
-            // #region Public Variables
-            // [ValidateInput(nameof(StatDataValidation), ContinuousValidationCheck = true)]
-            // public List<Stat.Data> statDatas = new List<Stat.Data>();
-            //
-            // public Material _Material;
-            //
-            // #endregion
-            //
-            // #region Private Methods
-            //
-            // private bool StatDataValidation(List<Stat.Data> datas, ref string errorMessage)
-            // {
-            //     return ValidationHelper.StatDataValidation(datas, ref errorMessage);
-            // }
-
-            // #endregion
-
-            // [HorizontalGroup("Split")]
-            // [FoldoutGroup("Split/Domain Data")]
-            // [LabelWidth(100)]
-            // public float Life;
-            // [FoldoutGroup("Split/Domain Data")]
-            // [LabelWidth(100)]
-            // public float MP;
-            // [FoldoutGroup("Split/Domain Data")]
-            // [LabelWidth(100)]
-            // public float Offset;
-            //
-            // [LabelText("Size")]
-            // [HorizontalGroup("Split/Domain Data/Group 1", LabelWidth = 20)]
-            // public Label Size ;
-            // [HorizontalGroup("Split/Domain Data/Group 1")]
-            // public float x;
-            // [HorizontalGroup("Split/Domain Data/Group 1")]
-            // public float y;
-            //
-            // [FoldoutGroup("Split/Visual Data")]
-            // public string DisplayName;
-            // [FoldoutGroup("Split/Visual Data")]
-            // public Material EnemyMaterial;
-            //
-            // [FoldoutGroup("Behaviour")]
-            // [ValueDropdown("@GetAllPhases.GetAllPhaseNames", ExpandAllMenuItems = true,
-            //     IsUniqueList = true,
-            //     DropdownHeight = 250, DropdownWidth = 300)]
-            // public string Behaviour;
         // }
 
         #endregion
