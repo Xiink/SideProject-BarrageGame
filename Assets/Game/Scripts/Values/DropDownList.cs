@@ -1,3 +1,4 @@
+using Game.Scripts.Enemy.Steps;
 using Game.Scripts.Names;
 using Sirenix.OdinInspector;
 
@@ -13,5 +14,16 @@ namespace Game.Scripts.Values
 
         public static ValueDropdownList<string> GetAllStatNames => GetBaseStatNames;
 
+        public static ValueDropdownList<DataList> GetStructureNames = new ValueDropdownList<DataList>()
+        {
+            // {"階段資料",},
+            // {"序列資料",},
+            {"步驟資料",new EnemyStepData()},
+            // {"動作資料",},
+            {"延遲",new DelayData()},
+
+        };
+
+        public static ValueDropdownList<DataList> GetAllStructureNames => GetStructureNames;
     }
 }

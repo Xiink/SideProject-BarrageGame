@@ -45,27 +45,27 @@ namespace Game.Scripts.Enemy.States
         string _currentAction = string.Empty;
         public async void OnUpdate()
         {
-            if(finish == false) return;
-
-            if(Actions.Count > 0)
-                _currentAction = Actions.Dequeue();
-
-            switch (_currentAction)
-            {
-                case "Delay":
-                    finish = false;
-                    finish = await Delay(5000);
-                    break;
-                case "SquareMove":
-                    finish = !SquareMove();
-                    if (finish == false)
-                    {
-                        finish = true;
-                        Actions.Enqueue("Delay");
-                        Actions.Enqueue("SquareMove");
-                    }
-                    break;
-            }
+            // if(finish == false) return;
+            //
+            // if(Actions.Count > 0)
+            //     _currentAction = Actions.Dequeue();
+            //
+            // switch (_currentAction)
+            // {
+            //     case "Delay":
+            //         finish = false;
+            //         finish = await Delay(5000);
+            //         break;
+            //     case "SquareMove":
+            //         finish = !SquareMove();
+            //         if (finish == false)
+            //         {
+            //             finish = true;
+            //             Actions.Enqueue("Delay");
+            //             Actions.Enqueue("SquareMove");
+            //         }
+            //         break;
+            // }
         }
 
         public void OnExit()

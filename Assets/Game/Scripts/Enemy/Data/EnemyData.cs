@@ -5,8 +5,8 @@ using Sirenix.Serialization;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Zenject;
-using Game.Scripts.Enemy.Values;
 using Assets.Game.Scripts.Enemy.Data;
+using Game.Scripts.Enemy.Phases;
 
 namespace Game.Scripts.Enemy.Data
 {
@@ -26,11 +26,17 @@ namespace Game.Scripts.Enemy.Data
         [HideLabel]
         public VisualData _visualData;
 
+        // [FoldoutGroup("Behaviour")]
+        // [ValueDropdown("@GetPhaseNames.Names", ExpandAllMenuItems = true,
+        // IsUniqueList = true,
+        // DropdownHeight = 250, DropdownWidth = 300)]
+        // public string Behaviour;
+
         [FoldoutGroup("Behaviour")]
-        [ValueDropdown("@GetAllPhases.GetAllPhaseNames", ExpandAllMenuItems = true,
-        IsUniqueList = true,
-        DropdownHeight = 250, DropdownWidth = 300)]
-        public string Behaviour;
+        [ValueDropdown("@GetPhases.phases", ExpandAllMenuItems = true,
+            IsUniqueList = true,
+            DropdownHeight = 250, DropdownWidth = 300)]
+        public EnemyPhase Behaviour;
 
         public override void InstallBindings()
         {

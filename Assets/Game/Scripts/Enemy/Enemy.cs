@@ -106,9 +106,7 @@ namespace Game.Scripts.Enemy
 
         private void InitStats()
         {
-            Debug.Log(_data._domaindata.Life);
-            Debug.Log(_data._domaindata.MP);
-            Debug.Log(_data._domaindata.Offset);
+            // Debug.Log(_data.Behaviour.PhaseDataList[0].Data.GetType());
             // _data.statDatas.ForEach(data => _stats.Add(new Stat(data)));
         }
 
@@ -116,6 +114,10 @@ namespace Game.Scripts.Enemy
 
         #region Nested Types
 
+        private void Update()
+        {
+
+        }
         // [Inject]
         // private void Update()
         // {

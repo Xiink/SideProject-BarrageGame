@@ -12,5 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f83819a33b64e14b7680529cedd5ecf, type: 3}
   m_Name: "\u7B2C\u4E00\u968E\u6BB5"
   m_EditorClassIdentifier: 
-  DesplayName: "\u7B2C\u4E00\u968E\u6BB5"
-  uid: 0
+  DisplayName: "\u7B2C\u4E00\u968E\u6BB5"
+  uid: 1
+  PhaseDataList:
+  - Data:
+      rid: 6531094763751079941
+  - Data:
+      rid: 6531094835619954688
+  references:
+    version: 2
+    RefIds:
+    - rid: 6531094763751079941
+      type: {class: DelayData, ns: Game.Scripts.Enemy.Steps, asm: Scripts}
+      data:
+        delayTime: 5
+    - rid: 6531094835619954688
+      type: {class: EnemyStepData, ns: Game.Scripts.Enemy.Steps, asm: Scripts}
+      data:
+        StepDataList: []

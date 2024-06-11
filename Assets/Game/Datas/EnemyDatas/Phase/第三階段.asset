@@ -12,5 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f83819a33b64e14b7680529cedd5ecf, type: 3}
   m_Name: "\u7B2C\u4E09\u968E\u6BB5"
   m_EditorClassIdentifier: 
-  DesplayName: "\u7B2C\u4E09\u968E\u6BB5"
-  uid: 0
+  DisplayName: "\u7B2C\u4E09\u968E\u6BB5"
+  uid: 3
+  PhaseDataList: []
+  references:
+    version: 2
+    RefIds: []

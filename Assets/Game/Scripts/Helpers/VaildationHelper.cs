@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
+using Game.Scripts.Enemy.Phases;
 using Game.Scripts.RPG;
 using rStarUtility.Util.Extensions.Csharp;
+using Sirenix.OdinInspector;
 
 namespace Game.Scripts.Helpers
 {
@@ -28,6 +30,16 @@ namespace Game.Scripts.Helpers
             var DuplicateName = groupByName.First(g => g.Count() > 1);
             errorMessage = $"Find Duplicate Data :  {DuplicateName.Key}";
             return false;
+        }
+
+        public static bool PhaseUIDValidation(List<uint> phases,uint id)
+        {
+            var index = phases.FindIndex(phase => phase == id);
+
+            if (index != -1)
+                return false;
+            else
+                return true;
         }
     }
 }

@@ -882,10 +882,14 @@ PrefabInstance:
     - target: {fileID: 1625997599060617582, guid: e43c448ab577dfc4fb929a9ff066e57e, type: 3}
       propertyPath: _scriptableObjectInstallers.Array.data[0]
       value: 
-      objectReference: {fileID: 11400000, guid: 6104b99fd0f37f743bff0c3178949a08, type: 2}
+      objectReference: {fileID: 11400000, guid: b750bc54c0e6f8e479035674009a3a91, type: 2}
     - target: {fileID: 4747835221155594187, guid: e43c448ab577dfc4fb929a9ff066e57e, type: 3}
       propertyPath: m_Name
       value: NormalEnemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 4747835221155594187, guid: e43c448ab577dfc4fb929a9ff066e57e, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6083133774743617362, guid: e43c448ab577dfc4fb929a9ff066e57e, type: 3}
       propertyPath: m_LocalPosition.x
