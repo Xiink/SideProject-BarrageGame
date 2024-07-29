@@ -1,23 +1,17 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Game.Scripts.Battle.Misc;
-using Game.Scripts.Enemy.States;
-using Game.Scripts.RPG;
-using UnityEngine;
+using Game.Scripts.Enemy.Phases;
 using Zenject;
 
 namespace Game.Scripts.Enemy.Main
 {
     public class EnemyStateManager : ITickable,IInitializable
     {
-        [Inject] private IState _currentStateHandler;
+        [Inject]
+        public EnemyFlowControl _EnemyFlowControl;
 
-        private EnemyStates _currentState = EnemyStates.None;
+        private EnemyPhase _currentPhase;
 
         public void Tick()
         {
-            _currentStateHandler.OnUpdate();
         }
 
         public void ChangeState(EnemyStates states)
@@ -27,7 +21,7 @@ namespace Game.Scripts.Enemy.Main
 
         public void Initialize()
         {
-            _currentStateHandler.OnEnter();
+
         }
     }
 }

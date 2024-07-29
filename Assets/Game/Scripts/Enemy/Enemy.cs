@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Game.Scripts.Battle.Misc;
 using Game.Scripts.Enemy.Data;
+using Game.Scripts.Enemy.Main;
 using Game.Scripts.Helpers;
 using Game.Scripts.RPG;
 using PlasticGui.Configuration.CloudEdition.Welcome;
@@ -14,7 +15,7 @@ using Zenject;
 namespace Game.Scripts.Enemy
 {
     [ExecuteInEditMode]
-    public class Enemy : MonoBehaviour,IMover
+    public class Enemy : MonoBehaviour,IMover,IInitializable
     {
         #region Public Variables
 
@@ -40,16 +41,14 @@ namespace Game.Scripts.Enemy
         [Inject]
         public EnemyData _data;
 
+        [Inject]
+        public EnemyStateManager _EnemyStateManager;
+
         private GenericRepository<Stat> _stats = new GenericRepository<Stat>();
 
         #endregion
 
         #region Public Methods
-
-        //private void Awake()
-        //{
-        //    Debug.Log(testint);
-        //}
 
         public void Die()
         {
@@ -100,38 +99,25 @@ namespace Game.Scripts.Enemy
         [Inject]
         private void Init()
         {
-            // this.GetComponent<MeshRenderer>().sharedMaterial.SetColor("_Color",_data.ColorOptions);
-            InitStats();
+
         }
 
         private void InitStats()
         {
-            // Debug.Log(_data.Behaviour.PhaseDataList[0].Data.GetType());
-            // _data.statDatas.ForEach(data => _stats.Add(new Stat(data)));
+
         }
 
         #endregion
 
         #region Nested Types
 
-        private void Update()
+        public void Initialize()
         {
-
+            Debug.Log(this);
         }
-        // [Inject]
-        // private void Update()
-        // {
-        //     UpdateData();
-        // }
-        //
-        // [Inject]
-        // private void UpdateData()
-        // {
-        //     // Debug.Log(_data);
-        //     this.GetComponent<MeshRenderer>().sharedMaterial.SetColor("_Color",_data.ColorOptions);
-        // }
 
         #endregion
+
 
     }
 }

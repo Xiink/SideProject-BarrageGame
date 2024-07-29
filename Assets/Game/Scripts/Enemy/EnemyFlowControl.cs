@@ -22,20 +22,12 @@ namespace Game.Scripts.Enemy
         [Inject]
         public IMover _enemy;
 
-        private bool _finished = true;
-        private int currentIndex = 0;
+        private bool _finished = true; // 用來確認Action是否完成
+        private int currentIndex = 0; // 用來確認目前在執行哪個Action
 
         public async void Tick()
         {
-            // var nowAction = _data.Behaviour.PhaseDataList[0].Data;
-            //
-            // System.Reflection.MemberInfo info = typeof(DelayData);
-            //
-            // if (nowAction.GetType() == typeof(DelayData))
-            // {
-            //     await Task.Delay(5000);
-            //     Debug.Log("Delay");
-            // }
+
         }
 
         public async void Initialize()
@@ -43,6 +35,8 @@ namespace Game.Scripts.Enemy
             var phase = _data.Behaviour;
             var actions = _data.Behaviour.PhaseDataList;
 
+            // 手動綁定
+            // 需要進行省略，要研究怎麼處理
             foreach(var action in actions)
             {
                 try
@@ -55,6 +49,7 @@ namespace Game.Scripts.Enemy
                 }
             }
 
+            // 依序進行執行Action
             foreach(var action in actions)
             {
                 try
@@ -66,20 +61,6 @@ namespace Game.Scripts.Enemy
 
                 }
             }
-            // while (true)
-            // {
-            //     foreach(var action in actions)
-            //     {
-            //         try
-            //         {
-            //             await action.Data.onExecute();
-            //         }
-            //         catch
-            //         {
-            //
-            //         }
-            //     }
-            // }
         }
     }
 }
