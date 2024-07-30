@@ -7,8 +7,10 @@ namespace Game.Scripts.Enemy.Steps
 {
     public interface DataList
     {
-        Task onExecute();
+        Task<bool> onExecute();
 
         public void InjectDependencies(IFlowControl control);
+
+        public void InitAction();
     }
 }

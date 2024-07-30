@@ -13,23 +13,48 @@ namespace Game.Scripts.Enemy.Steps
     [Serializable]
     public class DelayData : DataList
     {
-        public override string ToString() => "延遲";
+        #region Public Variables
 
-        [LabelText("延遲秒數：")]
-        public float delayTime;
+        [LabelText("延遲秒數：")] public float delayTime;
 
-        [Inject]
-        private IFlowControl _enemyFlowControl;
+        #endregion
 
-        public async Task onExecute()
+        #region Private Variables
+
+        [Inject] private IFlowControl _enemyFlowControl;
+
+        bool _isFinished = true;
+
+        #endregion
+
+        #region Public Methods
+
+        public void InitAction()
         {
-            await Task.Delay(5000);
-            Debug.Log("延遲");
+            _isFinished = true;
         }
 
         public void InjectDependencies(IFlowControl control)
         {
             _enemyFlowControl = control;
         }
+
+        public async Task<bool> onExecute()
+        {
+            if (_isFinished == false)
+                return false;
+
+            if (_isFinished == true)
+                _isFinished = false;
+
+            await Task.Delay((int)(delayTime*1000));
+            Debug.Log("延遲");
+
+            return true;
+        }
+
+        public override string ToString() => "延遲";
+
+        #endregion
     }
 }

@@ -18,15 +18,15 @@ MonoBehaviour:
   - Data:
       rid: 6531094763751079941
   - Data:
-      rid: 6531094835619954688
+      rid: 5917991180815302656
   references:
     version: 2
     RefIds:
-    - rid: 6531094763751079941
-      type: {class: DelayData, ns: Game.Scripts.Enemy.Steps, asm: Scripts}
-      data:
-        delayTime: 5
-    - rid: 6531094835619954688
+    - rid: 5917991180815302656
       type: {class: EnemyStepData, ns: Game.Scripts.Enemy.Steps, asm: Scripts}
       data:
         StepDataList: []
+    - rid: 6531094763751079941
+      type: {class: DelayData, ns: Game.Scripts.Enemy.Steps, asm: Scripts}
+      data:
+        delayTime: 1

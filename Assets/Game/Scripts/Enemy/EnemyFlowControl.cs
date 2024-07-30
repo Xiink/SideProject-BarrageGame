@@ -11,10 +11,12 @@ using Zenject;
 
 namespace Game.Scripts.Enemy
 {
-    public class EnemyFlowControl : IInitializable,IFlowControl
+    public class EnemyFlowControl : ITickable,IInitializable,IFlowControl
     {
         public EnemyPhase _currentPhase;
         public EnemyStep _currentStep;
+
+        public DataList _currentAction;
 
         [Inject]
         public EnemyData _data;
@@ -27,7 +29,30 @@ namespace Game.Scripts.Enemy
 
         public async void Tick()
         {
+            var result = await _currentAction.onExecute();
+            if (result == true)
+            {
+                currentIndex++;
+                if (currentIndex >= _data.Behaviour.PhaseDataList.Count)
+                    currentIndex = 0;
+                ChangeAction(currentIndex);
+            }
+        }
 
+        /// <summary>
+        /// 切換要進行的Action
+        /// </summary>
+        /// <param name="index"></param>
+        public void ChangeAction(int index)
+        {
+            // 如果不是第一次，則將已經完成的Action進行初始化
+            if(_currentAction != null)
+                _currentAction.InitAction();
+
+            var actions = _data.Behaviour.PhaseDataList;
+            _currentAction = actions[index].Data;
+
+            _finished = true;
         }
 
         public async void Initialize()
@@ -49,18 +74,8 @@ namespace Game.Scripts.Enemy
                 }
             }
 
-            // 依序進行執行Action
-            foreach(var action in actions)
-            {
-                try
-                {
-                    await action.Data.onExecute();
-                }
-                catch
-                {
-
-                }
-            }
+            currentIndex = 0;
+            ChangeAction(currentIndex);
         }
     }
 }

@@ -15,13 +15,25 @@ namespace Game.Scripts.Enemy.Steps
     [Serializable]
     public class EnemyStepData : DataList
     {
-        public override string ToString() => "步驟資料";
-
-        private bool statTick = false;
-        private bool result = false;
+        #region Public Variables
 
         [LabelText("Step Data id List")] [ValueDropdown("@GetStep.steps"), HideReferenceObjectPicker]
         public List<EnemyStep> StepDataList;
+
+        #endregion
+
+        #region Private Variables
+
+        private enum Direction
+        {
+            Right,
+            Up,
+            Left,
+            Down
+        };
+
+        private bool statTick = false;
+        private bool result = false;
 
         [Inject] private EnemyFlowControl _enemyFlowControl;
 
@@ -34,54 +46,32 @@ namespace Game.Scripts.Enemy.Steps
 
         private SynchronizationContext _context;
 
-        private enum Direction
+        #endregion
+
+        #region Public Methods
+
+        public void InitAction()
         {
-            Right,
-            Up,
-            Left,
-            Down
-        };
+            currentDirection = Direction.Right;
+            result = false;
+        }
 
-        public async Task onExecute()
+        public void InjectDependencies(IFlowControl control)
         {
-            Debug.Log("測試");
-            Debug.Log(_enemyFlowControl._enemy);
+            _enemyFlowControl = (EnemyFlowControl)control;
+        }
 
-            statTick = true;
-            _context = SynchronizationContext.Current;
+        public async Task<bool> onExecute()
+        {
+            SquareMove();
 
-            await Task.Delay(8000);
-            Debug.Log("延遲了八秒");
-
-            // var task = Task.Run(async () =>
-            // {
-            //     while (true)
-            //     {
-            //         // _context.Post(_ =>
-            //         // {
-            //         //     // result = SquareMove();
-            //         //     Debug.Log("Test");
-            //         // }, null);
-            //         result = true;
-            //         await Task.Delay(8000);
-            //         Debug.Log("延遲了八秒");
-            //
-            //         if (result == true)
-            //         {
-            //             Debug.Log("End");
-            //             break;
-            //         }
-            //     }
-            // });
-            // task.Wait();
+            return result;
         }
 
         public bool SquareMove()
         {
             // 根據當前方向和速度進行移動
             float step = moveSpeed * Time.deltaTime;
-            bool result = false;
-
             try
             {
                 switch (currentDirection)
@@ -89,7 +79,6 @@ namespace Game.Scripts.Enemy.Steps
                     case Direction.Right:
                         _enemyFlowControl._enemy.transform.position =
                             Vector3.MoveTowards(_enemyFlowControl._enemy.transform.position, targetPos, step);
-                        Debug.Log(_enemyFlowControl._enemy.transform.position);
                         if (Vector3.Distance(_enemyFlowControl._enemy.transform.position, targetPos) < 0.01f)
                         {
                             currentDirection = Direction.Up;
@@ -135,13 +124,11 @@ namespace Game.Scripts.Enemy.Steps
                 Debug.Log(ex.Message);
             }
 
-
             return result;
         }
 
-        public void InjectDependencies(IFlowControl control)
-        {
-            _enemyFlowControl = (EnemyFlowControl)control;
-        }
+        public override string ToString() => "步驟資料";
+
+        #endregion
     }
 }
