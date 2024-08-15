@@ -14,6 +14,8 @@ namespace Game.Scripts.Battle.Misc
 
         public Vector2 GetPosition();
 
+        public void AddForce(Vector3 force);
+
         public void SetPosition(Vector2 newPos);
     }
 }

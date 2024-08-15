@@ -1,4 +1,4 @@
-namespace Game.Scripts.Enemy.Main
+namespace Game.Scripts.Enemy.States
 {
     public enum EnemyStates
     {

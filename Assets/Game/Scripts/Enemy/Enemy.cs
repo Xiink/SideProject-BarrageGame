@@ -60,6 +60,11 @@ namespace Game.Scripts.Enemy
             return (Vector2)Trans.position;
         }
 
+        public void AddForce(Vector3 force)
+        {
+            rigidbody.AddForce(force);
+        }
+
         public float GetStatFinalValue(string statName)
         {
             return 0;
@@ -117,7 +122,5 @@ namespace Game.Scripts.Enemy
         }
 
         #endregion
-
-
     }
 }

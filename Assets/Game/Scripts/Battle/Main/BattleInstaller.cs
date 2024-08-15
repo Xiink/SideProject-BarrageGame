@@ -18,7 +18,8 @@ namespace Game.Scripts.Battle.Main
             Container.BindFactory<BulletTypes, Bullet.Bullet, Bullet.Bullet.Factory>()
                 .FromPoolableMemoryPool<BulletTypes, Bullet.Bullet, BulletScriptPool>(poolBinder => poolBinder
                     .WithInitialSize(20)
-                    .FromComponentInNewPrefab(_bullet));
+                    .FromComponentInNewPrefab(_bullet)
+                    .UnderTransformGroup("Bullets"));
 
             Container.BindInstance<Camera>(mainCamera);
             Container.Bind<GameState>().AsSingle();

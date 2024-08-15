@@ -21,6 +21,8 @@ namespace Game.Scripts.Bullet
     {
         #region Public Variables
 
+        float _startTime;
+        float _lifeTime = 3f;
         public IMemoryPool _pool;
         public BulletTypes _type;
         // public float speed = 50f;
@@ -40,7 +42,11 @@ namespace Game.Scripts.Bullet
         private void Update()
         {
             transform.Translate(FindStat(StatNames.MoveSpeed).stat.Amount * Time.deltaTime * -1, 0, 0);
-            Destroy(gameObject, 3);
+
+            if (Time.realtimeSinceStartup - _startTime > _lifeTime)
+            {
+                _pool.Despawn(this);
+            }
         }
 
         #endregion
@@ -69,6 +75,8 @@ namespace Game.Scripts.Bullet
             //speed = speed;
             _type = type;
             _pool = p3;
+
+            _startTime = Time.realtimeSinceStartup;
         }
 
         public void OnTriggerEnter(Collider other)

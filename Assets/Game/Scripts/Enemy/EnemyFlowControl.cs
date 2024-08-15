@@ -29,14 +29,15 @@ namespace Game.Scripts.Enemy
 
         public async void Tick()
         {
-            var result = await _currentAction.onExecute();
-            if (result == true)
-            {
-                currentIndex++;
-                if (currentIndex >= _data.Behaviour.PhaseDataList.Count)
-                    currentIndex = 0;
-                ChangeAction(currentIndex);
-            }
+            // 20240813暫時註解
+            // var result = await _currentAction.onExecute();
+            // if (result == true)
+            // {
+            //     currentIndex++;
+            //     if (currentIndex >= _data.Behaviour.PhaseDataList.Count)
+            //         currentIndex = 0;
+            //     ChangeAction(currentIndex);
+            // }
         }
 
         /// <summary>

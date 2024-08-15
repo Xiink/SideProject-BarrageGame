@@ -63,6 +63,11 @@ namespace Game.Scripts.Players.Main
             return (Vector2)Trans.position;
         }
 
+        public void AddForce(Vector3 force)
+        {
+            throw new NotImplementedException();
+        }
+
         public float GetStatFinalValue(string statName)
         {
             var finalValue = 0f;

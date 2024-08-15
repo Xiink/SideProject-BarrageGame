@@ -33,7 +33,6 @@ namespace Game.Scripts.Enemy.Steps
         };
 
         private bool statTick = false;
-        private bool result = false;
 
         [Inject] private EnemyFlowControl _enemyFlowControl;
 
@@ -44,6 +43,8 @@ namespace Game.Scripts.Enemy.Steps
         private Vector3 startPos; // 起始位置
         private Vector3 targetPos; // 目標位置
 
+        private bool _isFinished = true;
+
         private SynchronizationContext _context;
 
         #endregion
@@ -53,7 +54,7 @@ namespace Game.Scripts.Enemy.Steps
         public void InitAction()
         {
             currentDirection = Direction.Right;
-            result = false;
+            _isFinished = false;
         }
 
         public void InjectDependencies(IFlowControl control)
@@ -63,7 +64,7 @@ namespace Game.Scripts.Enemy.Steps
 
         public async Task<bool> onExecute()
         {
-            SquareMove();
+            var result = SquareMove();
 
             return result;
         }
@@ -113,7 +114,7 @@ namespace Game.Scripts.Enemy.Steps
                         {
                             currentDirection = Direction.Right;
                             targetPos += Vector3.right * squareSize;
-                            result = true;
+                            _isFinished = true;
                         }
 
                         break;
@@ -124,7 +125,7 @@ namespace Game.Scripts.Enemy.Steps
                 Debug.Log(ex.Message);
             }
 
-            return result;
+            return _isFinished;
         }
 
         public override string ToString() => "步驟資料";
