@@ -649,6 +649,7 @@ MonoBehaviour:
   _scriptableObjectInstallers: []
   _monoInstallers:
   - {fileID: 1486479653}
+  - {fileID: 2064545090}
   _installerPrefabs: []
   _autoRun: 1
   OnPreInstall:
@@ -825,8 +826,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _scriptableObjectInstallers:
   - {fileID: 11400000, guid: 97e1b70b3ecc8404b9225e80b6d05b22, type: 2}
-  _monoInstallers:
-  - {fileID: 2064545090}
+  _monoInstallers: []
   _installerPrefabs: []
   _autoRun: 1
   _kernel: {fileID: 0}
@@ -844,8 +844,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _components:
   - {fileID: 2064545089}
-  - {fileID: 2064545091}
-  _identifier: 
+  - {fileID: 2064545082}
+  _identifier: PlayerCharacter
   _useSceneContext: 0
   _context: {fileID: 0}
   _bindType: 0
@@ -944,6 +944,10 @@ PrefabInstance:
     - target: {fileID: 6083133774743617362, guid: e43c448ab577dfc4fb929a9ff066e57e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8489385921574320495, guid: e43c448ab577dfc4fb929a9ff066e57e, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

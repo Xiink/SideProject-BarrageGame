@@ -20,7 +20,7 @@ namespace Game.Scripts.Enemy.Main
             Container.BindInterfacesTo<EnemyEnterState>().AsSingle().WithArguments(GetComponent<IMover>());
 
             Container.BindInterfacesAndSelfTo<EnemyStateManager>().AsSingle().WithArguments(GetComponent<IMover>());
-            Container.Bind<EnemyFollowState>().AsSingle();
+            Container.BindInterfacesAndSelfTo<EnemyFollowState>().AsSingle();
 
             Container.Bind<EnemyFlowControl>().AsSingle();
             // Container.BindInterfacesAndSelfTo<EnemyStateManager>().AsSingle().WithArguments(GetComponent<IMover>());

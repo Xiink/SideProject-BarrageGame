@@ -27,28 +27,13 @@ namespace VInspector
             var hideField = false;
             var disableField = false;
             var noVariablesShown = true;
-            var prevFieldDeclaringType = default(Type);
             var selectedTabPath = rootTab.GetSelectedTabPath();
 
 
 
             void drawMember(MemberInfo memberInfo)
             {
-                void handleDeclaringTypeChange()
-                {
-                    var curFieldDeclaringType = memberInfo.DeclaringType;
 
-                    if (prevFieldDeclaringType == null) { prevFieldDeclaringType = curFieldDeclaringType; return; }
-                    if (prevFieldDeclaringType == curFieldDeclaringType) return;
-
-                    drawingTabPath = "";
-                    drawingFoldoutPath = "";
-                    hideField = false;
-                    disableField = false;
-
-                    prevFieldDeclaringType = curFieldDeclaringType;
-
-                }
                 void ifs()
                 {
                     var endIfAttribute = memberInfo.GetCustomAttributeCached<EndIfAttribute>();
@@ -307,7 +292,6 @@ namespace VInspector
                     for (int i = sharedPathNames.Count; i < newPathNames.Count; i++)
                         beginFoldout(newPathNames[i]);
 
-
                 }
 
                 void updateIndentLevel()
@@ -499,9 +483,6 @@ namespace VInspector
 
 
 
-                handleDeclaringTypeChange();
-
-
 
                 ifs();
 
@@ -521,10 +502,10 @@ namespace VInspector
 
 
 
-
                 foldouts();
 
                 if (!rootFoldout.IsSubfoldoutContentVisible(drawingFoldoutPath)) return;
+
 
 
 
@@ -621,14 +602,14 @@ namespace VInspector
 
                     if (!clicked) return;
 
-                    foreach (var target in targets)
-                    {
-                        if (target is Object unityObject && unityObject)
-                            unityObject.RecordUndo();
+                    foreach (var targetObject in rootProperty.serializedObject.targetObjects)
+                        targetObject.RecordUndo();
 
+                    foreach (var target in targets)
                         button.action(target);
 
-                    }
+                    foreach (var targetObject in rootProperty.serializedObject.targetObjects)
+                        targetObject.Dirty();
 
                 }
                 void expandButton()
@@ -734,7 +715,6 @@ namespace VInspector
             }
 
 
-
             void scriptField()
             {
                 if (scriptFieldProperty == null) return;
@@ -761,6 +741,7 @@ namespace VInspector
                     drawMember(memberInfo);
 
                 EditorGUI.indentLevel = baseIndentLevel;
+
 
             }
             void noVariablesToShow()
@@ -827,6 +808,7 @@ namespace VInspector
 
 
 
+
             rootTab.ResetSubtabsDrawn();
 
             scriptField();
@@ -853,6 +835,7 @@ namespace VInspector
         public Type _targetType;
 
         static Dictionary<int, Rect> fieldRects_byLastControlId = new();
+
 
 
 
@@ -1213,8 +1196,9 @@ namespace VInspector
             {
                 if (drawableMemberLists_byTargetType.ContainsKey(targetType)) return;
 
-                var members = new HashSet<MemberInfo>();
 
+
+                var membersHashset = new HashSet<MemberInfo>();
 
                 void serializedFields()
                 {
@@ -1226,47 +1210,47 @@ namespace VInspector
                         if (!curProperty.NextVisible(false)) return;
 
                     do if (targetType.GetFieldInfo(curProperty.name) is FieldInfo fieldInfo)
-                            members.Add(fieldInfo);
+                            membersHashset.Add(fieldInfo);
                     while (curProperty.NextVisible(false));
 
 
                 }
                 void showInInspectorFields()
                 {
-                    members.UnionWith(TypeCache.GetFieldsWithAttribute<ShowInInspectorAttribute>()
+                    membersHashset.UnionWith(TypeCache.GetFieldsWithAttribute<ShowInInspectorAttribute>()
                                                .Where(r => r.DeclaringType.IsAssignableFrom(targetType))
                                                .Select(r => r as MemberInfo));
                 }
                 void showInInspectorProperties()
                 {
-                    members.UnionWith(targetType.GetProperties(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy)
+                    membersHashset.UnionWith(targetType.GetProperties(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy)
                                                 .Where(r => Attribute.IsDefined(r, typeof(ShowInInspectorAttribute)))
                                                 .Where(r => r.CanRead)
                                                 .Select(r => r as MemberInfo));
                 }
                 void groupingAttributesMembers()
                 {
-                    members.UnionWith(TypeCache.GetFieldsWithAttribute<TabAttribute>()
+                    membersHashset.UnionWith(TypeCache.GetFieldsWithAttribute<TabAttribute>()
                                                .Where(r => r.DeclaringType.IsAssignableFrom(targetType)));
 
-                    members.UnionWith(TypeCache.GetFieldsWithAttribute<EndTabAttribute>()
-                                               .Where(r => r.DeclaringType.IsAssignableFrom(targetType)));
-
-
-
-                    members.UnionWith(TypeCache.GetFieldsWithAttribute<FoldoutAttribute>()
-                                               .Where(r => r.DeclaringType.IsAssignableFrom(targetType)));
-
-                    members.UnionWith(TypeCache.GetFieldsWithAttribute<EndFoldoutAttribute>()
+                    membersHashset.UnionWith(TypeCache.GetFieldsWithAttribute<EndTabAttribute>()
                                                .Where(r => r.DeclaringType.IsAssignableFrom(targetType)));
 
 
 
-
-                    members.UnionWith(TypeCache.GetFieldsWithAttribute<IfAttribute>()
+                    membersHashset.UnionWith(TypeCache.GetFieldsWithAttribute<FoldoutAttribute>()
                                                .Where(r => r.DeclaringType.IsAssignableFrom(targetType)));
 
-                    members.UnionWith(TypeCache.GetFieldsWithAttribute<EndIfAttribute>()
+                    membersHashset.UnionWith(TypeCache.GetFieldsWithAttribute<EndFoldoutAttribute>()
+                                               .Where(r => r.DeclaringType.IsAssignableFrom(targetType)));
+
+
+
+
+                    membersHashset.UnionWith(TypeCache.GetFieldsWithAttribute<IfAttribute>()
+                                               .Where(r => r.DeclaringType.IsAssignableFrom(targetType)));
+
+                    membersHashset.UnionWith(TypeCache.GetFieldsWithAttribute<EndIfAttribute>()
                                                .Where(r => r.DeclaringType.IsAssignableFrom(targetType)));
 
 
@@ -1278,12 +1262,90 @@ namespace VInspector
                 }
 
 
+
+                var membersList = new List<MemberInfo>();
+
+                void orderByDeclaration()
+                {
+                    membersList = membersHashset.OrderBy(r => r.DeclaringType == targetType)
+                                                 .ThenBy(r => r.MetadataToken)
+                                                 .ToList();
+                }
+                void insertTypeChangeMarkers()
+                {
+                    var prevDeclaringType = default(Type);
+
+                    for (int i = 0; i < membersList.Count; i++)
+                    {
+                        if (prevDeclaringType != membersList[i].DeclaringType && prevDeclaringType != null)
+                        {
+                            membersList.Insert(i, typeof(VInspectorEditor).GetFieldInfo(nameof(declaringTypeChangeMarker)));
+                            i++;
+
+                        }
+
+                        prevDeclaringType = membersList[i].DeclaringType;
+
+                    }
+
+                }
+                void mergeFoldouts()
+                {
+                    var endedFoldouts = new HashSet<string>();
+                    var lastMemberInFoldout_byFoldoutPath = new Dictionary<string, MemberInfo>();
+
+                    var curFoldoutPath = "";
+                    var prevFoldoutPath = "";
+
+                    for (int i = 0; i < membersList.Count; i++)
+                    {
+                        if (membersList[i].GetCustomAttributeCached<EndFoldoutAttribute>() is EndFoldoutAttribute)
+                            curFoldoutPath = "";
+
+                        if (membersList[i].GetCustomAttributeCached<FoldoutAttribute>() is FoldoutAttribute foldoutAttribute)
+                            curFoldoutPath = foldoutAttribute.name;
+
+
+
+
+                        if (prevFoldoutPath != curFoldoutPath && prevFoldoutPath != "")
+                        {
+                            endedFoldouts.Add(prevFoldoutPath);
+                            lastMemberInFoldout_byFoldoutPath[prevFoldoutPath] = membersList[i - 1];
+                        }
+
+                        if (endedFoldouts.Contains(curFoldoutPath))
+                        {
+                            var member = membersList[i];
+
+                            var foldoutEndsAt = membersList.IndexOf(lastMemberInFoldout_byFoldoutPath[curFoldoutPath]);
+
+                            membersList.RemoveAt(i);
+                            membersList.AddAt(member, foldoutEndsAt + 1);
+
+                        }
+
+
+
+                        prevFoldoutPath = curFoldoutPath;
+
+                    }
+
+                }
+
+
+
+
                 serializedFields();
                 showInInspectorFields();
                 showInInspectorProperties();
                 groupingAttributesMembers();
 
-                drawableMemberLists_byTargetType[targetType] = members.OrderBy(r => r.MetadataToken).ToList();
+                orderByDeclaration();
+                insertTypeChangeMarkers();
+                mergeFoldouts();
+
+                drawableMemberLists_byTargetType[targetType] = membersList;
 
             }
 
@@ -1322,6 +1384,10 @@ namespace VInspector
         static Dictionary<Type, List<MemberInfo>> showInInspectorMembers_byTargetType = new();
         static Dictionary<FieldInfo, List<MethodInfo>> valueChangedCallbacks_byFieldInfos;
         static HashSet<Type> typesUsingVInspector;
+
+
+        [EndFoldout, EndTab, EndIf]
+        static object declaringTypeChangeMarker;
 
     }
 

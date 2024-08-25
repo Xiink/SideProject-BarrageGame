@@ -32,6 +32,7 @@ namespace Game.Scripts.Enemy.Main
 
         public void FixedTick()
         {
+            _currentStateHandler.FixedUpdate();
         }
 
         public void Initialize()

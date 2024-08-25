@@ -22,16 +22,17 @@ namespace Game.Scripts.Players.Main
         /// </summary>
         public ReadOnlyCollection<Stat> Stats => _stats.Contents;
 
-        public Rigidbody rigib { get; set; }
+        // public Rigidbody rigib { get; set; }
 
-        public Rigidbody rigidbody
-        {
-            get
-            {
-                if (rigib == null) rigib = this.GetComponent<Rigidbody>();
-                return rigib;
-            }
-        }
+        [Inject(Id = "PlayerCharacter")]
+        public Rigidbody rigidbody { get; set; }
+        // {
+        //     get
+        //     {
+        //         if (rigib == null) rigib = this.GetComponent<Rigidbody>();
+        //         return rigib;
+        //     }
+        // }
 
         public Transform trans { get; set; }
 

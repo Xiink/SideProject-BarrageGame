@@ -24,174 +24,7 @@ namespace VInspector
     public static class VInspector
     {
 
-        static void Navbar_OnGUI(EditorWindow window, Rect navbarRect)
-        {
-            var scrollPos = window.GetMemberValue<ScrollView>("m_ScrollView").scrollOffset.y;
-
-            void shadow()
-            {
-                var shadowLength = 30;
-                var shadowPos = 21;
-                var shadowGreyscale = isDarkTheme ? .08f : .28f;
-                var shadowAlpha = .35f;
-
-                var minScrollPos = 10;
-                var maxScrollPos = 20;
-
-                var opacity = ((scrollPos - minScrollPos) / (maxScrollPos - minScrollPos)).Clamp01();
-
-                navbarRect.MoveY(shadowPos).SetHeight(shadowLength).DrawCurtainDown(Greyscale(shadowGreyscale, shadowAlpha * opacity));
-
-            }
-            void background()
-            {
-                var backgroundColor = Greyscale(isDarkTheme ? .235f : .8f);
-                var lineColor = Greyscale(isDarkTheme ? .1f : .53f);
-
-                navbarRect.Draw(backgroundColor);
-
-                navbarRect.SetHeightFromBottom(1).MoveY(1).Draw(lineColor);
-
-            }
-
-            void name()
-            {
-                var nameRect = navbarRect.MoveX(30 * 2 + 1);
-
-                var minScrollPos = 10;
-                var maxScrollPos = 20;
-
-                var opacity = (scrollPos - minScrollPos) / (maxScrollPos - minScrollPos);
-
-
-
-
-                SetGUIColor(Greyscale(.95f, opacity));
-                SetLabelBold();
-
-                GUI.Label(nameRect, Selection.activeObject?.name ?? "No selection");
-
-                ResetLabelStyle();
-                ResetGUIColor();
-
-
-            }
-            void nameCurtain()
-            {
-                if (!data) return;
-                if (VInspectorBookmarksGUI.lastItemX == default) return;
-
-                var backgroundColor = Greyscale(isDarkTheme ? .235f : .8f);
-
-                var curtainRect = navbarRect.AddHeightFromMid(-4).SetXMax(VInspectorBookmarksGUI.lastItemX).SetWidthFromRight(20);
-                var maskRect = navbarRect.AddHeightFromMid(-4).SetX(VInspectorBookmarksGUI.lastItemX).SetWidth(123);
-
-                curtainRect.DrawCurtainLeft(backgroundColor);
-                maskRect.Draw(backgroundColor);
-
-
-            }
-
-            void selectPrev()
-            {
-                var buttonRect = navbarRect.SetWidth(30).MoveX(4);
-
-                var iconName = "Chevron Left";
-                var iconSize = 14;
-                var colorNormal = Greyscale(isDarkTheme ? .75f : .2f);
-                var colorHovered = Greyscale(isDarkTheme ? 1f : .2f);
-                var colorPressed = Greyscale(isDarkTheme ? .75f : .5f);
-                var colorDisabled = Greyscale(isDarkTheme ? .53f : .55f);
-
-
-                var disabled = !VInspectorSelectionHistory.instance.prevStates.Any();
-
-                if (disabled) { IconButton(buttonRect, iconName, iconSize, colorDisabled, colorDisabled, colorDisabled); return; }
-
-
-                if (!IconButton(buttonRect, iconName, iconSize, colorNormal, colorHovered, colorPressed)) return;
-
-                VInspectorSelectionHistory.instance.MoveBack();
-
-            }
-            void selectNext()
-            {
-                var buttonRect = navbarRect.SetWidth(30).MoveX(30).MoveX(1).AddWidthFromMid(-6);
-
-                var iconName = "Chevron Right";
-                var iconSize = 14;
-                var colorNormal = Greyscale(isDarkTheme ? .75f : .2f);
-                var colorHovered = Greyscale(isDarkTheme ? 1f : .2f);
-                var colorPressed = Greyscale(isDarkTheme ? .75f : .5f);
-                var colorDisabled = Greyscale(isDarkTheme ? .53f : .55f);
-
-
-                var disabled = !VInspectorSelectionHistory.instance.nextStates.Any();
-
-                if (disabled) { IconButton(buttonRect, iconName, iconSize, colorDisabled, colorDisabled, colorDisabled); return; }
-
-
-                if (!IconButton(buttonRect, iconName, iconSize, colorNormal, colorHovered, colorPressed)) return;
-
-                VInspectorSelectionHistory.instance.MoveForward();
-
-            }
-
-            void bookmarks()
-            {
-                void createData()
-                {
-                    if (data) return;
-                    if (!navbarRect.IsHovered()) return;
-                    if (!DragAndDrop.objectReferences.Any()) return;
-
-                    data = ScriptableObject.CreateInstance<VInspectorData>();
-
-                    AssetDatabase.CreateAsset(data, GetScriptPath("VInspector").GetParentPath().CombinePath("vInspector Data.asset"));
-
-                }
-                void repaintOnUndoRedo()
-                {
-                    if (!data) return;
-                    if (curEvent.commandName != "UndoRedoPerformed") return;
-                    if (!VInspectorBookmarksGUI.repaintNeededAfterUndoRedo) return;
-
-                    window.Repaint();
-
-                    VInspectorBookmarksGUI.repaintNeededAfterUndoRedo = false;
-
-                }
-                void gui()
-                {
-                    if (!data) return;
-
-                    var bookmarksRect = navbarRect.AddWidth(-5).AddWidthFromRight(-60);
-
-                    VInspectorBookmarksGUI.OnGUI(bookmarksRect, window);
-
-                }
-
-                createData();
-                repaintOnUndoRedo();
-                gui();
-
-            }
-
-
-            shadow();
-            background();
-
-            name();
-            nameCurtain();
-
-            selectPrev();
-            selectNext();
-
-            bookmarks();
-
-        }
-
-        static void UpdateNavbar() // update
+        static void UpdateNavbars() // update
         {
             void updateNavbar(EditorWindow window)
             {
@@ -220,7 +53,8 @@ namespace VInspector
                 navbar.style.width = Length.Percent(100);
                 navbar.style.height = 28;
 
-                navbar.onGUIHandler = () => Navbar_OnGUI(window, navbar.contentRect);
+                var navbarGui = new VInspectorNavbar(window);
+                navbar.onGUIHandler = () => navbarGui.OnGUI(navbar.contentRect);
 
                 navbar.style.position = Position.Absolute;
 
@@ -1146,7 +980,10 @@ namespace VInspector
 
             var components = gameObject.GetComponents<Component>().Where(r => r);
 
-            // if (editor.targets.Length > 1)
+            if (!componentHeaders_byComponent__byEditor.ContainsKey(editor))
+                componentHeaders_byComponent__byEditor[editor] = new();
+
+            // if (editor.targets.Length > 1) 
             // components = tracker.activeEditors.Where(r => r.target && r.target is Component && r.targets.Length == editor.targets.Length).Select(r => r.targets.First() as Component).ToArray();
 
             void clearHeadersOnReorder()
@@ -1154,7 +991,7 @@ namespace VInspector
                 var curOrderHash = components.Aggregate(17, (hash, element) => hash * 31 + (element?.GetHashCode() ?? 0));
 
                 if (curOrderHash != componentOrderHashes_byEditor.GetValueOrDefault(editor))
-                    componentHeaders_byComponent.Clear();
+                    componentHeaders_byComponent__byEditor[editor].Clear();
 
                 componentOrderHashes_byEditor[editor] = curOrderHash;
 
@@ -1162,9 +999,9 @@ namespace VInspector
             void createHeader(Component component)
             {
                 if (!component) return;
-                if (componentHeaders_byComponent.ContainsKey(component)) return;
+                if (componentHeaders_byComponent__byEditor[editor].ContainsKey(component)) return;
 
-                componentHeaders_byComponent[component] = new VInspectorComponentHeader(component, editor);
+                componentHeaders_byComponent__byEditor[editor][component] = new VInspectorComponentHeader(component, editor);
 
             }
 
@@ -1175,11 +1012,11 @@ namespace VInspector
                 createHeader(component);
 
             foreach (var component in components)
-                componentHeaders_byComponent[component].Update();
+                componentHeaders_byComponent__byEditor[editor][component].Update();
 
         }
 
-        static Dictionary<Component, VInspectorComponentHeader> componentHeaders_byComponent = new();
+        static Dictionary<Editor, Dictionary<Component, VInspectorComponentHeader>> componentHeaders_byComponent__byEditor = new();
 
         static Dictionary<Editor, int> componentOrderHashes_byEditor = new();
 
@@ -1266,6 +1103,8 @@ namespace VInspector
         {
             if (!data) return;
 
+
+
             if (state == PlayModeStateChange.EnteredPlayMode)
                 StashBookmarkObjects();
 
@@ -1275,6 +1114,21 @@ namespace VInspector
             // scene objects can get recreated in playmode if the scene was reloaded
             // in this case their respective items will be updated in OnSceneLoaded_inPlaymode to reference the recreated versions
             // so we ensure that after playmode items reference the same objects as they did before playmode
+
+
+
+
+            if (state == PlayModeStateChange.EnteredEditMode)
+                foreach (var item in data.items)
+                    if (item.globalId.guid == "00000000000000000000000000000000")
+                        if (item._obj is GameObject gameObject)
+                        {
+                            item.globalId = new GlobalID(item.globalId.ToString().Replace("00000000000000000000000000000000", gameObject.scene.path.ToGuid()));
+                            data.Dirty();
+                        }
+
+            // objects from DontDestroyOnLoad that were bookmarked in playmode have globalIds with blank scene guids
+            // we fix this after playmode, when scene guids become available
 
         }
 
@@ -1315,8 +1169,8 @@ namespace VInspector
                 Selection.selectionChanged += UpdatePasteButtons;
 
 
-                EditorApplication.update -= UpdateNavbar;
-                EditorApplication.update += UpdateNavbar;
+                EditorApplication.update -= UpdateNavbars;
+                EditorApplication.update += UpdateNavbars;
 
                 EditorApplication.update -= UpdateComponentAnimations;
                 EditorApplication.update += UpdateComponentAnimations;
@@ -1405,7 +1259,7 @@ namespace VInspector
 
 
 
-        static IEnumerable<EditorWindow> allInspectors => _allInspectors ??= t_InspectorWindow.GetFieldValue<IList>("m_AllInspectors").Cast<EditorWindow>();
+        static IEnumerable<EditorWindow> allInspectors => _allInspectors ??= t_InspectorWindow.GetFieldValue<IList>("m_AllInspectors").Cast<EditorWindow>().Where(r => r.GetType() == t_InspectorWindow);
         static IEnumerable<EditorWindow> _allInspectors;
 
 
@@ -1417,8 +1271,7 @@ namespace VInspector
 
         static Type t_VHierarchy = Type.GetType("VHierarchy.VHierarchy") ?? Type.GetType("VHierarchy.VHierarchy, VHierarchy, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null");
 
-        // public static MethodInfo mi_VHierarchy_GetIconName = t_VHierarchy?.GetMethod("GetIconName_forVInspector", maxBindingFlags);
-        public static MethodInfo mi_VHierarchy_GetIconName = t_VHierarchy?.GetMethod("GetIconName_forVFavorites", maxBindingFlags);
+        public static MethodInfo mi_VHierarchy_GetIconName = t_VHierarchy?.GetMethod("GetIconName_forVInspector", maxBindingFlags);
 
 
 
@@ -1426,7 +1279,7 @@ namespace VInspector
 
 
 
-        const string version = "2.0.1";
+        const string version = "2.0.7";
 
 
     }

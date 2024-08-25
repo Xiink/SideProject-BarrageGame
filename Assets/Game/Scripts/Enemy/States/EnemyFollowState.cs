@@ -1,4 +1,5 @@
 using Game.Scripts.Enemy.Main;
+using Game.Scripts.Players.Handlers;
 using Game.Scripts.Players.Main;
 using UnityEngine;
 using Zenject;
@@ -8,9 +9,12 @@ namespace Game.Scripts.Enemy.States
     public class EnemyFollowState : IEnemyState
     {
         [Inject]
-        EnemyStateManager _enemyStateManager;
+        private EnemyStateManager _enemyStateManager;
 
-        readonly PlayerFacade _playerCharacter;
+        [Inject]
+        private PlayerMoveHandler _playerMoveHandler;
+
+        // readonly PlayerFacade _playerCharacter;
 
         bool _strafeRight;
         float _lastStrafeChangeTime;
@@ -32,13 +36,13 @@ namespace Game.Scripts.Enemy.States
 
         public void Update()
         {
-            // var distanceToPlyaer =
-            //     (_enemyStateManager._playerCharacter.GetPosition() - _enemyStateManager._enemy.GetPosition()).magnitude;
-            // if (Time.realtimeSinceStartup - _lastStrafeChangeTime > 20)
-            // {
-            //     _lastStrafeChangeTime = Time.realtimeSinceStartup;
-            //     _strafeRight = !_strafeRight;
-            // }
+            var distanceToPlyaer =
+                (_playerMoveHandler._mover.GetPosition() - _enemyStateManager._enemy.GetPosition()).magnitude;
+            if (Time.realtimeSinceStartup - _lastStrafeChangeTime > 20)
+            {
+                _lastStrafeChangeTime = Time.realtimeSinceStartup;
+                _strafeRight = !_strafeRight;
+            }
         }
 
         public void FixedUpdate()
@@ -61,9 +65,9 @@ namespace Game.Scripts.Enemy.States
         }
         private void MoveTowardsPlayer()
         {
-            // var playerDir = (_enemyStateManager._playerCharacter.GetPosition() - _enemyStateManager._enemy.GetPosition()).normalized;
-            //
-            // _enemyStateManager._enemy.AddForce(playerDir * 15);
+            var playerDir = (_playerMoveHandler._mover.GetPosition() - _enemyStateManager._enemy.GetPosition()).normalized;
+
+            _enemyStateManager._enemy.AddForce(playerDir * 15);
         }
     }
 }

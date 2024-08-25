@@ -126,13 +126,13 @@ namespace VInspector
                 {
                     var nameRect = headerRect.MoveX(54).MoveY(-1);
 
+
                     var s = new GUIContent(EditorGUIUtility.ObjectContent(component, component.GetType())).text;
                     s = s.Substring(s.LastIndexOf('(') + 1);
                     s = s.Substring(0, s.Length - 1);
 
-
-                    // if (isPinned)
-                    // s += " of " + component.gameObject.name;
+                    if (instances.Any(r => r.component.GetType() == component.GetType() && r.component != component))
+                        s += " - " + component.gameObject.name;
 
 
                     SetLabelBold();
@@ -340,12 +340,24 @@ namespace VInspector
             this.component = component;
             this.editor = Editor.CreateEditor(component);
 
+            if (!instances.Contains(this))
+                instances.Add(this);
+
         }
 
-        void OnDestroy() => editor?.DestroyImmediate();
+        void OnDestroy()
+        {
+            editor?.DestroyImmediate();
+
+            if (instances.Contains(this))
+                instances.Remove(this);
+
+        }
 
         public Component component;
         public Editor editor;
+
+        public static List<VInspectorComponentWindow> instances = new();
 
 
 

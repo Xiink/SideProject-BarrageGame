@@ -22,6 +22,9 @@ namespace Game.Scripts.Enemy
         public bool Moveable { get; }
 
         public Rigidbody rigidbody { get; }
+
+        private Rigidbody2D rigi2D => GetComponent<Rigidbody2D>();
+
         public Transform trans { get; set; }
 
         public Transform Trans
@@ -62,7 +65,7 @@ namespace Game.Scripts.Enemy
 
         public void AddForce(Vector3 force)
         {
-            rigidbody.AddForce(force);
+            rigi2D.AddForce(force);
         }
 
         public float GetStatFinalValue(string statName)

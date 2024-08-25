@@ -66,8 +66,8 @@ namespace VInspector
         const string navigationBar = dir + "Navigation bar";
         const string copyPasteButtons = dir + "Copy \u2215 Paste components";
         const string saveInPlaymodeButton = dir + "Save in play mode";
-        const string componentWindows = dir + "Create component windows with Alt-Drag";
-        const string componentAnimations = dir + "Component expand \u2215 collapse animations";
+        const string componentWindows = dir + "Component windows";
+        const string componentAnimations = dir + "Component animations";
         const string minimalMode = dir + "Minimal mode";
         const string resettableVariables = dir + "Resettable variables";
         const string hideScriptField = dir + "Hide script field";

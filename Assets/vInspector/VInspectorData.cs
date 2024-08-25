@@ -94,10 +94,13 @@ namespace VInspector
 
                 _name = o.name;
 
-                _obj = globalId.GetObject();
+                _obj = o;
 
             }
 
+
+
+            public float width => VInspectorNavbar.expandedItemWidth;
 
 
 
@@ -141,7 +144,7 @@ namespace VInspector
 
 
 
-        public void OnAfterDeserialize() => VInspectorBookmarksGUI.repaintNeededAfterUndoRedo = true;
+        public void OnAfterDeserialize() => VInspectorNavbar.repaintNeededAfterUndoRedo = true;
         public void OnBeforeSerialize() { }
 
 
@@ -157,8 +160,7 @@ namespace VInspector
         {
             public override void OnInspectorGUI()
             {
-                var style = EditorStyles.label;
-                style.wordWrap = true;
+                var style = new GUIStyle(EditorStyles.label) { wordWrap = true };
 
 
                 SetGUIEnabled(false);

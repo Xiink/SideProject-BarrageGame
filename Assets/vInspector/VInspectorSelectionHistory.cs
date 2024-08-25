@@ -31,7 +31,7 @@ namespace VInspector
 
             ignoreThisSelectionChange = true;
 
-            Selection.objects = prevState.selectedObjects?.ToArray();
+            prevState.selectedObjects.ToArray().SelectInInspector(frameInHierarchy: false, frameInProject: false);
 
         }
         public void MoveForward()
@@ -47,7 +47,7 @@ namespace VInspector
 
             ignoreThisSelectionChange = true;
 
-            Selection.objects = nextState.selectedObjects?.ToArray();
+            nextState.selectedObjects.ToArray().SelectInInspector(frameInHierarchy: false, frameInProject: false);
 
         }
 

@@ -1322,6 +1322,29 @@ namespace VInspector.Libs
 
         }
 
+        public static void SelectInInspector(this Object[] objects, bool frameInHierarchy = false, bool frameInProject = false)
+        {
+            void setHierarchyLocked(bool isLocked) => allHierarchies.ForEach(r => r?.GetMemberValue("m_SceneHierarchy")?.SetMemberValue("m_RectSelectInProgress", true));
+            void setProjectLocked(bool isLocked) => allProjectBrowsers.ForEach(r => r?.SetMemberValue("m_InternalSelectionChange", isLocked));
+
+
+            if (!frameInHierarchy) setHierarchyLocked(true);
+            if (!frameInProject) setProjectLocked(true);
+
+            Selection.objects = objects?.ToArray();
+
+            if (!frameInHierarchy) EditorApplication.delayCall += () => setHierarchyLocked(false);
+            if (!frameInProject) EditorApplication.delayCall += () => setProjectLocked(false);
+
+        }
+        public static void SelectInInspector(this Object obj, bool frameInHierarchy = false, bool frameInProject = false) => new[] { obj }.SelectInInspector(frameInHierarchy, frameInProject);
+
+        static IEnumerable<EditorWindow> allHierarchies => _allHierarchies ??= typeof(Editor).Assembly.GetType("UnityEditor.SceneHierarchyWindow").GetFieldValue<IList>("s_SceneHierarchyWindows").Cast<EditorWindow>();
+        static IEnumerable<EditorWindow> _allHierarchies;
+
+        static IEnumerable<EditorWindow> allProjectBrowsers => _allProjectBrowsers ??= typeof(Editor).Assembly.GetType("UnityEditor.ProjectBrowser").GetFieldValue<IList>("s_ProjectBrowsers").Cast<EditorWindow>();
+        static IEnumerable<EditorWindow> _allProjectBrowsers;
+
 
 
         public static EditorWindow OpenObjectPicker<T>(Object obj = null, bool allowSceneObjects = false, string searchFilter = "", int controlID = 0) where T : Object
@@ -1778,24 +1801,37 @@ namespace VInspector.Libs
 
         public static void SetGUIColor(Color c)
         {
-            if (!_guiColorModified)
-                _defaultGuiColor = GUI.color;
+            _guiColorStack.Push(GUI.color);
 
-            _guiColorModified = true;
-
-            GUI.color = _defaultGuiColor * c;
+            GUI.color *= c;
 
         }
         public static void ResetGUIColor()
         {
-            GUI.color = _guiColorModified ? _defaultGuiColor : Color.white;
+            GUI.color = _guiColorStack.Pop();
+        }
 
-            _guiColorModified = false;
+        static Stack<Color> _guiColorStack = new();
+
+
+
+        public static float editorDeltaTime = .0166f;
+
+        static void EditorDeltaTime_Update()
+        {
+            editorDeltaTime = (float)(EditorApplication.timeSinceStartup - _lastUpdateTime);
+
+            _lastUpdateTime = EditorApplication.timeSinceStartup;
 
         }
-        static bool _guiColorModified;
-        static Color _defaultGuiColor;
+        static double _lastUpdateTime;
 
+        [InitializeOnLoadMethod]
+        static void EditorDeltaTime_Subscribe()
+        {
+            EditorApplication.update -= EditorDeltaTime_Update;
+            EditorApplication.update += EditorDeltaTime_Update;
+        }
 
 
 

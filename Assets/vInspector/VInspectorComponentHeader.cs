@@ -22,6 +22,9 @@ namespace VInspector
         {
             void masks()
             {
+                if (!curEvent.isRepaint) return;
+
+
                 Color backgroundColor;
 
                 float buttonMask_xMin;
@@ -56,17 +59,11 @@ namespace VInspector
                         defaultButtonCount = customButtonCount = 0;
 
 
-
-
                     buttonMask_xMax = headerRect.xMax - buttonsOffsetRight - defaultButtonCount * buttonSize;
-
-
                     buttonMask_xMin = headerRect.xMax - buttonsOffsetRight - (defaultButtonCount + customButtonCount).Max(3) * buttonSize;
 
-
-
-
                 }
+
 
                 void hideArrow()
                 {
@@ -116,6 +113,7 @@ namespace VInspector
                     rect.DrawCurtainLeft(backgroundColor);
 
                 }
+
 
 
                 set_backgroundColor();
@@ -276,6 +274,38 @@ namespace VInspector
 
             }
 
+            void blockClicksOnDefaultButtons()
+            {
+                var buttonCount = VInspectorMenu.componentButtons_defaultButtonsCount;
+
+                if (VInspectorMenu.copyPasteButtonsEnabled)
+                    buttonCount++;
+
+                if (VInspectorMenu.saveInPlaymodeButtonEnabled && Application.isPlaying)
+                    buttonCount++;
+
+                if (buttonCount >= 3) return;
+
+
+
+                var blockRect_xMin = headerRect.xMax - buttonsOffsetRight - 3 * buttonSize;
+                var blockRect_xMax = headerRect.xMax - buttonsOffsetRight - buttonCount * buttonSize;
+
+                var blockRect = headerRect.AddHeightFromMid(-2).SetX(blockRect_xMin).SetXMax(blockRect_xMax);
+
+
+
+                SetGUIColor(Color.clear);
+
+                if (IconButton(blockRect, ""))
+                    if (curEvent.holdingShift)
+                        VInspector.CollapseOtherComponents(component, window);
+                    else
+                        VInspector.ToggleComponentExpanded(component, window);
+
+                ResetGUIColor();
+
+            }
             void expandWithAnimation()
             {
                 if (!mousePressedOnBackground) return;
@@ -409,6 +439,7 @@ namespace VInspector
             {
                 if (!curEvent.isUsed) return;
                 if (!headerRect.IsHovered()) return;
+                if (imguiContainer.onGUIHandler.Method.DeclaringType.FullName.StartsWith("Sisus")) return;
 
                 GUIUtility.keyboardControl = 0;
 
@@ -430,8 +461,9 @@ namespace VInspector
             copyPasteButton();
             saveInPlaymodeButton();
 
-            createComponentWindow();
+            blockClicksOnDefaultButtons();
             expandWithAnimation();
+            createComponentWindow();
 
             set_mousePressedOnBackground();
             set_hoveredComponentHeader();
@@ -483,13 +515,27 @@ namespace VInspector
         public void Update()
         {
             if (imguiContainer is VisualElement v && v.panel == null) { imguiContainer.onGUIHandler = defaultHeaderGUIAction; imguiContainer = null; }
-            if (imguiContainer != null && imguiContainer.onGUIHandler.Method.DeclaringType == typeof(VInspectorComponentHeader)) return;
+            if (imguiContainer?.onGUIHandler.Method.DeclaringType == typeof(VInspectorComponentHeader)) return;
+            if (imguiContainer?.onGUIHandler.Method.DeclaringType.FullName.StartsWith("Sisus") == true) return;
+
             if (typeof(ScriptableObject).IsAssignableFrom(component.GetType())) return;
             if (editor.GetPropertyValue("propertyViewer") is not EditorWindow window) return;
 
+
             this.window = window;
 
+            void fixWrongWindow_2022_3_26()
+            {
+                if (Application.unityVersion != "2022.3.26f1") return;
 
+                if (!window.hasFocus)
+                    window = window.GetMemberValue("m_Parent")?.GetMemberValue<List<EditorWindow>>("m_Panes")?.FirstOrDefault(r => r.hasFocus) ?? window;
+
+                // in 2022.3.26 wrong inspector may be returned by propertyViewer when there are multiple inspectors
+                // also the same instance of an editor may be used on all inspectors
+                // here we fix it for cases when multiple inspectors are in the same dock area
+
+            }
             void findHeader(VisualElement element)
             {
                 if (element == null) return;
@@ -525,17 +571,15 @@ namespace VInspector
             }
             void setupGUICallbacks()
             {
+                if (imguiContainer == null) return;
+
                 defaultHeaderGUIAction = imguiContainer.onGUIHandler;
                 imguiContainer.onGUIHandler = OnGUI;
-
-                // imguiContainer.RegisterCallback<KeyDownEvent>((r) => { window.Repaint(); });
             }
 
-
+            fixWrongWindow_2022_3_26();
             findHeader(window.rootVisualElement);
-
-            if (imguiContainer != null)
-                setupGUICallbacks();
+            setupGUICallbacks();
 
         }
 

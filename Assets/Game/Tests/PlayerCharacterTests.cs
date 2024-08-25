@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.ComponentModel;
 using Game.Scripts.Battle.Misc;
 using Game.Scripts.Battle.States;
 using Game.Scripts.Names;
@@ -9,6 +10,7 @@ using NSubstitute;
 using NUnit.Framework;
 using rStarUtility.Generic.TestExtensions;
 using rStarUtility.Generic.TestFrameWork;
+using UnityEngine;
 
 namespace Game.Tests
 {
@@ -55,6 +57,7 @@ namespace Game.Tests
             var moverHandler = Given_A_PlayerMoveHandler();
 
             var playerCharacter = Resolve<PlayerCharacter>();
+
             gameState.SetPauseState(true);
             moverHandler.Tick();
             playerCharacter.Trans.ShouldTransformPositionBe(0,0);
@@ -66,27 +69,31 @@ namespace Game.Tests
 
         [Test(Description = "設定數值時，會限制數值最大最小值")]
         // [Ignore("還沒做完，正確為計算值的設置")]
-        public void Set_PlayerCharacter_Stats_WouldBe_Clamp()
+        public void set_PlayerCharacter_Stats_WouldBe_Clamp()
         {
-            // var statName = "123";
-            // var statDatas = new List<Stat.Data> { new Stat.Data(statName, 0, 2, 99) };
-            // Bind_Instance(new PlayerCharacter.Data() { statDatas = statDatas });
-            // var character = NewPlayerCharacter();
-            // character.GetStatFinalValue(statName).ShouldBe(2);
-            // character.SetStatAmount(statName, -5);
-            // character.GetStatFinalValue(statName).ShouldBe(2);
+            var statName = StatNames.MoveSpeed;
+            var statDatas = new List<Stat.Data> { new Stat.Data(statName, 9999) };
+            Bind_Instance(new PlayerCharacter.Data() { statDatas = statDatas });
+            var character = NewPlayerCharacter();
+            character.GetStatFinalValue(statName).ShouldBe(30);
+            character.SetStatAmount(statName, -5);
+            character.GetStatFinalValue(statName).ShouldBe(1);
         }
 
         private PlayerMoveHandler Given_A_PlayerMoveHandler()
         {
             var playerCharacter = NewPlayerCharacter();
             playerCharacter.SetStatAmount(StatNames.MoveSpeed,1);
+
             var inputState = Bind_And_Resolve<PlayerInputState>();
             var timeProvider = Bind_Mock_And_Resolve<ITimeProvider>();
+            var cameraProvider = Bind_Mock_And_Resolve<ICameraProvider>();
+
             inputState.SetMoveDirection(1, 1);
             timeProvider.GetDeltaTime().Returns(1);
 
             var moveHandler = Bind_And_Resolve<PlayerMoveHandler>();
+
             return moveHandler;
         }
 
@@ -98,9 +105,18 @@ namespace Game.Tests
                 moveable.GetState().Returns(true);
             }
 
+
             Bind_Instance(new PlayerCharacter.Data());
             Bind_InterfacesAndSelfTo_From_NewGameObject<PlayerCharacter>();
+            Container.Bind<Rigidbody>().WithId("PlayerCharacter").FromNewComponentOnNewGameObject().AsSingle();
+            var rigibody = Container.ResolveId<Rigidbody>("PlayerCharacter");
+
             var playerCharacter = Resolve<PlayerCharacter>();
+
+            // playerCharacter.gameObject.AddComponent<Rigidbody>();
+            // var rigibody = new Rigidbody();
+            // Container.BindInstance(rigibody);
+
             return playerCharacter;
         }
 
