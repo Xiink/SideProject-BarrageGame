@@ -25,6 +25,8 @@ namespace Game.Scripts.Enemy.Main
 
         public void Tick()
         {
+            if(_enemy.Moveable == false) return;
+
             _enemy.SetPosition(new Vector3(_enemy.GetPosition().x, _enemy.GetPosition().y, 0));
 
             _currentStateHandler.Update();
@@ -32,6 +34,8 @@ namespace Game.Scripts.Enemy.Main
 
         public void FixedTick()
         {
+            if(_enemy.Moveable == false) return;
+
             _currentStateHandler.FixedUpdate();
         }
 

@@ -14,6 +14,8 @@ namespace Game.Scripts.Enemy.States
         [Inject]
         private PlayerMoveHandler _playerMoveHandler;
 
+        // [Inject]
+        // private PlayerCharacter _playerCharacter;
         // readonly PlayerFacade _playerCharacter;
 
         bool _strafeRight;

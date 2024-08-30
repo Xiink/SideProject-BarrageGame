@@ -15,12 +15,9 @@ using Zenject;
 namespace Game.Scripts.Enemy
 {
     [ExecuteInEditMode]
-    public class Enemy : MonoBehaviour,IMover,IInitializable
+    public class Enemy : MonoBehaviour,IMover
     {
         #region Public Variables
-
-        public bool Moveable { get; }
-
         public Rigidbody rigidbody { get; }
 
         private Rigidbody2D rigi2D => GetComponent<Rigidbody2D>();
@@ -37,6 +34,8 @@ namespace Game.Scripts.Enemy
         }
         #endregion
 
+        public bool Moveable => _moveable.GetState();
+
         public SpriteRenderer sprit;
 
         #region Private Variables
@@ -46,6 +45,9 @@ namespace Game.Scripts.Enemy
 
         [Inject]
         public EnemyStateManager _EnemyStateManager;
+
+        [Inject]
+        private IMoveable _moveable;
 
         private GenericRepository<Stat> _stats = new GenericRepository<Stat>();
 
@@ -104,12 +106,6 @@ namespace Game.Scripts.Enemy
             return findStat;
         }
 
-        [Inject]
-        private void Init()
-        {
-
-        }
-
         private void InitStats()
         {
 
@@ -117,13 +113,10 @@ namespace Game.Scripts.Enemy
 
         #endregion
 
-        #region Nested Types
-
-        public void Initialize()
+        [Serializable]
+        public class Data
         {
-            Debug.Log(this);
-        }
 
-        #endregion
+        }
     }
 }

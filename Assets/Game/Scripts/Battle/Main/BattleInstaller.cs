@@ -25,11 +25,9 @@ namespace Game.Scripts.Battle.Main
             Container.Bind<GameState>().AsSingle();
             Container.Bind<InputState>().AsSingle();
 
-            // Container.BindInterfacesAndSelfTo<TimeProvider>().AsSingle();
             Container.Bind<ITimeProvider>().To<TimeProvider>().AsSingle();
-            // Container.BindInterfacesAndSelfTo<CameraProvider>().AsSingle();
             Container.Bind<ICameraProvider>().To<CameraProvider>().AsSingle();
-            Container.BindInterfacesAndSelfTo<Moveable>().AsSingle();
+            Container.Bind<IMoveable>().To<Moveable>().AsSingle();
             Container.BindInterfacesTo<InputHandler>().AsSingle();
             Container.BindInterfacesTo<GamePauseHandler>().AsSingle();
 

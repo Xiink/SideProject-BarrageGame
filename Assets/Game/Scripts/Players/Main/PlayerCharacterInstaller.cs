@@ -2,6 +2,7 @@ using Game.Scripts.Battle.Misc;
 using Game.Scripts.Bullet;
 using Game.Scripts.Enemy.Main;
 using Game.Scripts.Players.Handlers;
+using UnityEngine;
 using Zenject;
 
 namespace Game.Scripts.Players.Main
@@ -9,6 +10,7 @@ namespace Game.Scripts.Players.Main
     public class PlayerCharacterInstaller : MonoInstaller
     {
 
+        public GameObject _player;
 
         public PlayerCharacterInstaller()
         {
@@ -16,6 +18,7 @@ namespace Game.Scripts.Players.Main
 
         public override void InstallBindings()
         {
+            // Container.Bind<IMover>().To<PlayerCharacter>().AsSingle();
             Container.BindInterfacesAndSelfTo<PlayerInputState>().AsSingle();
 
             Container.BindInterfacesAndSelfTo<PlayerInputHandler>().AsSingle();

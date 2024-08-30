@@ -105,7 +105,6 @@ namespace Game.Tests
                 moveable.GetState().Returns(true);
             }
 
-
             Bind_Instance(new PlayerCharacter.Data());
             Bind_InterfacesAndSelfTo_From_NewGameObject<PlayerCharacter>();
             Container.Bind<Rigidbody>().WithId("PlayerCharacter").FromNewComponentOnNewGameObject().AsSingle();
