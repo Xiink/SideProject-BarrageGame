@@ -56,6 +56,11 @@ namespace Game.Tests
 
             var moveHandler = Given_A_PlayerMoveHandler();
             var playerCharacter = Resolve<PlayerCharacter>();
+
+            moveHandler.HorDash(5);
+            playerCharacter.Trans.ShouldTransformPositionBe(5, 0);
+            moveHandler.VerDash(5);
+            playerCharacter.Trans.ShouldTransformPositionBe(5, 5);
         }
 
 

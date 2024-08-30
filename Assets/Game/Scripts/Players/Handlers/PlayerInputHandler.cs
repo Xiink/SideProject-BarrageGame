@@ -16,7 +16,7 @@ namespace Game.Scripts.Players.Handlers
 
             _playerInputState.SetShootMouseDown(Input.GetMouseButtonDown(0));
 
-            _playerInputState.SetDashKeyDown(Input.GetKey(KeyCode.Escape));
+            _playerInputState.SetDashKeyDown(Input.GetKey(KeyCode.Space));
         }
     }
 }
