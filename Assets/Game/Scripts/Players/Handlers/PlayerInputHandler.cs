@@ -15,6 +15,8 @@ namespace Game.Scripts.Players.Handlers
             _playerInputState.SetVer(Input.GetAxisRaw("Vertical"));
 
             _playerInputState.SetShootMouseDown(Input.GetMouseButtonDown(0));
+
+            _playerInputState.SetDashKeyDown(Input.GetKey(KeyCode.Escape));
         }
     }
 }

@@ -15,12 +15,14 @@ namespace Game.Scripts.Players.Handlers
 
         public void Tick()
         {
-            if(_mover.Moveable == false) return;
+            Move();
 
-            var moveSpeed = _mover.GetStatFinalValue(StatNames.MoveSpeed);
-            var movement = _timeProvider.GetDeltaTime() * moveSpeed * _playerInputState.MoveDirection;
-            var newPos = movement + _mover.GetPosition();
-            _mover.SetPosition(newPos);
+            GetMousePosition();
+        }
+
+        public void GetMousePosition()
+        {
+            if(_mover.Moveable == false) return;
 
             var mousePos = _cameraProvider.GetMousePosition();
             var goalDir = mousePos - (Vector3)_mover.GetPosition();
@@ -29,6 +31,16 @@ namespace Game.Scripts.Players.Handlers
 
             var d = Quaternion.LookRotation(goalDir) * Quaternion.AngleAxis(90, Vector3.up);
             _mover.rigidbody.rotation = d;
+        }
+
+        public void Move()
+        {
+            if(_mover.Moveable == false) return;
+
+            var moveSpeed = _mover.GetStatFinalValue(StatNames.MoveSpeed);
+            var movement = _timeProvider.GetDeltaTime() * moveSpeed * _playerInputState.MoveDirection;
+            var newPos = movement + _mover.GetPosition();
+            _mover.SetPosition(newPos);
         }
     }
 }

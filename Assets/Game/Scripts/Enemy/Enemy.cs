@@ -36,12 +36,12 @@ namespace Game.Scripts.Enemy
 
         public bool Moveable => _moveable.GetState();
 
-        public SpriteRenderer sprit;
+        // public SpriteRenderer sprit;
 
         #region Private Variables
 
-        [Inject]
-        public EnemyData _data;
+        // [Inject]
+        // public EnemyData _data;
 
         [Inject]
         public EnemyStateManager _EnemyStateManager;
@@ -80,43 +80,43 @@ namespace Game.Scripts.Enemy
             Trans.position = (Vector3)newPos;
         }
 
-        public void SetStatAmount(string name, float value)
-        {
-            var (contains, stat) = _stats.FindContent(_ => _.Name == name);
-
-            // 如果當前角色已有該屬性直接進行設定
-            // 沒有的話則新增一個Stat
-            if (contains)
-            {
-                stat.SetAmount(value);
-            }
-            else
-            {
-                _stats.Add(new Stat(new Stat.Data(name, value)));
-            }
-        }
-
-        #endregion
-
-        #region Private Methods
-
-        private (bool containsStat, Stat stat) FindStat(string statName)
-        {
-            (bool contains, Stat stat) findStat = _stats.FindContent(_ => _.Name == statName);
-            return findStat;
-        }
-
-        private void InitStats()
-        {
-
-        }
+        // public void SetStatAmount(string name, float value)
+        // {
+        //     var (contains, stat) = _stats.FindContent(_ => _.Name == name);
+        //
+        //     // 如果當前角色已有該屬性直接進行設定
+        //     // 沒有的話則新增一個Stat
+        //     if (contains)
+        //     {
+        //         stat.SetAmount(value);
+        //     }
+        //     else
+        //     {
+        //         _stats.Add(new Stat(new Stat.Data(name, value)));
+        //     }
+        // }
 
         #endregion
 
-        [Serializable]
-        public class Data
-        {
+        // #region Private Methods
+        //
+        // private (bool containsStat, Stat stat) FindStat(string statName)
+        // {
+        //     (bool contains, Stat stat) findStat = _stats.FindContent(_ => _.Name == statName);
+        //     return findStat;
+        // }
+        //
+        // private void InitStats()
+        // {
+        //
+        // }
+        //
+        // #endregion
 
-        }
+        // [Serializable]
+        // public class Data
+        // {
+        //
+        // }
     }
 }

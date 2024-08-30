@@ -41,12 +41,23 @@ namespace Game.Tests
             var moveHandler = Given_A_PlayerMoveHandler();
             var playerCharacter = Resolve<PlayerCharacter>();
 
-            moveHandler.Tick();
+            moveHandler.Move();
             playerCharacter.Trans.ShouldTransformPositionBe(1, 1);
-            moveHandler.Tick();
+            moveHandler.Move();
             playerCharacter.Trans.ShouldTransformPositionBe(2, 2);
 
         }
+
+        [Test(Description = "玩家使用Dash")]
+        public void DashPlayerCharacter_By_Input()
+        {
+            var statDatas = new List<Stat.Data> { new Stat.Data(StatNames.MoveSpeed, 999) };
+            Bind_Instance(new PlayerCharacter.Data() { statDatas = statDatas });
+
+            var moveHandler = Given_A_PlayerMoveHandler();
+            var playerCharacter = Resolve<PlayerCharacter>();
+        }
+
 
         [Test(Description = "遊戲暫停，玩家無法移動角色")]
         public void BattlePause_Cannot_MovePlayerCharacter()
@@ -59,10 +70,10 @@ namespace Game.Tests
             var playerCharacter = Resolve<PlayerCharacter>();
 
             gameState.SetPauseState(true);
-            moverHandler.Tick();
+            moverHandler.Move();
             playerCharacter.Trans.ShouldTransformPositionBe(0,0);
             gameState.SetPauseState(false);
-            moverHandler.Tick();
+            moverHandler.Move();
             playerCharacter.Trans.ShouldTransformPositionBe(1,1);
 
         }

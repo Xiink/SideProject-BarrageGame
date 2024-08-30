@@ -9,6 +9,7 @@ namespace Game.Scripts.Players.Main
         public float Vertical { get; private set; }
         public Vector2 MoveDirection => new Vector2(Horizontal, Vertical);
         public bool _shootMouseDown { get; private set; }
+        public bool _dashKeyDown { get; private set; }
 
         public void SetMoveDirection(float hor, float ver)
         {
@@ -29,6 +30,11 @@ namespace Game.Scripts.Players.Main
         public void SetShootMouseDown(bool state)
         {
             _shootMouseDown = state;
+        }
+
+        public void SetDashKeyDown(bool state)
+        {
+            _dashKeyDown = state;
         }
     }
 }
