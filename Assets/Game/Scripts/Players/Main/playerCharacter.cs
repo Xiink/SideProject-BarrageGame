@@ -26,13 +26,6 @@ namespace Game.Scripts.Players.Main
 
         [Inject(Id = "PlayerCharacter")]
         public Rigidbody rigidbody { get; set; }
-        // {
-        //     get
-        //     {
-        //         if (rigib == null) rigib = this.GetComponent<Rigidbody>();
-        //         return rigib;
-        //     }
-        // }
 
         public Transform trans { get; set; }
 

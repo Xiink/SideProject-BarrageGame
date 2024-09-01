@@ -9,7 +9,8 @@ namespace Game.Scripts.Players.Handlers
 {
     public class PlayerMoveHandler : ITickable
     {
-        [Inject] public IMover _mover;
+        [Inject(Id = "PlayerCharacter")]
+        public IMover _mover;
         [Inject] private PlayerInputState _playerInputState;
         [Inject] private ITimeProvider _timeProvider;
         [Inject] private ICameraProvider _cameraProvider;

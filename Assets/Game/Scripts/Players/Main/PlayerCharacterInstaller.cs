@@ -18,12 +18,13 @@ namespace Game.Scripts.Players.Main
 
         public override void InstallBindings()
         {
-            // Container.Bind<IMover>().To<PlayerCharacter>().AsSingle();
             Container.BindInterfacesAndSelfTo<PlayerInputState>().AsSingle();
 
-            Container.BindInterfacesAndSelfTo<PlayerInputHandler>().AsSingle();
+            Container.BindInterfacesTo<PlayerInputHandler>().AsSingle();
             Container.BindInterfacesAndSelfTo<PlayerMoveHandler>().AsSingle().WithArguments(GetComponent<IMover>());
             Container.BindInterfacesAndSelfTo<PlayerShootHandler>().AsSingle().WithArguments(GetComponent<IMover>());
+            // Container.BindInterfacesAndSelfTo<PlayerMoveHandler>().AsSingle().WithArguments(GetComponent<IMover>());
+            // Container.BindInterfacesAndSelfTo<PlayerShootHandler>().AsSingle().WithArguments(GetComponent<IMover>());
 
             Container.BindExecutionOrder<PlayerInputHandler>(-10000);
         }

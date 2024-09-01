@@ -1,3 +1,4 @@
+using Game.Scripts.Battle.Misc;
 using Game.Scripts.Enemy.Main;
 using Game.Scripts.Players.Handlers;
 using Game.Scripts.Players.Main;
@@ -11,8 +12,11 @@ namespace Game.Scripts.Enemy.States
         [Inject]
         private EnemyStateManager _enemyStateManager;
 
-        [Inject]
-        private PlayerMoveHandler _playerMoveHandler;
+        // [Inject]
+        // private PlayerMoveHandler _playerMoveHandler;
+
+        [Inject(Id = "PlayerCharacter")]
+        private IMover _playerCharacter;
 
         // [Inject]
         // private PlayerCharacter _playerCharacter;
@@ -39,7 +43,7 @@ namespace Game.Scripts.Enemy.States
         public void Update()
         {
             var distanceToPlyaer =
-                (_playerMoveHandler._mover.GetPosition() - _enemyStateManager._enemy.GetPosition()).magnitude;
+                (_playerCharacter.GetPosition() - _enemyStateManager._enemy.GetPosition()).magnitude;
             if (Time.realtimeSinceStartup - _lastStrafeChangeTime > 20)
             {
                 _lastStrafeChangeTime = Time.realtimeSinceStartup;
@@ -67,7 +71,7 @@ namespace Game.Scripts.Enemy.States
         }
         private void MoveTowardsPlayer()
         {
-            var playerDir = (_playerMoveHandler._mover.GetPosition() - _enemyStateManager._enemy.GetPosition()).normalized;
+            var playerDir = (_playerCharacter.GetPosition() - _enemyStateManager._enemy.GetPosition()).normalized;
 
             _enemyStateManager._enemy.AddForce(playerDir * 15);
         }
