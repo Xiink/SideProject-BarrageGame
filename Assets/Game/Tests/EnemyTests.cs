@@ -24,12 +24,26 @@ namespace Game.Tests
             var enemy = Resolve<Enemy>();
 
 
-            enemy._data._domaindata = new DomainData();
-            // Debug.Log(enemy._data._domaindata);
+            enemy._data._domaindata = ScriptableObject.CreateInstance<DomainData>();
             enemy._data._domaindata.speed = 1;
 
             moveHandler.Move(new Vector2(1,1));
-            // enemy.Trans.ShouldTransformPositionBe(1, 1);
+            enemy.Trans.ShouldTransformPositionBe(1, 1);
+            enemy._data._domaindata.speed = 5;
+            moveHandler.Move(new Vector2(1,1));
+            enemy.Trans.ShouldTransformPositionBe(6, 6);
+        }
+
+        [Test(Description = "Add Force")]
+        public void Add_Force_To_Enemy()
+        {
+            var EnemyMoveHander = Given_A_EnemyMoveHandler();
+            var enemy = Resolve<Enemy>();
+
+            enemy._data._domaindata = ScriptableObject.CreateInstance<DomainData>();
+            enemy._data._domaindata.speed = 1;
+
+            EnemyMoveHander.AddForce();
         }
 
         private EnemyMoveHandler Given_A_EnemyMoveHandler()
@@ -57,6 +71,10 @@ namespace Game.Tests
             // Bind_Instance(ScriptableObject.CreateInstance<VisualData>());
             // Container.Bind<EnemyData>().FromScriptableObjectResource("Assets/Game/Datas/NormalEnemyData.asset");
             Bind_InterfacesAndSelfTo_From_NewGameObject<Enemy>();
+
+            Container.Bind<Rigidbody2D>().FromNewComponentOnNewGameObject().AsSingle();
+            var rigibody2d = Container.Resolve<Rigidbody2D>();
+
             var enemy = Resolve<Enemy>();
 
             return enemy;

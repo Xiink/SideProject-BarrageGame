@@ -937,6 +937,26 @@ PrefabInstance:
       propertyPath: _bindType
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 7594444681654402530, guid: e43c448ab577dfc4fb929a9ff066e57e, type: 3}
+      propertyPath: _identifier
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7594444681654402530, guid: e43c448ab577dfc4fb929a9ff066e57e, type: 3}
+      propertyPath: _useSceneContext
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7594444681654402530, guid: e43c448ab577dfc4fb929a9ff066e57e, type: 3}
+      propertyPath: _components.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7594444681654402530, guid: e43c448ab577dfc4fb929a9ff066e57e, type: 3}
+      propertyPath: _components.Array.data[1]
+      value: 
+      objectReference: {fileID: 7108616693953784183}
+    - target: {fileID: 7594444681654402530, guid: e43c448ab577dfc4fb929a9ff066e57e, type: 3}
+      propertyPath: _components.Array.data[2]
+      value: 
+      objectReference: {fileID: 7108616693953784184}
     - target: {fileID: 8489385921574320495, guid: e43c448ab577dfc4fb929a9ff066e57e, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -946,6 +966,22 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e43c448ab577dfc4fb929a9ff066e57e, type: 3}
+--- !u!50 &7108616693953784183 stripped
+Rigidbody2D:
+  m_CorrespondingSourceObject: {fileID: 7376347143083370944, guid: e43c448ab577dfc4fb929a9ff066e57e, type: 3}
+  m_PrefabInstance: {fileID: 7108616693953784182}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7108616693953784184 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7561032855246711523, guid: e43c448ab577dfc4fb929a9ff066e57e, type: 3}
+  m_PrefabInstance: {fileID: 7108616693953784182}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d031ff3e6be84f14841b4c59736ec783, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

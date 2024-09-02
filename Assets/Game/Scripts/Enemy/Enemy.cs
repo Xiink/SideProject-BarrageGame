@@ -23,6 +23,7 @@ namespace Game.Scripts.Enemy
         // public EnemyStateManager _EnemyStateManager;
 
         public bool Moveable => _moveable.GetState();
+
         public Rigidbody rigidbody { get; }
 
         public Transform trans { get; set; }
@@ -48,7 +49,9 @@ namespace Game.Scripts.Enemy
 
         private GenericRepository<Stat> _stats = new GenericRepository<Stat>();
 
-        private Rigidbody2D rigi2D => GetComponent<Rigidbody2D>();
+        [Inject]
+        public Rigidbody2D rigidbody2D { get; set; }
+        // private Rigidbody2D rigi2D => GetComponent<Rigidbody2D>();
 
         #endregion
 
@@ -56,7 +59,7 @@ namespace Game.Scripts.Enemy
 
         public void AddForce(Vector3 force)
         {
-            rigi2D.AddForce(force);
+            rigidbody2D.AddForce(force);
         }
 
         public void Die()

@@ -18,7 +18,6 @@ namespace Game.Scripts.Enemy.Handlers
 
         public void Tick()
         {
-            Debug.Log(_data._domaindata.speed);
         }
 
         public void Move(Vector2 MoveDirection)
@@ -32,5 +31,15 @@ namespace Game.Scripts.Enemy.Handlers
             _enemy.SetPosition(newPos);
         }
 
+        public void AddForce()
+        {
+            if(_enemy.Moveable == false) return;
+
+            var playerDir = new Vector2(10,0).normalized;
+
+            _enemy.AddForce(playerDir * 15);
+
+            Debug.Log(_enemy.GetPosition());
+        }
     }
 }
