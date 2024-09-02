@@ -67,6 +67,9 @@ namespace Game.Tests
         [Test(Description = "遊戲暫停，玩家無法移動角色")]
         public void BattlePause_Cannot_MovePlayerCharacter()
         {
+            var statDatas = new List<Stat.Data> { new Stat.Data(StatNames.MoveSpeed, 999) };
+            Bind_Instance(new PlayerCharacter.Data() { statDatas = statDatas });
+
             var gameState = Bind_And_Resolve<GameState>();
             Bind_InterfacesTo<Moveable>();
 

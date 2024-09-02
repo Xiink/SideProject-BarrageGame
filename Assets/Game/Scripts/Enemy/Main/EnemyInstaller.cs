@@ -1,5 +1,6 @@
 using FluentAssertions;
 using Game.Scripts.Battle.Misc;
+using Game.Scripts.Enemy.Handlers;
 using Game.Scripts.Enemy.States;
 using Game.Scripts.Enemy.Steps;
 using Game.Scripts.RPG;
@@ -17,6 +18,10 @@ namespace Game.Scripts.Enemy.Main
         public override void InstallBindings()
         {
             // Container.BindInterfacesAndSelfTo<EnemyStateManager>().AsSingle();
+            // Container.BindInterfacesAndSelfTo<EnemyFlowControl>().AsSingle();
+
+            Container.BindInterfacesTo<EnemyMoveHandler>().AsSingle();
+
             Container.BindInterfacesTo<EnemyEnterState>().AsSingle().WithArguments(GetComponent<IMover>());
 
             Container.BindInterfacesAndSelfTo<EnemyStateManager>().AsSingle().WithArguments(GetComponent<IMover>());

@@ -10,25 +10,17 @@ namespace Game.Scripts.Enemy.States
     public class EnemyFollowState : IEnemyState
     {
         [Inject]
-        private EnemyStateManager _enemyStateManager;
+        private IMover _enemy;
+        // private EnemyStateManager _enemyStateManager;
 
-        // [Inject]
-        // private PlayerMoveHandler _playerMoveHandler;
-
+        /// <summary>
+        /// 抓取PlayerCharacter的Imover
+        /// </summary>
         [Inject(Id = "PlayerCharacter")]
         private IMover _playerCharacter;
 
-        // [Inject]
-        // private PlayerCharacter _playerCharacter;
-        // readonly PlayerFacade _playerCharacter;
-
         bool _strafeRight;
         float _lastStrafeChangeTime;
-
-        // public EnemyFollowState(PlayerFacade facade)
-        // {
-        //     _playerCharacter = facade;
-        // }
 
         public void EnterState()
         {
@@ -43,7 +35,7 @@ namespace Game.Scripts.Enemy.States
         public void Update()
         {
             var distanceToPlyaer =
-                (_playerCharacter.GetPosition() - _enemyStateManager._enemy.GetPosition()).magnitude;
+                (_playerCharacter.GetPosition() - _enemy.GetPosition()).magnitude;
             if (Time.realtimeSinceStartup - _lastStrafeChangeTime > 20)
             {
                 _lastStrafeChangeTime = Time.realtimeSinceStartup;
@@ -71,9 +63,9 @@ namespace Game.Scripts.Enemy.States
         }
         private void MoveTowardsPlayer()
         {
-            var playerDir = (_playerCharacter.GetPosition() - _enemyStateManager._enemy.GetPosition()).normalized;
+            var playerDir = (_playerCharacter.GetPosition() - _enemy.GetPosition()).normalized;
 
-            _enemyStateManager._enemy.AddForce(playerDir * 15);
+            _enemy.AddForce(playerDir * 15);
         }
     }
 }

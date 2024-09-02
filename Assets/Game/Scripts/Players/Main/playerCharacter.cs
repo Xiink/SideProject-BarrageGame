@@ -91,7 +91,7 @@ namespace Game.Scripts.Players.Main
             }
             else
             {
-                _stats.Add(new Stat(new Stat.Data(name, value)));
+                // _stats.Add(new Stat(new Stat.Data(name, value)));
             }
         }
 

@@ -9,7 +9,8 @@ namespace Game.Scripts.Players.Handlers
 {
     public class PlayerMoveHandler : ITickable
     {
-        [Inject(Id = "PlayerCharacter")]
+        // [Inject(Id = "PlayerCharacter")]
+        [Inject]
         public IMover _mover;
         [Inject] private PlayerInputState _playerInputState;
         [Inject] private ITimeProvider _timeProvider;
@@ -30,8 +31,6 @@ namespace Game.Scripts.Players.Handlers
             {
                 Move();
             }
-
-
 
             GetMousePosition();
         }

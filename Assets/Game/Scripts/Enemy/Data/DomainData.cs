@@ -18,6 +18,8 @@ namespace Assets.Game.Scripts.Enemy.Data
         public float MP;
         [LabelWidth(100)]
         public float Offset;
+        [LabelWidth(100)]
+        public float speed;
 
         [LabelText("Size")]
         [HorizontalGroup("Group 1", LabelWidth = 20)]

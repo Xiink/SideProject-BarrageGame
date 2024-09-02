@@ -1,13 +1,17 @@
 using System.Collections.Generic;
+using Assets.Game.Scripts.Enemy.Data;
 using Game.Scripts.Battle.Misc;
 using Game.Scripts.Enemy;
+using Game.Scripts.Enemy.Data;
 using Game.Scripts.Enemy.Handlers;
 using Game.Scripts.Names;
 using Game.Scripts.Players.Main;
 using Game.Scripts.RPG;
 using NSubstitute;
 using NUnit.Framework;
+using rStarUtility.Generic.TestExtensions;
 using rStarUtility.Generic.TestFrameWork;
+using UnityEngine;
 
 namespace Game.Tests
 {
@@ -16,19 +20,27 @@ namespace Game.Tests
         [Test(Description = "初始化敵人，敵人數值正確")]
         public void Init_Enemy_Stats_Correct()
         {
-            // var statDatas = new List<Stat.Data> { new Stat.Data(StatNames.MoveSpeed,999) };
-            // Bind_Instance(new Enemy.Data() {});
+            var moveHandler = Given_A_EnemyMoveHandler();
+            var enemy = Resolve<Enemy>();
 
-            // var moveHandler = Given_A_PlayerMoveHandler();
-            // var playerCharacter = Resolve<PlayerCharacter>();
+
+            enemy._data._domaindata = new DomainData();
+            // Debug.Log(enemy._data._domaindata);
+            enemy._data._domaindata.speed = 1;
+
+            moveHandler.Move(new Vector2(1,1));
+            // enemy.Trans.ShouldTransformPositionBe(1, 1);
         }
 
         private EnemyMoveHandler Given_A_EnemyMoveHandler()
         {
             var enemy = NewEnemy();
 
+            var timeProvider = Bind_Mock_And_Resolve<ITimeProvider>();
+            timeProvider.GetDeltaTime().Returns(1);
 
-            var moveHandler = Bind_Mock_And_Resolve<EnemyMoveHandler>();
+            var moveHandler = Bind_And_Resolve<EnemyMoveHandler>();
+
             return moveHandler;
         }
 
@@ -40,7 +52,10 @@ namespace Game.Tests
                 moveable.GetState().Returns(true);
             }
 
-            // Bind_Instance(new Enemy.Data());
+            Bind_Instance(ScriptableObject.CreateInstance<DomainData>());
+            Bind_Instance(ScriptableObject.CreateInstance<EnemyData>());
+            // Bind_Instance(ScriptableObject.CreateInstance<VisualData>());
+            // Container.Bind<EnemyData>().FromScriptableObjectResource("Assets/Game/Datas/NormalEnemyData.asset");
             Bind_InterfacesAndSelfTo_From_NewGameObject<Enemy>();
             var enemy = Resolve<Enemy>();
 
