@@ -45,7 +45,7 @@ namespace Game.Scripts.Players.Handlers
             goalDir.Normalize();
 
             var d = Quaternion.LookRotation(goalDir) * Quaternion.AngleAxis(90, Vector3.up);
-            _mover.rigidbody.rotation = d;
+            _mover.transform.rotation = d;
         }
 
         public void Move()

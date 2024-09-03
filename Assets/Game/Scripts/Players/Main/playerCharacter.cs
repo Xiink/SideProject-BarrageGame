@@ -25,7 +25,7 @@ namespace Game.Scripts.Players.Main
         // public Rigidbody rigib { get; set; }
 
         [Inject(Id = "PlayerCharacter")]
-        public Rigidbody rigidbody { get; set; }
+        public Rigidbody2D rigidbody2D { get; set; }
 
         public Transform trans { get; set; }
 
@@ -42,9 +42,11 @@ namespace Game.Scripts.Players.Main
 
         #region Private Variables
 
-        [Inject] private IMoveable _moveable;
+        [Inject]
+        private IMoveable _moveable;
 
-        [Inject] private Data _data;
+        [Inject]
+        private Data _data;
 
         private GenericRepository<Stat> _stats = new GenericRepository<Stat>();
 

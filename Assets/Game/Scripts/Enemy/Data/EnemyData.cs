@@ -26,12 +26,6 @@ namespace Game.Scripts.Enemy.Data
         [HideLabel]
         public VisualData _visualData;
 
-        // [FoldoutGroup("Behaviour")]
-        // [ValueDropdown("@GetPhaseNames.Names", ExpandAllMenuItems = true,
-        // IsUniqueList = true,
-        // DropdownHeight = 250, DropdownWidth = 300)]
-        // public string Behaviour;
-
         [FoldoutGroup("Behaviour")]
         [ValueDropdown("@GetPhases.phases", ExpandAllMenuItems = true,
             IsUniqueList = true,
@@ -41,6 +35,9 @@ namespace Game.Scripts.Enemy.Data
         public override void InstallBindings()
         {
             Container.BindInstance(this);
+            Container.BindInstance(_domaindata);
+            Container.BindInstance(_visualData);
+            Container.BindInstance(Behaviour);
         }
     }
 }

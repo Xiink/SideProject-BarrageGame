@@ -6,6 +6,7 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Assets.Game.Scripts.Enemy.Data
 {
@@ -13,20 +14,24 @@ namespace Assets.Game.Scripts.Enemy.Data
     //[Serializable]
     public class DomainData : ScriptableObject
     {
-        public float Life;
+        [FormerlySerializedAs("Life")]
         [LabelWidth(100)]
-        public float MP;
+        public float life;
+        [FormerlySerializedAs("MP")]
         [LabelWidth(100)]
-        public float Offset;
+        public float mp;
         [LabelWidth(100)]
         public float speed;
 
-        [LabelText("Size")]
-        [HorizontalGroup("Group 1", LabelWidth = 20)]
+
+        [HorizontalGroup("Group 1", LabelWidth = 100)]
+        [LabelText("BoxColliderSize")]
         public Label Size;
         [HorizontalGroup("Group 1")]
+        [LabelWidth(30)]
         public float x;
         [HorizontalGroup("Group 1")]
+        [LabelWidth(30)]
         public float y;
     }
 }

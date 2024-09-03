@@ -29,7 +29,7 @@ namespace Game.Scripts.Players.Handlers
             var bullet = _factory.Create(BulletTypes.FromPlayer);
 
             bullet.transform.position = (Vector3)_player.GetPosition() - _player.transform.right;
-            bullet.transform.rotation = _player.rigidbody.rotation;
+            bullet.transform.rotation = _player.transform.rotation;
         }
     }
 }

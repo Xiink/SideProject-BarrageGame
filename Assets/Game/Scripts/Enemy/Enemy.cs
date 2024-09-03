@@ -14,17 +14,19 @@ using Zenject;
 
 namespace Game.Scripts.Enemy
 {
+    /// <summary>
+    /// TODO:目前是注入EnemyData，但是會有多個同樣敵人會注入同樣EnemyData導致敵人共用同樣數值的問題
+    /// TODO:需要改成每個敵人都有自己的EnemyData
+    /// TODD:使用物件池來產生Enemy
+    /// TODO:確認EnemyData中的DomainData及VisualData有沒有更好的設定方式
+    /// </summary>
+
     [ExecuteInEditMode]
     public class Enemy : MonoBehaviour,IMover
     {
         #region Public Variables
 
-        // [Inject]
-        // public EnemyStateManager _EnemyStateManager;
-
         public bool Moveable => _moveable.GetState();
-
-        public Rigidbody rigidbody { get; }
 
         public Transform trans { get; set; }
 
@@ -64,7 +66,8 @@ namespace Game.Scripts.Enemy
 
         public void Die()
         {
-            Destroy(gameObject);
+            _data._domaindata.life -= 1;
+            // Destroy(gameObject);
         }
 
         public Vector2 GetPosition()

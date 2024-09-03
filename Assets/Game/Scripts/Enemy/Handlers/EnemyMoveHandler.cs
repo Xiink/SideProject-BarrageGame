@@ -18,6 +18,7 @@ namespace Game.Scripts.Enemy.Handlers
 
         public void Tick()
         {
+            Debug.Log(_enemy + $"{_data._domaindata.life}");
         }
 
         public void Move(Vector2 MoveDirection)

@@ -39,11 +39,19 @@ namespace Game.Tests
         {
             var EnemyMoveHander = Given_A_EnemyMoveHandler();
             var enemy = Resolve<Enemy>();
-
-            enemy._data._domaindata = ScriptableObject.CreateInstance<DomainData>();
-            enemy._data._domaindata.speed = 1;
+            var initialPosition = enemy.rigidbody2D.position;
 
             EnemyMoveHander.AddForce();
+
+            // 調成SimulationMode2D.Script，才能模擬物理效果
+            Physics2D.simulationMode = SimulationMode2D.Script;
+            Physics2D.Simulate(Time.fixedDeltaTime);
+
+            Assert.AreNotEqual(initialPosition, enemy.rigidbody2D.position);
+            Assert.Greater(enemy.rigidbody2D.position.x, initialPosition.x);
+
+            // 要記得改回來，不然會影響其他測試跟Runtime
+            Physics2D.simulationMode = SimulationMode2D.FixedUpdate;
         }
 
         private EnemyMoveHandler Given_A_EnemyMoveHandler()
