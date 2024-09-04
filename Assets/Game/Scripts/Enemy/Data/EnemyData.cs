@@ -35,9 +35,6 @@ namespace Game.Scripts.Enemy.Data
         public override void InstallBindings()
         {
             Container.BindInstance(this);
-            Container.BindInstance(_domaindata);
-            Container.BindInstance(_visualData);
-            Container.BindInstance(Behaviour);
         }
     }
 }

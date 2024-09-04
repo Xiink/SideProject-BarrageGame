@@ -84,6 +84,11 @@ namespace Game.Scripts.Enemy
         {
             Trans.position = (Vector3)newPos;
         }
+        
+        public class Factory : PlaceholderFactory<Enemy>
+        {
+            
+        }
 
         #endregion
 

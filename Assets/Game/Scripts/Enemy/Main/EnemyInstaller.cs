@@ -1,5 +1,6 @@
 using FluentAssertions;
 using Game.Scripts.Battle.Misc;
+using Game.Scripts.Enemy.Data;
 using Game.Scripts.Enemy.Handlers;
 using Game.Scripts.Enemy.States;
 using Game.Scripts.Enemy.Steps;
@@ -10,6 +11,8 @@ namespace Game.Scripts.Enemy.Main
 {
     public class EnemyInstaller : MonoInstaller
     {
+        public EnemyData enemyData;
+
         public EnemyInstaller()
         {
 
@@ -19,6 +22,8 @@ namespace Game.Scripts.Enemy.Main
         {
             // Container.BindInterfacesAndSelfTo<EnemyStateManager>().AsSingle();
             // Container.BindInterfacesAndSelfTo<EnemyFlowControl>().AsSingle();
+            Container.Bind<IEnemyDataFactory>().To<EnemyDataFactory>().AsTransient().WithArguments(enemyData);
+            Container.Bind<Enemy>().AsTransient().WithArguments(Container.Resolve<IEnemyDataFactory>().Create());
 
             Container.BindInterfacesTo<EnemyMoveHandler>().AsSingle();
 
