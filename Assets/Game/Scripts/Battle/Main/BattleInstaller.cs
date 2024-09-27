@@ -22,14 +22,14 @@ namespace Game.Scripts.Battle.Main
                     .FromComponentInNewPrefab(_bullet)
                     .UnderTransformGroup("Bullets"));
 
-            // Container.BindFactory<Enemy.Enemy, Enemy.Enemy.Factory>()
-            //     .FromPoolableMemoryPool<Enemy.Enemy, EnemyScriptPool>(poolBinder => poolBinder
-            //         .WithInitialSize(20)
-            //         .FromComponentInNewPrefab(enemyPrefab)
-            //         .UnderTransformGroup("Enemies").AsTransient());
             Container.BindFactory<Enemy.Enemy, Enemy.Enemy.Factory>()
-                .FromComponentInNewPrefab(enemyPrefab)
-                .AsTransient();
+                .FromPoolableMemoryPool<Enemy.Enemy, EnemyScriptPool>(poolBinder => poolBinder
+                    .WithInitialSize(20)
+                    .FromComponentInNewPrefab(enemyPrefab)
+                    .UnderTransformGroup("Enemies").AsTransient());
+            // Container.BindFactory<Enemy.Enemy, Enemy.Enemy.Factory>()
+            //     .FromComponentInNewPrefab(enemyPrefab)
+            //     .AsTransient();
 
             Container.BindInstance<Camera>(mainCamera);
             Container.Bind<GameState>().AsSingle();

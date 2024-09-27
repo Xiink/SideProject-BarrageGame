@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Codice.Client.Commands.WkTree;
 using Game.Scripts.Battle.Misc;
 using Game.Scripts.Enemy.Data;
 using Game.Scripts.Enemy.Main;
@@ -51,7 +52,7 @@ namespace Game.Scripts.Enemy
 
         private GenericRepository<Stat> _stats = new GenericRepository<Stat>();
 
-        [Inject]
+        // [Inject]
         public Rigidbody2D rigidbody2D { get; set; }
 
         // private Rigidbody2D rigi2D => GetComponent<Rigidbody2D>();
@@ -68,7 +69,8 @@ namespace Game.Scripts.Enemy
 
         public void AddForce(Vector3 force)
         {
-            rigidbody2D.AddForce(force);
+            this.GetComponent<Rigidbody2D>().AddForce(force);
+            // rigidbody2D.AddForce(force);
         }
 
         public void Die()

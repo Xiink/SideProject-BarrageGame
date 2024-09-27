@@ -23,20 +23,20 @@ namespace Game.Scripts.Enemy.Main
         {
             // Container.BindInterfacesAndSelfTo<EnemyStateManager>().AsSingle();
             // Container.BindInterfacesAndSelfTo<EnemyFlowControl>().AsSingle();
-            Container.Bind<IEnemyDataFactory>().To<EnemyDataFactory>().AsTransient().WithArguments(enemyData);
-            // 使用工厂创建的 EnemyData 绑定 Enemy
-            Container.Bind<Enemy>().AsTransient().OnInstantiated<Enemy>((ctx, enemy) =>
-            {
-                var factory = ctx.Container.Resolve<IEnemyDataFactory>();
-                enemy.Construct(factory.Create());
-            });
+            // Container.Bind<IEnemyDataFactory>().To<EnemyDataFactory>().AsTransient().WithArguments(enemyData);
+            // // 使用工厂创建的 EnemyData 绑定 Enemy
+            // Container.Bind<Enemy>().AsTransient().OnInstantiated<Enemy>((ctx, enemy) =>
+            // {
+            //     var factory = ctx.Container.Resolve<IEnemyDataFactory>();
+            //     enemy.Construct(factory.Create());
+            // });
 
-            Container.BindInterfacesTo<EnemyMoveHandler>().AsSingle();
+            Container.BindInterfacesTo<EnemyMoveHandler>().AsSingle().WithArguments(GetComponent<IMover>());
 
             Container.BindInterfacesTo<EnemyEnterState>().AsSingle().WithArguments(GetComponent<IMover>());
 
             Container.BindInterfacesAndSelfTo<EnemyStateManager>().AsSingle().WithArguments(GetComponent<IMover>());
-            Container.BindInterfacesAndSelfTo<EnemyFollowState>().AsSingle();
+            Container.BindInterfacesAndSelfTo<EnemyFollowState>().AsSingle().WithArguments(GetComponent<IMover>());
 
             Container.Bind<EnemyFlowControl>().AsSingle();
         }

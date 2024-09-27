@@ -13,21 +13,22 @@ public class TestCreat : MonoBehaviour
 {
     public GameObject myPrefab;
 
-    // [Inject]
-    // private Enemy.Factory _factory;
+    [Inject]
+    private Enemy.Factory _factory;
 
     // Start is called before the first frame update
     void Start()
     {
-        // if (_factory == null)
-        // {
-        //     Debug.LogError("Enemy.Factory not injected!");
-        // }
-        // else
-        // {
-        //     var enemy = _factory.Create();
-        //     Debug.Log("Enemy created successfully.");
-        // }
+        if (_factory == null)
+        {
+            Debug.LogError("Enemy.Factory not injected!");
+            Debug.LogError("Enemy.Factory not injected!");
+        }
+        else
+        {
+            var enemy = _factory.Create();
+            Debug.Log("Enemy created successfully.");
+        }
     }
     // Update is called once per frame
     void Update()
