@@ -21,8 +21,8 @@ namespace Game.Scripts.Enemy
     /// TODO:確認EnemyData中的DomainData及VisualData有沒有更好的設定方式
     /// </summary>
 
-    [ExecuteInEditMode]
-    public class Enemy : MonoBehaviour,IMover
+    // [ExecuteInEditMode]
+    public class Enemy : MonoBehaviour,IMover, IPoolable<IMemoryPool>
     {
         #region Public Variables
 
@@ -39,7 +39,7 @@ namespace Game.Scripts.Enemy
             }
         }
 
-        [Inject]
+        // [Inject]
         public EnemyData _data;
 
         #endregion
@@ -53,11 +53,18 @@ namespace Game.Scripts.Enemy
 
         [Inject]
         public Rigidbody2D rigidbody2D { get; set; }
+
         // private Rigidbody2D rigi2D => GetComponent<Rigidbody2D>();
 
         #endregion
 
         #region Public Methods
+
+        [Inject]
+        public void Construct(EnemyData data)
+        {
+            _data = data;
+        }
 
         public void AddForce(Vector3 force)
         {
@@ -121,6 +128,20 @@ namespace Game.Scripts.Enemy
 
         }
 
+        private void Update()
+        {
+            Debug.Log(this + $"{_data._domaindata.life}");
+        }
+
         #endregion
+
+        public void OnDespawned()
+        {
+
+        }
+
+        public void OnSpawned(IMemoryPool p1)
+        {
+        }
     }
 }

@@ -10,6 +10,7 @@ namespace Game.Scripts.Battle.Main
     public class BattleInstaller : MonoInstaller
     {
         public GameObject _bullet;
+        public GameObject enemyPrefab;
         public Camera mainCamera;
 
         public override void InstallBindings()
@@ -20,6 +21,15 @@ namespace Game.Scripts.Battle.Main
                     .WithInitialSize(20)
                     .FromComponentInNewPrefab(_bullet)
                     .UnderTransformGroup("Bullets"));
+
+            // Container.BindFactory<Enemy.Enemy, Enemy.Enemy.Factory>()
+            //     .FromPoolableMemoryPool<Enemy.Enemy, EnemyScriptPool>(poolBinder => poolBinder
+            //         .WithInitialSize(20)
+            //         .FromComponentInNewPrefab(enemyPrefab)
+            //         .UnderTransformGroup("Enemies").AsTransient());
+            Container.BindFactory<Enemy.Enemy, Enemy.Enemy.Factory>()
+                .FromComponentInNewPrefab(enemyPrefab)
+                .AsTransient();
 
             Container.BindInstance<Camera>(mainCamera);
             Container.Bind<GameState>().AsSingle();
@@ -35,6 +45,10 @@ namespace Game.Scripts.Battle.Main
         }
 
         class BulletScriptPool : MonoPoolableMemoryPool<BulletTypes, IMemoryPool,Bullet.Bullet>
+        {
+        }
+
+        class EnemyScriptPool : MonoPoolableMemoryPool<IMemoryPool,Enemy.Enemy>
         {
         }
     }

@@ -5,6 +5,7 @@ using Game.Scripts.Enemy.Handlers;
 using Game.Scripts.Enemy.States;
 using Game.Scripts.Enemy.Steps;
 using Game.Scripts.RPG;
+using UnityEngine;
 using Zenject;
 
 namespace Game.Scripts.Enemy.Main
@@ -23,7 +24,12 @@ namespace Game.Scripts.Enemy.Main
             // Container.BindInterfacesAndSelfTo<EnemyStateManager>().AsSingle();
             // Container.BindInterfacesAndSelfTo<EnemyFlowControl>().AsSingle();
             Container.Bind<IEnemyDataFactory>().To<EnemyDataFactory>().AsTransient().WithArguments(enemyData);
-            Container.Bind<Enemy>().AsTransient().WithArguments(Container.Resolve<IEnemyDataFactory>().Create());
+            // 使用工厂创建的 EnemyData 绑定 Enemy
+            Container.Bind<Enemy>().AsTransient().OnInstantiated<Enemy>((ctx, enemy) =>
+            {
+                var factory = ctx.Container.Resolve<IEnemyDataFactory>();
+                enemy.Construct(factory.Create());
+            });
 
             Container.BindInterfacesTo<EnemyMoveHandler>().AsSingle();
 
@@ -33,8 +39,7 @@ namespace Game.Scripts.Enemy.Main
             Container.BindInterfacesAndSelfTo<EnemyFollowState>().AsSingle();
 
             Container.Bind<EnemyFlowControl>().AsSingle();
-            // Container.BindInterfacesAndSelfTo<EnemyStateManager>().AsSingle().WithArguments(GetComponent<IMover>());
-            // Container.BindInterfacesAndSelfTo<EnemyFlowControl>().AsSingle().WithArguments(GetComponent<IMover>());
         }
+
     }
 }
