@@ -16,9 +16,7 @@ using Zenject;
 namespace Game.Scripts.Enemy
 {
     /// <summary>
-    /// TODO:目前是注入EnemyData，但是會有多個同樣敵人會注入同樣EnemyData導致敵人共用同樣數值的問題
-    /// TODO:需要改成每個敵人都有自己的EnemyData
-    /// TODD:使用物件池來產生Enemy
+    /// TODO:目前可以透過工廠模式來讓每個Enemy有自己的EnemyData，但內部的DomainData還是沒有
     /// TODO:確認EnemyData中的DomainData及VisualData有沒有更好的設定方式
     /// </summary>
 
@@ -41,7 +39,7 @@ namespace Game.Scripts.Enemy
         }
 
         // [Inject]
-        public EnemyData _data;
+        public EnemyData _data { get; set; }
 
         #endregion
 
@@ -49,6 +47,8 @@ namespace Game.Scripts.Enemy
 
         [Inject]
         private IMoveable _moveable;
+
+        [Inject] private IEnemyDataFactory _enemyDataFactory;
 
         private GenericRepository<Stat> _stats = new GenericRepository<Stat>();
 
@@ -64,7 +64,8 @@ namespace Game.Scripts.Enemy
         [Inject]
         public void Construct(EnemyData data)
         {
-            _data = data;
+            // _data = data;
+            _data = _enemyDataFactory.Create();
         }
 
         public void AddForce(Vector3 force)
@@ -132,6 +133,9 @@ namespace Game.Scripts.Enemy
 
         private void Update()
         {
+            Debug.Log(this + $"{_data._domaindata.life}");
+
+            // 如果是_data.hp已經分開了
             Debug.Log(this + $"{_data._domaindata.life}");
         }
 

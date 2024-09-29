@@ -15,3 +15,4 @@ MonoBehaviour:
   _domaindata: {fileID: 11400000, guid: eee2cc7da3bddef4e90dc5bb0544acea, type: 2}
   _visualData: {fileID: 11400000, guid: 61269a6a74b30e5428845058d23fc2cb, type: 2}
   Behaviour: {fileID: 11400000, guid: 992c7526b75ce3e4b87f3720150416ae, type: 2}
+  hp: 10

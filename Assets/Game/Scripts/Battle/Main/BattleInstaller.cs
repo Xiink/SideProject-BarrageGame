@@ -2,6 +2,7 @@ using Game.Scripts.Battle.Handlers;
 using Game.Scripts.Battle.Misc;
 using Game.Scripts.Battle.States;
 using Game.Scripts.Bullet;
+using Game.Scripts.Enemy.Application;
 using UnityEngine;
 using Zenject;
 
@@ -27,9 +28,8 @@ namespace Game.Scripts.Battle.Main
                     .WithInitialSize(20)
                     .FromComponentInNewPrefab(enemyPrefab)
                     .UnderTransformGroup("Enemies").AsTransient());
-            // Container.BindFactory<Enemy.Enemy, Enemy.Enemy.Factory>()
-            //     .FromComponentInNewPrefab(enemyPrefab)
-            //     .AsTransient();
+
+            Container.BindInterfacesAndSelfTo<EnemySpawner>().AsSingle();
 
             Container.BindInstance<Camera>(mainCamera);
             Container.Bind<GameState>().AsSingle();

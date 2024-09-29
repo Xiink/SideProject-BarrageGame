@@ -23,16 +23,17 @@ namespace Game.Scripts.Enemy.Main
         {
             // Container.BindInterfacesAndSelfTo<EnemyStateManager>().AsSingle();
             // Container.BindInterfacesAndSelfTo<EnemyFlowControl>().AsSingle();
-            // Container.Bind<IEnemyDataFactory>().To<EnemyDataFactory>().AsTransient().WithArguments(enemyData);
+            Container.Bind<IEnemyDataFactory>().To<EnemyDataFactory>().AsTransient().WithArguments(enemyData);
             // // 使用工厂创建的 EnemyData 绑定 Enemy
             // Container.Bind<Enemy>().AsTransient().OnInstantiated<Enemy>((ctx, enemy) =>
             // {
             //     var factory = ctx.Container.Resolve<IEnemyDataFactory>();
             //     enemy.Construct(factory.Create());
+            //
+            //     Debug.Log("Bind");
             // });
 
             Container.BindInterfacesTo<EnemyMoveHandler>().AsSingle().WithArguments(GetComponent<IMover>());
-
             Container.BindInterfacesTo<EnemyEnterState>().AsSingle().WithArguments(GetComponent<IMover>());
 
             Container.BindInterfacesAndSelfTo<EnemyStateManager>().AsSingle().WithArguments(GetComponent<IMover>());
