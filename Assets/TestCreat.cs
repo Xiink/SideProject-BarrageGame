@@ -18,7 +18,7 @@ public class TestCreat : MonoBehaviour
 
     void Start()
     {
-        _enemySpawner.CreateNewEnemy();
+        // _enemySpawner.CreateNewEnemy();
     }
 
 }
