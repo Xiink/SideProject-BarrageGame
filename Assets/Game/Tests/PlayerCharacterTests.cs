@@ -125,16 +125,12 @@ namespace Game.Tests
             }
 
             Bind_Instance(new PlayerCharacter.Data());
+
             Bind_InterfacesAndSelfTo_From_NewGameObject<PlayerCharacter>();
-            Container.Bind<Rigidbody>().WithId("PlayerCharacter").FromNewComponentOnNewGameObject().AsSingle();
-            var rigibody = Container.ResolveId<Rigidbody>("PlayerCharacter");
+            Container.Bind<Rigidbody2D>().WithId("PlayerCharacter").FromNewComponentOnNewGameObject().AsSingle();
+            var rigibody = Container.ResolveId<Rigidbody2D>("PlayerCharacter");
 
             var playerCharacter = Resolve<PlayerCharacter>();
-
-            // playerCharacter.gameObject.AddComponent<Rigidbody>();
-            // var rigibody = new Rigidbody();
-            // Container.BindInstance(rigibody);
-
             return playerCharacter;
         }
 
