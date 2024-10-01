@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using Codice.Client.Commands.WkTree;
 using Game.Scripts.Battle.Misc;
 using Game.Scripts.Enemy.Data;
+using Game.Scripts.Enemy.Handlers;
 using Game.Scripts.Enemy.Main;
+using Game.Scripts.Enemy.UI;
 using Game.Scripts.Helpers;
 using Game.Scripts.RPG;
 using PlasticGui.Configuration.CloudEdition.Welcome;
@@ -48,14 +50,16 @@ namespace Game.Scripts.Enemy
         [Inject]
         private IMoveable _moveable;
 
-        [Inject] private IEnemyDataFactory _enemyDataFactory;
+        [Inject]
+        private IEnemyDataFactory _enemyDataFactory;
 
         private GenericRepository<Stat> _stats = new GenericRepository<Stat>();
 
         [Inject]
         public Rigidbody2D rigidbody2D { get; set; }
 
-        // private Rigidbody2D rigi2D => GetComponent<Rigidbody2D>();
+        [Inject]
+        private EnemyHpBar _enemyHpBarUIHandler;
 
         #endregion
 
@@ -76,9 +80,15 @@ namespace Game.Scripts.Enemy
 
         public void Die()
         {
-            _data._domaindata.life -= 1;
-            _data.hp -= 1;
             // Destroy(gameObject);
+        }
+
+        public void TakeDamage()
+        {
+            // _data._domaindata.life -= 1;
+            _data.hp -= 1;
+            var percent = _data.hp / _data.maxhp;
+            _enemyHpBarUIHandler.SetPercent(percent);
         }
 
         public Vector2 GetPosition()

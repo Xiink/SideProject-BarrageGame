@@ -85,7 +85,7 @@ namespace Game.Scripts.Bullet
             var enemy = other.GetComponent<Enemy.Enemy>();
             if (enemy != null && _type == BulletTypes.FromPlayer)
             {
-                enemy.Die();
+                enemy.TakeDamage();
                 _pool.Despawn(this);
             }
         }
@@ -96,7 +96,7 @@ namespace Game.Scripts.Bullet
             var enemy = other.GetComponent<Enemy.Enemy>();
             if (enemy != null && _type == BulletTypes.FromPlayer)
             {
-                enemy.Die();
+                enemy.TakeDamage();
                 _pool.Despawn(this);
             }
         }
@@ -107,7 +107,7 @@ namespace Game.Scripts.Bullet
             var enemy = other.gameObject.GetComponent<Enemy.Enemy>();
             if (enemy != null && _type == BulletTypes.FromPlayer)
             {
-                enemy.Die();
+                enemy.TakeDamage();
                 _pool.Despawn(this);
             }
         }
@@ -118,7 +118,7 @@ namespace Game.Scripts.Bullet
             var enemy = other.gameObject.GetComponent<Enemy.Enemy>();
             if (enemy != null && _type == BulletTypes.FromPlayer)
             {
-                enemy.Die();
+                enemy.TakeDamage();
                 _pool.Despawn(this);
             }
         }

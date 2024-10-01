@@ -32,6 +32,7 @@ namespace Game.Scripts.Enemy.Data
             DropdownHeight = 250, DropdownWidth = 300)]
         public EnemyPhase Behaviour;
 
+        public float maxhp = 10;
         public float hp = 10;
 
         public override void InstallBindings()
