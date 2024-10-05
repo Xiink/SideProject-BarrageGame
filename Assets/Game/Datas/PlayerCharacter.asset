@@ -15,4 +15,4 @@ MonoBehaviour:
   _data:
     statDatas:
     - name: MoveSpeed
-      amount: 7.79
+      amount: 10.02

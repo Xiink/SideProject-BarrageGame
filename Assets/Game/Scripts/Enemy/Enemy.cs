@@ -89,6 +89,8 @@ namespace Game.Scripts.Enemy
             _data.hp -= 1;
             var percent = _data.hp / _data.maxhp;
             _enemyHpBarUIHandler.SetPercent(percent);
+
+            _enemyHpBarUIHandler.DoFlash();
         }
 
         public Vector2 GetPosition()

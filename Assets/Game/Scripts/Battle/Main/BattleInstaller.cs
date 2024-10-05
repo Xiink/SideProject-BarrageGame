@@ -3,6 +3,7 @@ using Game.Scripts.Battle.Misc;
 using Game.Scripts.Battle.States;
 using Game.Scripts.Bullet;
 using Game.Scripts.Enemy.Application;
+using Game.Scripts.UI;
 using UnityEngine;
 using Zenject;
 
@@ -40,6 +41,7 @@ namespace Game.Scripts.Battle.Main
             Container.Bind<IMoveable>().To<Moveable>().AsSingle();
             Container.BindInterfacesTo<InputHandler>().AsSingle();
             Container.BindInterfacesTo<GamePauseHandler>().AsSingle();
+            Container.BindInterfacesTo<MainUIController>().AsSingle();
 
             Container.BindExecutionOrder<InputHandler>(-100000);
         }
