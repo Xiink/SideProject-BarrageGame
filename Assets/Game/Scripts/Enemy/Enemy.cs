@@ -55,11 +55,14 @@ namespace Game.Scripts.Enemy
 
         private GenericRepository<Stat> _stats = new GenericRepository<Stat>();
 
-        [Inject]
+        [Inject(Id = "NormalEnemy")]
         public Rigidbody2D rigidbody2D { get; set; }
 
-        [Inject]
+        [Inject(Id = "NormalEnemy")]
         private EnemyHpBar _enemyHpBarUIHandler;
+
+        [Inject(Id = "NormalEnemy")]
+        private SpriteRenderer _spriteRenderer;
 
         #endregion
 
@@ -70,6 +73,8 @@ namespace Game.Scripts.Enemy
         {
             // _data = data;
             _data = _enemyDataFactory.Create();
+
+            _spriteRenderer.sprite = _data._visualData._Sprite;
         }
 
         public void AddForce(Vector3 force)

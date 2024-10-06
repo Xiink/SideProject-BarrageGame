@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Assets.Game.Scripts.Enemy.Data
@@ -13,6 +14,11 @@ namespace Assets.Game.Scripts.Enemy.Data
     {
         public string DisplayName;
         public Material EnemyMaterial;
+
+        [VerticalGroup("base")]
+        [PreviewField(ObjectFieldAlignment.Left,Height = 150)]
+        [HideLabel]
+        public Sprite _Sprite;
     }
 }
 

@@ -17,7 +17,20 @@ namespace Game.Scripts.Battle.Main
 
         public override void InstallBindings()
         {
-            // Container.BindInstance(_bullet).IfNotBound();
+            BindSpawner();
+            BindState();
+            BindHandler();
+
+            Container.BindInstance<Camera>(mainCamera);
+            Container.Bind<ITimeProvider>().To<TimeProvider>().AsSingle();
+            Container.Bind<ICameraProvider>().To<CameraProvider>().AsSingle();
+            Container.Bind<IMoveable>().To<Moveable>().AsSingle();
+            Container.BindInterfacesTo<MainUIController>().AsSingle();
+
+        }
+
+        public void BindSpawner()
+        {
             Container.BindFactory<BulletTypes, Bullet.Bullet, Bullet.Bullet.Factory>()
                 .FromPoolableMemoryPool<BulletTypes, Bullet.Bullet, BulletScriptPool>(poolBinder => poolBinder
                     .WithInitialSize(20)
@@ -31,17 +44,18 @@ namespace Game.Scripts.Battle.Main
                     .UnderTransformGroup("Enemies").AsTransient());
 
             Container.BindInterfacesAndSelfTo<EnemySpawner>().AsSingle();
+        }
 
-            Container.BindInstance<Camera>(mainCamera);
+        public void BindState()
+        {
             Container.Bind<GameState>().AsSingle();
             Container.Bind<InputState>().AsSingle();
+        }
 
-            Container.Bind<ITimeProvider>().To<TimeProvider>().AsSingle();
-            Container.Bind<ICameraProvider>().To<CameraProvider>().AsSingle();
-            Container.Bind<IMoveable>().To<Moveable>().AsSingle();
+        public void BindHandler()
+        {
             Container.BindInterfacesTo<InputHandler>().AsSingle();
             Container.BindInterfacesTo<GamePauseHandler>().AsSingle();
-            Container.BindInterfacesTo<MainUIController>().AsSingle();
 
             Container.BindExecutionOrder<InputHandler>(-100000);
         }

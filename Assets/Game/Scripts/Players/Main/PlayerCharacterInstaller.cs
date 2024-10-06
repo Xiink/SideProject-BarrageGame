@@ -23,8 +23,6 @@ namespace Game.Scripts.Players.Main
             Container.BindInterfacesTo<PlayerInputHandler>().AsSingle();
             Container.BindInterfacesAndSelfTo<PlayerMoveHandler>().AsSingle().WithArguments(GetComponent<IMover>());
             Container.BindInterfacesAndSelfTo<PlayerShootHandler>().AsSingle().WithArguments(GetComponent<IMover>());
-            // Container.BindInterfacesAndSelfTo<PlayerMoveHandler>().AsSingle().WithArguments(GetComponent<IMover>());
-            // Container.BindInterfacesAndSelfTo<PlayerShootHandler>().AsSingle().WithArguments(GetComponent<IMover>());
 
             Container.BindExecutionOrder<PlayerInputHandler>(-10000);
         }

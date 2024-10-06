@@ -762,7 +762,6 @@ GameObject:
   - component: {fileID: 1486479652}
   - component: {fileID: 1486479651}
   - component: {fileID: 1486479653}
-  - component: {fileID: 1486479654}
   m_Layer: 0
   m_Name: SceneContext
   m_TagString: Untagged
@@ -833,19 +832,6 @@ MonoBehaviour:
   _bullet: {fileID: 5945195846653561587, guid: bac26955b9b8e6746b630e5a639d74ca, type: 3}
   enemyPrefab: {fileID: 4747835221155594187, guid: e43c448ab577dfc4fb929a9ff066e57e, type: 3}
   mainCamera: {fileID: 519420031}
---- !u!114 &1486479654
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1486479650}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e61a1120468851b4794476ced7b926de, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  myPrefab: {fileID: 4747835221155594187, guid: e43c448ab577dfc4fb929a9ff066e57e, type: 3}
 --- !u!1 &1535048691
 GameObject:
   m_ObjectHideFlags: 0

@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DisplayName: 
   EnemyMaterial: {fileID: 0}
+  _Sprite: {fileID: 21300000, guid: c32f8b16442086f4187583f4470c844b, type: 3}
