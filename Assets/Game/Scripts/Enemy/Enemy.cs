@@ -43,6 +43,8 @@ namespace Game.Scripts.Enemy
         // [Inject]
         public EnemyData _data { get; set; }
 
+        public IMemoryPool _pool;
+
         #endregion
 
         #region Private Variables
@@ -86,6 +88,7 @@ namespace Game.Scripts.Enemy
         public void Die()
         {
             // Destroy(gameObject);
+            _pool.Despawn(this);
         }
 
         public void TakeDamage()
@@ -96,6 +99,11 @@ namespace Game.Scripts.Enemy
             _enemyHpBarUIHandler.SetPercent(percent);
 
             _enemyHpBarUIHandler.DoFlash();
+
+            if(_data.hp <= 0)
+            {
+                Die();
+            }
         }
 
         public Vector2 GetPosition()
@@ -166,6 +174,7 @@ namespace Game.Scripts.Enemy
 
         public void OnSpawned(IMemoryPool p1)
         {
+            _pool = p1;
         }
     }
 }
