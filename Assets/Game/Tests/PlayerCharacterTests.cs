@@ -3,6 +3,7 @@ using System.ComponentModel;
 using Game.Scripts.Battle.Misc;
 using Game.Scripts.Battle.States;
 using Game.Scripts.Names;
+using Game.Scripts.Players.Events;
 using Game.Scripts.Players.Handlers;
 using Game.Scripts.Players.Main;
 using Game.Scripts.RPG;
@@ -86,6 +87,18 @@ namespace Game.Tests
 
         }
 
+        [Test(Description = "玩家角色射擊")]
+        public void PlayerCharacter_Shoot()
+        {
+            var statDatas = new List<Stat.Data> { new Stat.Data(StatNames.MoveSpeed, 999) };
+            Bind_Instance(new PlayerCharacter.Data() { statDatas = statDatas });
+
+            var shootHandler = Given_A_PlayerShootHandler();
+            var playerCharacter = Resolve<PlayerCharacter>();
+
+            shootHandler.Fire();
+        }
+
         [Test(Description = "設定數值時，會限制數值最大最小值")]
         // [Ignore("還沒做完，正確為計算值的設置")]
         public void set_PlayerCharacter_Stats_WouldBe_Clamp()
@@ -114,6 +127,26 @@ namespace Game.Tests
             var moveHandler = Bind_And_Resolve<PlayerMoveHandler>();
 
             return moveHandler;
+        }
+
+        private PlayerShootHandler Given_A_PlayerShootHandler()
+        {
+            var playerCharacter = NewPlayerCharacter();
+            playerCharacter.SetStatAmount(StatNames.MoveSpeed,1);
+
+            var inputState = Bind_And_Resolve<PlayerInputState>();
+            var timeProvider = Bind_Mock_And_Resolve<ITimeProvider>();
+            var cameraProvider = Bind_Mock_And_Resolve<ICameraProvider>();
+
+            var test1 = Container.Bind<PlayerShootObserver>().WithId("1").To<TestHandlerPlayerShoot>().AsSingle();
+            var test2 = Container.Bind<PlayerShootObserver>().WithId("2").To<TestHandlerPlayerShoot2>().AsSingle();
+
+            inputState.SetMoveDirection(1, 1);
+            timeProvider.GetDeltaTime().Returns(1);
+
+            var shootHandler = Bind_And_Resolve<PlayerShootHandler>();
+
+            return shootHandler;
         }
 
         private PlayerCharacter NewPlayerCharacter()

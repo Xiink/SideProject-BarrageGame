@@ -67,8 +67,14 @@ namespace Game.Scripts.Enemy
         [Inject(Id = "NormalEnemy")]
         private SpriteRenderer _spriteRenderer;
 
-        [Inject]
+        [Inject(Id = "CreateNewEnemy")]
         private NormalEnemyDieObserver _normalEnemyDieObserver;
+
+        [Inject(Id = "GetEnemyDieHandler")]
+        private NormalEnemyDieObserver _normalEnemyDieObserver1;
+
+        [Inject(Id = "TestHandler")]
+        private NormalEnemyDieObserver _normalEnemyDieObserver2;
 
         #endregion
 
@@ -108,6 +114,11 @@ namespace Game.Scripts.Enemy
             Debug.Log("Die");
 
             _normalEnemyDieObserver.OnNormalEnemyDie();
+
+            _normalEnemyDieObserver1.OnNormalEnemyDie();
+
+            _normalEnemyDieObserver2.OnNormalEnemyDie();
+
             _pool.Despawn(this);
             Destroy(gameObject);
 

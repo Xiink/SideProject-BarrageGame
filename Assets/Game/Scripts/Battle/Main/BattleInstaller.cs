@@ -5,6 +5,7 @@ using Game.Scripts.Battle.States;
 using Game.Scripts.Bullet;
 using Game.Scripts.Enemy.Application;
 using Game.Scripts.Enemy.Events;
+using Game.Scripts.Players.Events;
 using Game.Scripts.UI;
 using UnityEngine;
 using Zenject;
@@ -33,7 +34,16 @@ namespace Game.Scripts.Battle.Main
 
         public void BindController()
         {
-            Container.BindInterfacesAndSelfTo<BattleFlowController>().AsSingle();
+            // Container.BindInterfacesAndSelfTo<BattleFlowController>().AsSingle();
+            // Container.BindInterfacesTo<GetEnemyDieHandler>().AsSingle();
+            // Container.BindInterfacesTo<TestHandler>().AsSingle();
+
+            Container.Bind<NormalEnemyDieObserver>().WithId("CreateNewEnemy").To<BattleFlowController>().AsSingle();
+            Container.Bind<NormalEnemyDieObserver>().WithId("GetEnemyDieHandler").To<GetEnemyDieHandler>().AsSingle();
+            Container.Bind<NormalEnemyDieObserver>().WithId("TestHandler").To<TestHandler>().AsSingle();
+
+            Container.Bind<PlayerShootObserver>().WithId("1").To<TestHandlerPlayerShoot>().AsSingle();
+            Container.Bind<PlayerShootObserver>().WithId("2").To<TestHandlerPlayerShoot2>().AsSingle();
         }
 
         public void BindSpawner()
