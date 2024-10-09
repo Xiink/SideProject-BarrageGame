@@ -21,7 +21,6 @@ namespace Game.Scripts.UI
 
         private void CreateEnemy()
         {
-            Debug.Log("Test");
             _enemySpawner.CreateNewEnemy();
         }
     }

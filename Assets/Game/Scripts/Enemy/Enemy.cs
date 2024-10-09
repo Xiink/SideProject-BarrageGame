@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Codice.Client.Commands.WkTree;
 using Game.Scripts.Battle.Misc;
 using Game.Scripts.Enemy.Data;
+using Game.Scripts.Enemy.Events;
 using Game.Scripts.Enemy.Handlers;
 using Game.Scripts.Enemy.Main;
 using Game.Scripts.Enemy.UI;
@@ -27,7 +28,15 @@ namespace Game.Scripts.Enemy
     {
         #region Public Variables
 
+        public IMemoryPool _pool;
+
         public bool Moveable => _moveable.GetState();
+
+        // [Inject]
+        public EnemyData _data { get; set; }
+
+        [Inject(Id = "NormalEnemy")]
+        public Rigidbody2D rigidbody2D { get; set; }
 
         public Transform trans { get; set; }
 
@@ -39,11 +48,6 @@ namespace Game.Scripts.Enemy
                 return trans;
             }
         }
-
-        // [Inject]
-        public EnemyData _data { get; set; }
-
-        public IMemoryPool _pool;
 
         #endregion
 
@@ -58,17 +62,35 @@ namespace Game.Scripts.Enemy
         private GenericRepository<Stat> _stats = new GenericRepository<Stat>();
 
         [Inject(Id = "NormalEnemy")]
-        public Rigidbody2D rigidbody2D { get; set; }
-
-        [Inject(Id = "NormalEnemy")]
         private EnemyHpBar _enemyHpBarUIHandler;
 
         [Inject(Id = "NormalEnemy")]
         private SpriteRenderer _spriteRenderer;
 
+        [Inject]
+        private NormalEnemyDieObserver _normalEnemyDieObserver;
+
+        #endregion
+
+        #region Unity events
+
+        private void Update()
+        {
+            Debug.Log(this + $"{_data._domaindata.life}");
+
+            // 如果是_data.hp已經分開了
+            Debug.Log(this + $"{_data.hp}");
+        }
+
         #endregion
 
         #region Public Methods
+
+        public void AddForce(Vector3 force)
+        {
+            // this.GetComponent<Rigidbody2D>().AddForce(force);
+            rigidbody2D.AddForce(force);
+        }
 
         [Inject]
         public void Construct(EnemyData data)
@@ -79,31 +101,16 @@ namespace Game.Scripts.Enemy
             _spriteRenderer.sprite = _data._visualData._Sprite;
         }
 
-        public void AddForce(Vector3 force)
-        {
-            // this.GetComponent<Rigidbody2D>().AddForce(force);
-            rigidbody2D.AddForce(force);
-        }
-
         public void Die()
         {
             // Destroy(gameObject);
+
+            Debug.Log("Die");
+
+            _normalEnemyDieObserver.OnNormalEnemyDie();
             _pool.Despawn(this);
-        }
+            Destroy(gameObject);
 
-        public void TakeDamage()
-        {
-            // _data._domaindata.life -= 1;
-            _data.hp -= 1;
-            var percent = _data.hp / _data.maxhp;
-            _enemyHpBarUIHandler.SetPercent(percent);
-
-            _enemyHpBarUIHandler.DoFlash();
-
-            if(_data.hp <= 0)
-            {
-                Die();
-            }
         }
 
         public Vector2 GetPosition()
@@ -116,17 +123,20 @@ namespace Game.Scripts.Enemy
             return 0;
         }
 
+        public void OnDespawned()
+        {
+
+        }
+
+        public void OnSpawned(IMemoryPool p1)
+        {
+            _pool = p1;
+        }
+
         public void SetPosition(Vector2 newPos)
         {
             Trans.position = (Vector3)newPos;
         }
-        
-        public class Factory : PlaceholderFactory<Enemy>
-        {
-            
-        }
-
-        #endregion
 
         public void SetStatAmount(string name, float value)
         {
@@ -144,6 +154,23 @@ namespace Game.Scripts.Enemy
             }
         }
 
+        public void TakeDamage()
+        {
+            // _data._domaindata.life -= 1;
+            _data.hp -= 1;
+            var percent = _data.hp / _data.maxhp;
+            _enemyHpBarUIHandler.SetPercent(percent);
+
+            _enemyHpBarUIHandler.DoFlash();
+
+            if(_data.hp <= 0)
+            {
+                Die();
+            }
+        }
+
+        #endregion
+
         #region Private Methods
 
         private (bool containsStat, Stat stat) FindStat(string statName)
@@ -157,24 +184,13 @@ namespace Game.Scripts.Enemy
 
         }
 
-        private void Update()
-        {
-            Debug.Log(this + $"{_data._domaindata.life}");
-
-            // 如果是_data.hp已經分開了
-            Debug.Log(this + $"{_data.hp}");
-        }
-
         #endregion
 
-        public void OnDespawned()
-        {
+        #region Nested Types
 
-        }
+        public class Factory : PlaceholderFactory<Enemy>
+        {}
 
-        public void OnSpawned(IMemoryPool p1)
-        {
-            _pool = p1;
-        }
+        #endregion
     }
 }
