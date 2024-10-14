@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using Game.Scripts.Battle.Misc;
 using Game.Scripts.Battle.States;
+using Game.Scripts.Bullet;
 using Game.Scripts.Names;
 using Game.Scripts.Players.Events;
 using Game.Scripts.Players.Handlers;
@@ -11,7 +12,9 @@ using NSubstitute;
 using NUnit.Framework;
 using rStarUtility.Generic.TestExtensions;
 using rStarUtility.Generic.TestFrameWork;
+using UnityEditor;
 using UnityEngine;
+using Zenject;
 
 namespace Game.Tests
 {
@@ -96,6 +99,7 @@ namespace Game.Tests
             var shootHandler = Given_A_PlayerShootHandler();
             var playerCharacter = Resolve<PlayerCharacter>();
 
+            // shootHandler.Tick();
             shootHandler.Fire();
         }
 
@@ -131,6 +135,11 @@ namespace Game.Tests
 
         private PlayerShootHandler Given_A_PlayerShootHandler()
         {
+            GameObject _bullet = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Game/Datas/Bullet.prefab");
+            Container.BindFactory<BulletTypes, Bullet, Bullet.Factory>()
+                .FromComponentInNewPrefab(_bullet)
+                .AsSingle();
+
             var playerCharacter = NewPlayerCharacter();
             playerCharacter.SetStatAmount(StatNames.MoveSpeed,1);
 
@@ -138,8 +147,8 @@ namespace Game.Tests
             var timeProvider = Bind_Mock_And_Resolve<ITimeProvider>();
             var cameraProvider = Bind_Mock_And_Resolve<ICameraProvider>();
 
-            var test1 = Container.Bind<PlayerShootObserver>().WithId("1").To<TestHandlerPlayerShoot>().AsSingle();
-            var test2 = Container.Bind<PlayerShootObserver>().WithId("2").To<TestHandlerPlayerShoot2>().AsSingle();
+            var test1 = Container.BindInterfacesTo<TestHandlerPlayerShoot>().AsSingle();
+            var test2 = Container.BindInterfacesTo<TestHandlerPlayerShoot2>().AsSingle();
 
             inputState.SetMoveDirection(1, 1);
             timeProvider.GetDeltaTime().Returns(1);
@@ -166,6 +175,5 @@ namespace Game.Tests
             var playerCharacter = Resolve<PlayerCharacter>();
             return playerCharacter;
         }
-
     }
 }

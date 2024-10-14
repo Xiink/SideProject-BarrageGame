@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Game.Scripts.Battle.Misc;
 using Game.Scripts.Bullet;
 using Game.Scripts.Players.Events;
@@ -14,11 +15,9 @@ namespace Game.Scripts.Players.Handlers
         [Inject] private IMover _player;
         [Inject] private PlayerInputState _playerInputState;
 
-        [Inject(Id = "1")]
-        private PlayerShootObserver test1;
+        [Inject]
+        private List<PlayerShootObserver> test1;
 
-        [Inject(Id = "2")]
-        private PlayerShootObserver test2;
 
         public PlayerShootHandler(Bullet.Bullet.Factory factory)
         {
@@ -33,13 +32,17 @@ namespace Game.Scripts.Players.Handlers
 
         public void Fire()
         {
-            var bullet = _factory.Create(BulletTypes.FromPlayer);
+            _factory.Create(BulletTypes.FromPlayer);
 
-            bullet.transform.position = (Vector3)_player.GetPosition() - _player.transform.right;
-            bullet.transform.rotation = _player.transform.rotation;
+            // var bullet = _factory.Create(BulletTypes.FromPlayer);
+            //
+            // bullet.transform.position = (Vector3)_player.GetPosition() - _player.transform.right;
+            // bullet.transform.rotation = _player.transform.rotation;
 
-            test1.OnPlayerShoot();
-            test2.OnPlayerShoot();
+            foreach (var e in test1)
+            {
+                e.OnPlayerShoot();
+            }
         }
     }
 }
