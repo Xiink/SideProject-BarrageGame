@@ -32,12 +32,10 @@ namespace Game.Scripts.Players.Handlers
 
         public void Fire()
         {
-            _factory.Create(BulletTypes.FromPlayer);
+            var bullet = _factory.Create(BulletTypes.FromPlayer);
 
-            // var bullet = _factory.Create(BulletTypes.FromPlayer);
-            //
-            // bullet.transform.position = (Vector3)_player.GetPosition() - _player.transform.right;
-            // bullet.transform.rotation = _player.transform.rotation;
+            bullet.transform.position = (Vector3)_player.GetPosition() - _player.transform.right;
+            bullet.transform.rotation = _player.transform.rotation;
 
             foreach (var e in test1)
             {
