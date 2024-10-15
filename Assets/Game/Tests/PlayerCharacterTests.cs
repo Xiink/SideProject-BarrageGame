@@ -136,7 +136,7 @@ namespace Game.Tests
         private PlayerShootHandler Given_A_PlayerShootHandler()
         {
             GameObject _bullet = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Game/Datas/Bullet.prefab");
-            Container.BindFactory<BulletTypes, Bullet, Bullet.Factory>()
+            Container.BindFactory<Bullet.SpawnData,Bullet, Bullet.Factory>()
                 .FromComponentInNewPrefab(_bullet)
                 .AsSingle();
 

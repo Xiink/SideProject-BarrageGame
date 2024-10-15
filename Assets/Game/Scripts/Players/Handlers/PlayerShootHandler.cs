@@ -18,7 +18,6 @@ namespace Game.Scripts.Players.Handlers
         [Inject]
         private List<PlayerShootObserver> test1;
 
-
         public PlayerShootHandler(Bullet.Bullet.Factory factory)
         {
              _factory = factory;
@@ -32,10 +31,15 @@ namespace Game.Scripts.Players.Handlers
 
         public void Fire()
         {
-            var bullet = _factory.Create(BulletTypes.FromPlayer);
+            var type = BulletTypes.FromPlayer;
+            var Position = (Vector3)_player.GetPosition() - _player.transform.right;
+            var Rotation = _player.transform.rotation;
+            var spawnData = new Bullet.Bullet.SpawnData(type, Position, Rotation);
 
-            bullet.transform.position = (Vector3)_player.GetPosition() - _player.transform.right;
-            bullet.transform.rotation = _player.transform.rotation;
+            var bullet = _factory.Create(spawnData);
+
+            // bullet.transform.position = (Vector3)_player.GetPosition() - _player.transform.right;
+            // bullet.transform.rotation = _player.transform.rotation;
 
             foreach (var e in test1)
             {

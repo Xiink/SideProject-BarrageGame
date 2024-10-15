@@ -17,7 +17,7 @@ namespace Game.Scripts.Bullet
         Other
     }
 
-    public class Bullet : MonoBehaviour, IPoolable<BulletTypes, IMemoryPool>
+    public class Bullet : MonoBehaviour, IPoolable<Bullet.SpawnData, IMemoryPool>
     {
         #region Public Variables
 
@@ -70,13 +70,16 @@ namespace Game.Scripts.Bullet
             _pool = null;
         }
 
-        public void OnSpawned(BulletTypes type, IMemoryPool p3)
+        public void OnSpawned(Bullet.SpawnData data, IMemoryPool p3)
         {
             //speed = speed;
-            _type = type;
+            _type = data.Type;
             _pool = p3;
 
             _startTime = Time.realtimeSinceStartup;
+
+            transform.position = data.Position;
+            transform.rotation = data.Rotation;
         }
 
         public void OnTriggerEnter(Collider other)
@@ -168,8 +171,24 @@ namespace Game.Scripts.Bullet
             #endregion
         }
 
-        public class Factory : PlaceholderFactory<BulletTypes, Bullet>
+        public class Factory : PlaceholderFactory<SpawnData, Bullet>
         {}
+
+        public class SpawnData
+        {
+            public BulletTypes Type;
+
+            public Vector3 Position;
+
+            public Quaternion Rotation;
+
+            public SpawnData(BulletTypes type, Vector3 position, Quaternion rotation)
+            {
+                Type = type;
+                Position = position;
+                Rotation = rotation;
+            }
+        }
 
         #endregion
     }

@@ -44,11 +44,12 @@ namespace Game.Scripts.Battle.Main
 
         public void BindSpawner()
         {
-            Container.BindFactory<BulletTypes, Bullet.Bullet, Bullet.Bullet.Factory>()
-                .FromPoolableMemoryPool<BulletTypes, Bullet.Bullet, BulletScriptPool>(poolBinder => poolBinder
+            Container.BindFactory<Bullet.Bullet.SpawnData, Bullet.Bullet, Bullet.Bullet.Factory>()
+                .FromPoolableMemoryPool<Bullet.Bullet.SpawnData, Bullet.Bullet, BulletScriptPool>(poolBinder => poolBinder
                     .WithInitialSize(20)
                     .FromComponentInNewPrefab(_bullet)
                     .UnderTransformGroup("Bullets"));
+
 
             Container.BindFactory<Enemy.Enemy, Enemy.Enemy.Factory>()
                 .FromPoolableMemoryPool<Enemy.Enemy, EnemyScriptPool>(poolBinder => poolBinder
@@ -73,7 +74,7 @@ namespace Game.Scripts.Battle.Main
             Container.BindExecutionOrder<InputHandler>(-100000);
         }
 
-        class BulletScriptPool : MonoPoolableMemoryPool<BulletTypes, IMemoryPool,Bullet.Bullet>
+        class BulletScriptPool : MonoPoolableMemoryPool<Bullet.Bullet.SpawnData, IMemoryPool,Bullet.Bullet>
         {
         }
 
