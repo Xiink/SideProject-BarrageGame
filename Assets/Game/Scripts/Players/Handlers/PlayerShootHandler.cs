@@ -18,6 +18,9 @@ namespace Game.Scripts.Players.Handlers
         [Inject]
         private List<PlayerShootObserver> test1;
 
+        [Inject]
+        private TestFactory.TestFactory.ObjFactory _customFactory;
+
         public PlayerShootHandler(Bullet.Bullet.Factory factory)
         {
              _factory = factory;
@@ -37,6 +40,9 @@ namespace Game.Scripts.Players.Handlers
             var spawnData = new Bullet.Bullet.SpawnData(type, Position, Rotation);
 
             var bullet = _factory.Create(spawnData);
+
+            var obj = _customFactory.Create(new TestFactory.TestFactory.SpawnData(Position, Rotation));
+            obj.OnCreated();
 
             // bullet.transform.position = (Vector3)_player.GetPosition() - _player.transform.right;
             // bullet.transform.rotation = _player.transform.rotation;

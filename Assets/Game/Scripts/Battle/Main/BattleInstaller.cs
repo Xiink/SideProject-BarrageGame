@@ -3,6 +3,7 @@ using Game.Scripts.Battle.Handlers;
 using Game.Scripts.Battle.Misc;
 using Game.Scripts.Battle.States;
 using Game.Scripts.Bullet;
+using Game.Scripts.Bullet.Interfaces;
 using Game.Scripts.Enemy.Application;
 using Game.Scripts.Enemy.Events;
 using Game.Scripts.Players.Events;
@@ -37,7 +38,10 @@ namespace Game.Scripts.Battle.Main
         public void TestInstaller()
         {
             Container.Bind<TestFactory.TestFactory.DifficultyManager>().AsSingle();
-            Container.BindFactory<TestFactory.TestFactory.IObj, TestFactory.TestFactory.ObjFactory>().FromFactory<TestFactory.TestFactory.CustomFactory>();
+
+            Container.BindFactory<TestFactory.TestFactory.SpawnData,TestFactory.TestFactory.IObj, TestFactory.TestFactory.ObjFactory>()
+                .FromFactory<TestFactory.TestFactory.CustomFactory>();
+
         }
 
         public void BindController()
@@ -57,7 +61,6 @@ namespace Game.Scripts.Battle.Main
                     .WithInitialSize(20)
                     .FromComponentInNewPrefab(_bullet)
                     .UnderTransformGroup("Bullets"));
-
 
             Container.BindFactory<Enemy.Enemy, Enemy.Enemy.Factory>()
                 .FromPoolableMemoryPool<Enemy.Enemy, EnemyScriptPool>(poolBinder => poolBinder
