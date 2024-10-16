@@ -6,6 +6,7 @@ using Game.Scripts.Bullet;
 using Game.Scripts.Enemy.Application;
 using Game.Scripts.Enemy.Events;
 using Game.Scripts.Players.Events;
+using Game.Scripts.TestFactory;
 using Game.Scripts.UI;
 using UnityEngine;
 using Zenject;
@@ -24,12 +25,19 @@ namespace Game.Scripts.Battle.Main
             BindState();
             BindHandler();
             BindController();
+            TestInstaller();
 
             Container.BindInstance<Camera>(mainCamera);
             Container.Bind<ITimeProvider>().To<TimeProvider>().AsSingle();
             Container.Bind<ICameraProvider>().To<CameraProvider>().AsSingle();
             Container.Bind<IMoveable>().To<Moveable>().AsSingle();
             Container.BindInterfacesTo<MainUIController>().AsSingle();
+        }
+
+        public void TestInstaller()
+        {
+            Container.Bind<TestFactory.TestFactory.DifficultyManager>().AsSingle();
+            Container.BindFactory<TestFactory.TestFactory.IObj, TestFactory.TestFactory.ObjFactory>().FromFactory<TestFactory.TestFactory.CustomFactory>();
         }
 
         public void BindController()
