@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using Game.Scripts.Bullet.Interfaces;
 using Game.Scripts.Helpers;
 using Game.Scripts.Names;
 using Game.Scripts.RPG;
 using rStarUtility.Generic.Infrastructure;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using VInspector.Libs;
 using Zenject;
 
 namespace Game.Scripts.Bullet
@@ -17,19 +19,19 @@ namespace Game.Scripts.Bullet
         Other
     }
 
-    public class Bullet : MonoBehaviour, IPoolable<Bullet.SpawnData, IMemoryPool>
+    public class Bullet : MonoBehaviour,IBullet
     {
         #region Public Variables
 
-        float _startTime;
-        float _lifeTime = 3f;
         public IMemoryPool _pool;
         public BulletTypes _type;
-        // public float speed = 50f;
 
         #endregion
 
         #region Private Variables
+
+        float _startTime;
+        float _lifeTime = 3f;
 
         [Inject] private Bullet.Data _data;
 
@@ -45,7 +47,9 @@ namespace Game.Scripts.Bullet
 
             if (Time.realtimeSinceStartup - _startTime > _lifeTime)
             {
-                _pool.Despawn(this);
+                this.Destroy();
+                // _pool.Despawn(this);
+                // Destroy(this);
             }
         }
 
@@ -82,43 +86,19 @@ namespace Game.Scripts.Bullet
             transform.rotation = data.Rotation;
         }
 
+        public void OnSpawned(Bullet.SpawnData data)
+        {
+            _startTime = Time.realtimeSinceStartup;
+
+            _type = data.Type;
+            transform.position = data.Position;
+            transform.rotation = data.Rotation;
+        }
+
         public void OnTriggerEnter(Collider other)
         {
             Debug.Log("Enter");
             var enemy = other.GetComponent<Enemy.Enemy>();
-            if (enemy != null && _type == BulletTypes.FromPlayer)
-            {
-                enemy.TakeDamage();
-                _pool.Despawn(this);
-            }
-        }
-
-        private void OnTriggerEnter2D(Collider2D other)
-        {
-            Debug.Log("Enter");
-            var enemy = other.GetComponent<Enemy.Enemy>();
-            if (enemy != null && _type == BulletTypes.FromPlayer)
-            {
-                enemy.TakeDamage();
-                _pool.Despawn(this);
-            }
-        }
-
-        private void OnCollisionEnter(Collision other)
-        {
-            Debug.Log("CollisionEnter");
-            var enemy = other.gameObject.GetComponent<Enemy.Enemy>();
-            if (enemy != null && _type == BulletTypes.FromPlayer)
-            {
-                enemy.TakeDamage();
-                _pool.Despawn(this);
-            }
-        }
-
-        private void OnCollisionEnter2D(Collision2D other)
-        {
-            Debug.Log("CollisionEnter2D");
-            var enemy = other.gameObject.GetComponent<Enemy.Enemy>();
             if (enemy != null && _type == BulletTypes.FromPlayer)
             {
                 enemy.TakeDamage();
@@ -147,6 +127,39 @@ namespace Game.Scripts.Bullet
             _data.statDatas.ForEach(data => _stats.Add(new Stat(data)));
         }
 
+        private void OnCollisionEnter(Collision other)
+        {
+            Debug.Log("CollisionEnter");
+            var enemy = other.gameObject.GetComponent<Enemy.Enemy>();
+            if (enemy != null && _type == BulletTypes.FromPlayer)
+            {
+                enemy.TakeDamage();
+                _pool.Despawn(this);
+            }
+        }
+
+        private void OnCollisionEnter2D(Collision2D other)
+        {
+            Debug.Log("CollisionEnter2D");
+            var enemy = other.gameObject.GetComponent<Enemy.Enemy>();
+            if (enemy != null && _type == BulletTypes.FromPlayer)
+            {
+                enemy.TakeDamage();
+                _pool.Despawn(this);
+            }
+        }
+
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            Debug.Log("Enter");
+            var enemy = other.GetComponent<Enemy.Enemy>();
+            if (enemy != null && _type == BulletTypes.FromPlayer)
+            {
+                enemy.TakeDamage();
+                _pool.Despawn(this);
+            }
+        }
+
         #endregion
 
         #region Nested Types
@@ -171,16 +184,22 @@ namespace Game.Scripts.Bullet
             #endregion
         }
 
-        public class Factory : PlaceholderFactory<SpawnData, Bullet>
+        public class Factory : PlaceholderFactory<Bullet>
         {}
 
         public class SpawnData
         {
+            #region Public Variables
+
             public BulletTypes Type;
+
+            public Quaternion Rotation;
 
             public Vector3 Position;
 
-            public Quaternion Rotation;
+            #endregion
+
+            #region Constructor
 
             public SpawnData(BulletTypes type, Vector3 position, Quaternion rotation)
             {
@@ -188,6 +207,8 @@ namespace Game.Scripts.Bullet
                 Position = position;
                 Rotation = rotation;
             }
+
+            #endregion
         }
 
         #endregion

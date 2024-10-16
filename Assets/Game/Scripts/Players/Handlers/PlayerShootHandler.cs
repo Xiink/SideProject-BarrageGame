@@ -21,9 +21,16 @@ namespace Game.Scripts.Players.Handlers
         [Inject]
         private TestFactory.TestFactory.ObjFactory _customFactory;
 
-        public PlayerShootHandler(Bullet.Bullet.Factory factory)
+        [Inject]
+        private Bullet.BulletFactory _bulletFactory;
+
+        // public PlayerShootHandler(Bullet.Bullet.Factory factory)
+        // {
+        //      _factory = factory;
+        // }
+
+        public PlayerShootHandler()
         {
-             _factory = factory;
         }
 
         public void Tick()
@@ -39,13 +46,11 @@ namespace Game.Scripts.Players.Handlers
             var Rotation = _player.transform.rotation;
             var spawnData = new Bullet.Bullet.SpawnData(type, Position, Rotation);
 
-            var bullet = _factory.Create(spawnData);
+            // var bullet = _factory.Create(spawnData);
+            _bulletFactory.Create(spawnData);
 
-            var obj = _customFactory.Create(new TestFactory.TestFactory.SpawnData(Position, Rotation));
-            obj.OnCreated();
-
-            // bullet.transform.position = (Vector3)_player.GetPosition() - _player.transform.right;
-            // bullet.transform.rotation = _player.transform.rotation;
+            // var obj = _customFactory.Create(new TestFactory.TestFactory.SpawnData(Position, Rotation));
+            // obj.OnCreated();
 
             foreach (var e in test1)
             {

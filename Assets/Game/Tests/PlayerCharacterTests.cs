@@ -136,9 +136,9 @@ namespace Game.Tests
         private PlayerShootHandler Given_A_PlayerShootHandler()
         {
             GameObject _bullet = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Game/Datas/Bullet.prefab");
-            Container.BindFactory<Bullet.SpawnData,Bullet, Bullet.Factory>()
-                .FromComponentInNewPrefab(_bullet)
-                .AsSingle();
+            // Container.BindFactory<Bullet.SpawnData,Bullet, Bullet.Factory>()
+            //     .FromComponentInNewPrefab(_bullet)
+            //     .AsSingle();
 
             var playerCharacter = NewPlayerCharacter();
             playerCharacter.SetStatAmount(StatNames.MoveSpeed,1);

@@ -830,6 +830,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _bullet: {fileID: 5945195846653561587, guid: bac26955b9b8e6746b630e5a639d74ca, type: 3}
+  _Testbullet: {fileID: 5169272090415389477, guid: c50fe54a707d0c448bbde502871a8c4e, type: 3}
   enemyPrefab: {fileID: 4747835221155594187, guid: e43c448ab577dfc4fb929a9ff066e57e, type: 3}
   mainCamera: {fileID: 519420031}
 --- !u!1 &1535048691

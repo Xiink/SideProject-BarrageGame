@@ -17,6 +17,7 @@ namespace Game.Scripts.Battle.Main
     public class BattleInstaller : MonoInstaller
     {
         public GameObject _bullet;
+        public GameObject _Testbullet;
         public GameObject enemyPrefab;
         public Camera mainCamera;
 
@@ -39,9 +40,9 @@ namespace Game.Scripts.Battle.Main
         {
             Container.Bind<TestFactory.TestFactory.DifficultyManager>().AsSingle();
 
+            // 這邊Inject是綁定ObjFactory，而實作的是CustomFactory並且可以抽換
             Container.BindFactory<TestFactory.TestFactory.SpawnData,TestFactory.TestFactory.IObj, TestFactory.TestFactory.ObjFactory>()
                 .FromFactory<TestFactory.TestFactory.CustomFactory>();
-
         }
 
         public void BindController()
@@ -56,11 +57,15 @@ namespace Game.Scripts.Battle.Main
 
         public void BindSpawner()
         {
-            Container.BindFactory<Bullet.Bullet.SpawnData, Bullet.Bullet, Bullet.Bullet.Factory>()
-                .FromPoolableMemoryPool<Bullet.Bullet.SpawnData, Bullet.Bullet, BulletScriptPool>(poolBinder => poolBinder
-                    .WithInitialSize(20)
-                    .FromComponentInNewPrefab(_bullet)
-                    .UnderTransformGroup("Bullets"));
+            // Container.BindFactory<Bullet.Bullet.SpawnData, Bullet.Bullet, Bullet.Bullet.Factory>()
+            //     .FromPoolableMemoryPool<Bullet.Bullet.SpawnData, Bullet.Bullet, BulletScriptPool>(poolBinder => poolBinder
+            //         .WithInitialSize(20)
+            //         .FromComponentInNewPrefab(_bullet)
+            //         .UnderTransformGroup("Bullets"));
+            Container.BindFactory<Bullet.Bullet.SpawnData, Bullet.Interfaces.IBullet, BulletFactory>()
+                .FromFactory<CustomBulletFactory>();
+            Container.BindFactory<Bullet.Bullet, Bullet.Bullet.Factory>().FromComponentInNewPrefab(_bullet);
+            // Container.BindFactory<Bullet.Bullet.SpawnData,Bullet.TestBullet, Bullet.TestBullet.Factory>().FromComponentInNewPrefab(_Testbullet);
 
             Container.BindFactory<Enemy.Enemy, Enemy.Enemy.Factory>()
                 .FromPoolableMemoryPool<Enemy.Enemy, EnemyScriptPool>(poolBinder => poolBinder
@@ -85,9 +90,9 @@ namespace Game.Scripts.Battle.Main
             Container.BindExecutionOrder<InputHandler>(-100000);
         }
 
-        class BulletScriptPool : MonoPoolableMemoryPool<Bullet.Bullet.SpawnData, IMemoryPool,Bullet.Bullet>
-        {
-        }
+        // class BulletScriptPool : MonoPoolableMemoryPool<Bullet.Bullet.SpawnData, IMemoryPool,Bullet.Bullet>
+        // {
+        // }
 
         class EnemyScriptPool : MonoPoolableMemoryPool<IMemoryPool,Enemy.Enemy>
         {
