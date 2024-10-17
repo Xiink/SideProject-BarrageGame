@@ -97,12 +97,17 @@ namespace Game.Tests
             var statDatas = new List<Stat.Data> { new Stat.Data(StatNames.MoveSpeed, 999) };
             Bind_Instance(new PlayerCharacter.Data() { statDatas = statDatas });
 
+            Container.BindFactoryCustomInterface<Bullet.SpawnData,IBullet,BulletFactory,IBulletFactory>()
+                .FromFactory<CustomBulletFactory>();
+            GameObject _bullet = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Game/Datas/Bullet.prefab");
+            Container.BindFactory<Bullet, Bullet.Factory>().FromComponentInNewPrefab(_bullet);
+
             var shootHandler = Given_A_PlayerShootHandler();
             var playerCharacter = Resolve<PlayerCharacter>();
 
             // shootHandler.Tick();
             shootHandler.Fire();
-
+            Assert.AreEqual(1,Object.FindObjectsOfType<Bullet>().Length);
         }
 
         [Test(Description = "設定數值時，會限制數值最大最小值")]
@@ -137,17 +142,6 @@ namespace Game.Tests
 
         private PlayerShootHandler Given_A_PlayerShootHandler()
         {
-            GameObject _bullet = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Game/Datas/Bullet.prefab");
-            Container.BindFactory<Bullet, Bullet.Factory>().FromComponentInNewPrefab(_bullet);
-
-            var bulletFactory = Substitute.For<IBulletFactory>();
-            Container.Bind<IBulletFactory>().FromInstance(bulletFactory);
-
-            // bulletFactory.Received(1).Create(Arg.Any<Bullet.SpawnData>());
-            // Container.BindFactory<Bullet.SpawnData,Bullet, Bullet.Factory>()
-            //     .FromComponentInNewPrefab(_bullet)
-            //     .AsSingle();
-
             var playerCharacter = NewPlayerCharacter();
             playerCharacter.SetStatAmount(StatNames.MoveSpeed,1);
 
