@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Game.Scripts.Battle.Misc;
 using Game.Scripts.Bullet;
+using Game.Scripts.Bullet.Interfaces;
 using Game.Scripts.Players.Events;
 using Game.Scripts.Players.Main;
 using Zenject;
@@ -18,11 +19,12 @@ namespace Game.Scripts.Players.Handlers
         [Inject]
         private List<PlayerShootObserver> test1;
 
-        [Inject]
-        private TestFactory.TestFactory.ObjFactory _customFactory;
+        // [Inject]
+        // private TestFactory.TestFactory.ObjFactory _customFactory;
 
         [Inject]
-        private Bullet.BulletFactory _bulletFactory;
+        private IBulletFactory _bulletFactory;
+        // private Bullet.BulletFactory _bulletFactory;
 
         // public PlayerShootHandler(Bullet.Bullet.Factory factory)
         // {

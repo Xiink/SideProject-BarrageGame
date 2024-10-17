@@ -3,6 +3,7 @@ using System.ComponentModel;
 using Game.Scripts.Battle.Misc;
 using Game.Scripts.Battle.States;
 using Game.Scripts.Bullet;
+using Game.Scripts.Bullet.Interfaces;
 using Game.Scripts.Names;
 using Game.Scripts.Players.Events;
 using Game.Scripts.Players.Handlers;
@@ -101,6 +102,7 @@ namespace Game.Tests
 
             // shootHandler.Tick();
             shootHandler.Fire();
+
         }
 
         [Test(Description = "設定數值時，會限制數值最大最小值")]
@@ -136,6 +138,12 @@ namespace Game.Tests
         private PlayerShootHandler Given_A_PlayerShootHandler()
         {
             GameObject _bullet = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Game/Datas/Bullet.prefab");
+            Container.BindFactory<Bullet, Bullet.Factory>().FromComponentInNewPrefab(_bullet);
+
+            var bulletFactory = Substitute.For<IBulletFactory>();
+            Container.Bind<IBulletFactory>().FromInstance(bulletFactory);
+
+            // bulletFactory.Received(1).Create(Arg.Any<Bullet.SpawnData>());
             // Container.BindFactory<Bullet.SpawnData,Bullet, Bullet.Factory>()
             //     .FromComponentInNewPrefab(_bullet)
             //     .AsSingle();
