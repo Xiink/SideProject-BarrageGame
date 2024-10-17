@@ -15,7 +15,8 @@ namespace Game.Scripts.Bullet
 
         public IBullet Create(Bullet.SpawnData param)
         {
-            var newBullet = _factory.Create(param);
+            var newBullet = _factory.Create();
+            newBullet.OnSpawned(param);
             return newBullet;
         }
 

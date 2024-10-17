@@ -19,7 +19,7 @@ namespace Game.Scripts.Bullet
         Other
     }
 
-    public class Bullet : MonoBehaviour,IBullet,IPoolable<Bullet.SpawnData,IMemoryPool>
+    public class Bullet : MonoBehaviour,IBullet
     {
         #region Public Variables
 
@@ -47,7 +47,9 @@ namespace Game.Scripts.Bullet
 
             if (Time.realtimeSinceStartup - _startTime > _lifeTime)
             {
-                _pool.Despawn(this);
+                this.Destroy();
+                // _pool.Despawn(this);
+                // Destroy(this);
             }
         }
 
@@ -80,6 +82,15 @@ namespace Game.Scripts.Bullet
 
             _startTime = Time.realtimeSinceStartup;
 
+            transform.position = data.Position;
+            transform.rotation = data.Rotation;
+        }
+
+        public void OnSpawned(Bullet.SpawnData data)
+        {
+            _startTime = Time.realtimeSinceStartup;
+
+            _type = data.Type;
             transform.position = data.Position;
             transform.rotation = data.Rotation;
         }
@@ -173,7 +184,7 @@ namespace Game.Scripts.Bullet
             #endregion
         }
 
-        public class Factory : PlaceholderFactory<SpawnData,Bullet>
+        public class Factory : PlaceholderFactory<Bullet>
         {}
 
         public class SpawnData
