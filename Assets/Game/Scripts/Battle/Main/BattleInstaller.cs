@@ -57,14 +57,15 @@ namespace Game.Scripts.Battle.Main
 
         public void BindSpawner()
         {
-            // Container.BindFactory<Bullet.Bullet.SpawnData, Bullet.Bullet, Bullet.Bullet.Factory>()
-            //     .FromPoolableMemoryPool<Bullet.Bullet.SpawnData, Bullet.Bullet, BulletScriptPool>(poolBinder => poolBinder
-            //         .WithInitialSize(20)
-            //         .FromComponentInNewPrefab(_bullet)
-            //         .UnderTransformGroup("Bullets"));
+
             Container.BindFactory<Bullet.Bullet.SpawnData, Bullet.Interfaces.IBullet, BulletFactory>()
                 .FromFactory<CustomBulletFactory>();
-            Container.BindFactory<Bullet.Bullet, Bullet.Bullet.Factory>().FromComponentInNewPrefab(_bullet);
+            Container.BindFactory<Bullet.Bullet.SpawnData, Bullet.Bullet, Bullet.Bullet.Factory>()
+                .FromPoolableMemoryPool<Bullet.Bullet.SpawnData, Bullet.Bullet, BulletScriptPool>(poolBinder => poolBinder
+                    .WithInitialSize(20)
+                    .FromComponentInNewPrefab(_bullet)
+                    .UnderTransformGroup("Bullets"));
+            // Container.BindFactory<Bullet.Bullet, Bullet.Bullet.Factory>().FromComponentInNewPrefab(_bullet);
             // Container.BindFactory<Bullet.Bullet.SpawnData,Bullet.TestBullet, Bullet.TestBullet.Factory>().FromComponentInNewPrefab(_Testbullet);
 
             Container.BindFactory<Enemy.Enemy, Enemy.Enemy.Factory>()
@@ -90,9 +91,9 @@ namespace Game.Scripts.Battle.Main
             Container.BindExecutionOrder<InputHandler>(-100000);
         }
 
-        // class BulletScriptPool : MonoPoolableMemoryPool<Bullet.Bullet.SpawnData, IMemoryPool,Bullet.Bullet>
-        // {
-        // }
+        class BulletScriptPool : MonoPoolableMemoryPool<Bullet.Bullet.SpawnData, IMemoryPool,Bullet.Bullet>
+        {
+        }
 
         class EnemyScriptPool : MonoPoolableMemoryPool<IMemoryPool,Enemy.Enemy>
         {
