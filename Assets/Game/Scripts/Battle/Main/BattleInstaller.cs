@@ -68,8 +68,8 @@ namespace Game.Scripts.Battle.Main
             Container.BindFactoryCustomInterface<Bullet.Bullet.SpawnData, Bullet.Interfaces.IBullet,BulletFactory,IBulletFactory>()
                 .FromFactory<CustomBulletFactory>();
 
-            Container.BindFactory<Bullet.Bullet, Bullet.Bullet.Factory>().FromSubContainerResolve().ByNewContextPrefab(_bullet);
-            // Container.BindFactory<Bullet.Bullet, Bullet.Bullet.Factory>().FromComponentInNewPrefab(_bullet);
+            // Container.BindFactory<Bullet.Bullet, Bullet.Bullet.Factory>().FromSubContainerResolve().ByNewContextPrefab(_bullet);
+            Container.BindFactory<Bullet.Bullet, Bullet.Bullet.Factory>().FromComponentInNewPrefab(_bullet);
             // Container.BindFactory<Bullet.Bullet.SpawnData,Bullet.TestBullet, Bullet.TestBullet.Factory>().FromComponentInNewPrefab(_Testbullet);
 
             Container.BindFactory<Enemy.Enemy, Enemy.Enemy.Factory>()

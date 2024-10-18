@@ -11,7 +11,7 @@ namespace Game.Scripts.Players.Handlers
 {
     public class PlayerShootHandler : ITickable
     {
-        private readonly Bullet.Bullet.Factory _factory;
+        private readonly IBulletFactory _bulletFactory;
 
         [Inject] private IMover _player;
         [Inject] private PlayerInputState _playerInputState;
@@ -22,17 +22,13 @@ namespace Game.Scripts.Players.Handlers
         // [Inject]
         // private TestFactory.TestFactory.ObjFactory _customFactory;
 
-        [Inject]
-        private IBulletFactory _bulletFactory;
+        // [Inject]
+        // private IBulletFactory _bulletFactory;
         // private Bullet.BulletFactory _bulletFactory;
 
-        // public PlayerShootHandler(Bullet.Bullet.Factory factory)
-        // {
-        //      _factory = factory;
-        // }
-
-        public PlayerShootHandler()
+        public PlayerShootHandler(IBulletFactory factory)
         {
+            _bulletFactory = factory;
         }
 
         public void Tick()
@@ -49,7 +45,7 @@ namespace Game.Scripts.Players.Handlers
             var spawnData = new Bullet.Bullet.SpawnData(type, Position, Rotation);
 
             // var bullet = _factory.Create(spawnData);
-            _bulletFactory.Create(spawnData);
+            CreateBullet(spawnData);
 
             // var obj = _customFactory.Create(new TestFactory.TestFactory.SpawnData(Position, Rotation));
             // obj.OnCreated();
@@ -58,6 +54,11 @@ namespace Game.Scripts.Players.Handlers
             {
                 e.OnPlayerShoot();
             }
+        }
+
+        public void CreateBullet(Bullet.Bullet.SpawnData data)
+        {
+            _bulletFactory.Create(data);
         }
     }
 }
