@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Codice.Client.Commands.WkTree;
 using Game.Scripts.Battle.Misc;
 using Game.Scripts.Enemy.Data;
@@ -8,6 +9,7 @@ using Game.Scripts.Enemy.Handlers;
 using Game.Scripts.Enemy.Main;
 using Game.Scripts.Enemy.UI;
 using Game.Scripts.Helpers;
+using Game.Scripts.Names;
 using Game.Scripts.RPG;
 using PlasticGui.Configuration.CloudEdition.Welcome;
 using rStarUtility.Generic.Infrastructure;
@@ -24,7 +26,7 @@ namespace Game.Scripts.Enemy
     /// </summary>
 
     // [ExecuteInEditMode]
-    public class Enemy : MonoBehaviour,IMover, IPoolable<IMemoryPool>
+    public class Enemy : MonoBehaviour, IMover, IPoolable<IMemoryPool>
     {
         #region Public Variables
 
@@ -32,11 +34,14 @@ namespace Game.Scripts.Enemy
 
         public bool Moveable => _moveable.GetState();
 
-        // [Inject]
-        public EnemyData _data { get; set; }
+        [Inject] public EnemyData _data { get; set; }
 
-        [Inject(Id = "NormalEnemy")]
-        public Rigidbody2D rigidbody2D { get; set; }
+        /// <summary>
+        /// 敵人身上擁有的屬性
+        /// </summary>
+        public ReadOnlyCollection<Stat> Stats => _stats.Contents;
+
+        [Inject(Id = "NormalEnemy")] public Rigidbody2D rigidbody2D { get; set; }
 
         public Transform trans { get; set; }
 
@@ -53,22 +58,18 @@ namespace Game.Scripts.Enemy
 
         #region Private Variables
 
-        [Inject]
-        private IMoveable _moveable;
+        [Inject] private IMoveable _moveable;
 
-        [Inject]
-        private IEnemyDataFactory _enemyDataFactory;
+        // [Inject]
+        // private IEnemyDataFactory _enemyDataFactory;
 
         private GenericRepository<Stat> _stats = new GenericRepository<Stat>();
 
-        [Inject(Id = "NormalEnemy")]
-        private EnemyHpBar _enemyHpBarUIHandler;
+        [Inject(Id = "NormalEnemy")] private EnemyHpBar _enemyHpBarUIHandler;
 
-        [Inject(Id = "NormalEnemy")]
-        private SpriteRenderer _spriteRenderer;
+        [Inject(Id = "NormalEnemy")] private SpriteRenderer _spriteRenderer;
 
-        [Inject]
-        private List<NormalEnemyDieObserver> _normalEnemyDieObserver;
+        [Inject] private List<NormalEnemyDieObserver> _normalEnemyDieObserver;
 
         #endregion
 
@@ -96,7 +97,7 @@ namespace Game.Scripts.Enemy
         public void Construct(EnemyData data)
         {
             // _data = data;
-            _data = _enemyDataFactory.Create();
+            // _data = _enemyDataFactory.Create();
 
             _spriteRenderer.sprite = _data._visualData._Sprite;
         }
@@ -114,7 +115,6 @@ namespace Game.Scripts.Enemy
 
             _pool.Despawn(this);
             Destroy(gameObject);
-
         }
 
         public Vector2 GetPosition()
@@ -124,17 +124,24 @@ namespace Game.Scripts.Enemy
 
         public float GetStatFinalValue(string statName)
         {
-            return 0;
+            var finalValue = 0f;
+            var (contains, stat) = FindStat(statName);
+            if (contains)
+            {
+                finalValue = stat.Amount;
+            }
+
+            return finalValue;
         }
 
         public void OnDespawned()
         {
-
         }
 
         public void OnSpawned(IMemoryPool p1)
         {
             _pool = p1;
+            InitStats();
         }
 
         public void SetPosition(Vector2 newPos)
@@ -160,17 +167,35 @@ namespace Game.Scripts.Enemy
 
         public void TakeDamage()
         {
-            // _data._domaindata.life -= 1;
-            _data.hp -= 1;
-            var percent = _data.hp / _data.maxhp;
+            // 讀取當前Stat
+            var nowHp = GetStatFinalValue(StatNames.Hp);
+            Debug.Log(nowHp);
+
+            // 扣血
+            nowHp -= 1;
+
+            // 設定當前Stat
+            SetStatAmount(StatNames.Hp, nowHp);
+
+            // 取得更新後的Stat
+            var newHp =  GetStatFinalValue(StatNames.Hp);
+            Debug.Log(newHp);
+
+            var percent = newHp / _data.maxhp;
             _enemyHpBarUIHandler.SetPercent(percent);
 
             _enemyHpBarUIHandler.DoFlash();
 
-            if(_data.hp <= 0)
+            if (newHp <= 0)
             {
                 Die();
             }
+        }
+
+        [Indent]
+        private void Init()
+        {
+            InitStats();
         }
 
         #endregion
@@ -185,7 +210,7 @@ namespace Game.Scripts.Enemy
 
         private void InitStats()
         {
-
+            _stats.Add(new Stat(_data.hp));
         }
 
         #endregion

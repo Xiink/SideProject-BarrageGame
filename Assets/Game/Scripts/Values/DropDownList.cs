@@ -10,6 +10,7 @@ namespace Game.Scripts.Values
         {
             {"基礎數值 / 移動速度" , StatNames.MoveSpeed},
             {"基礎數值 / 攻擊力" , StatNames.Atk},
+            {"基礎數值 / 生命值" , StatNames.Hp},
         };
 
         public static ValueDropdownList<string> GetAllStatNames => GetBaseStatNames;

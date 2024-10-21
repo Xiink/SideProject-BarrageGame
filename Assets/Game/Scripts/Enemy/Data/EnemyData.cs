@@ -7,6 +7,7 @@ using UnityEngine.UIElements;
 using Zenject;
 using Assets.Game.Scripts.Enemy.Data;
 using Game.Scripts.Enemy.Phases;
+using Game.Scripts.RPG;
 
 namespace Game.Scripts.Enemy.Data
 {
@@ -33,7 +34,7 @@ namespace Game.Scripts.Enemy.Data
         public EnemyPhase Behaviour;
 
         public float maxhp = 10;
-        public float hp = 10;
+        public Stat.Data hp;
 
         public override void InstallBindings()
         {

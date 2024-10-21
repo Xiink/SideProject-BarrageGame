@@ -97,24 +97,23 @@ namespace Game.Tests
             var statDatas = new List<Stat.Data> { new Stat.Data(StatNames.MoveSpeed, 999) };
             Bind_Instance(new PlayerCharacter.Data() { statDatas = statDatas });
 
-            // Container.BindFactoryCustomInterface<Bullet.SpawnData,IBullet,BulletFactory,IBulletFactory>()
-            //     .FromFactory<CustomBulletFactory>();
-            // GameObject _bullet = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Game/Datas/Bullet.prefab");
-            // Container.BindFactory<Bullet, Bullet.Factory>().FromComponentInNewPrefab(_bullet);
-            var IFactory = Substitute.For<IBulletFactory>();
-            Bind_Instance(IFactory);
+            Bind_SubContainer_Requireds(Container);
+
+            Container.BindFactoryCustomInterface<Bullet.SpawnData,IBullet,BulletFactory,IBulletFactory>()
+                .FromFactory<CustomBulletFactory>();
+            GameObject _bullet = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Game/Datas/Bullet.prefab");
+            Container.BindFactory<Bullet, Bullet.Factory>().FromComponentInNewPrefab(_bullet);
+            // var IFactory = Substitute.For<IBulletFactory>();
+            // Bind_Instance(IFactory);
 
             var shootHandler = Given_A_PlayerShootHandler();
             var playerCharacter = Resolve<PlayerCharacter>();
 
-            // IFactory.Create(new Bullet.SpawnData(BulletTypes.Other,Vector3.zero,Quaternion.identity)).Returns(Substitute.For<IBullet>());
-            //
-            // shootHandler.Tick();
             var spawnData = new Bullet.SpawnData(BulletTypes.Other, Vector3.zero, Quaternion.identity);
             shootHandler.CreateBullet(spawnData);
+            // IFactory.Received(1).Create(spawnData);
 
-            IFactory.Received(1).Create(spawnData);
-            // Assert.AreEqual(1,Object.FindObjectsOfType<Bullet>().Length);
+            Assert.AreEqual(1,Object.FindObjectsOfType<Bullet>().Length);
         }
 
         [Test(Description = "設定數值時，會限制數值最大最小值")]

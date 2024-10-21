@@ -4,5 +4,6 @@ namespace Game.Scripts.Names
     {
         public const string MoveSpeed = "MoveSpeed";
         public const string Atk = "Atk";
+        public const string Hp = "Hp";
     }
 }

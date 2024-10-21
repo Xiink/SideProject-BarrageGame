@@ -25,7 +25,7 @@ namespace Game.Scripts.Enemy.Main
             // Container.BindInterfacesAndSelfTo<EnemyStateManager>().AsSingle();
             // Container.BindInterfacesAndSelfTo<EnemyFlowControl>().AsSingle();
 
-            Container.Bind<IEnemyDataFactory>().To<EnemyDataFactory>().AsTransient().WithArguments(enemyData);
+            // Container.Bind<IEnemyDataFactory>().To<EnemyDataFactory>().AsTransient().WithArguments(enemyData);
 
             // // 使用工厂创建的 EnemyData 绑定 Enemy
             // Container.Bind<Enemy>().AsTransient().OnInstantiated<Enemy>((ctx, enemy) =>
