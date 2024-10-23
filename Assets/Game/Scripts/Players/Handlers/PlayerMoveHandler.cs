@@ -1,6 +1,7 @@
 using Game.Scripts.Battle.Misc;
 using Game.Scripts.Names;
 using Game.Scripts.Players.Main;
+using Game.Scripts.UI;
 using rStarUtility.Util.Helper;
 using UnityEngine;
 using Zenject;
@@ -15,6 +16,7 @@ namespace Game.Scripts.Players.Handlers
         [Inject] private PlayerInputState _playerInputState;
         [Inject] private ITimeProvider _timeProvider;
         [Inject] private ICameraProvider _cameraProvider;
+        [Inject] private LeavelBoundary _leavelBoundary;
 
         public void Tick()
         {

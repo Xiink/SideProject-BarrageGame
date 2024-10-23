@@ -61,7 +61,7 @@ namespace Game.Scripts.Players.Main
 
         public void AddForce(Vector3 force)
         {
-            throw new NotImplementedException();
+            this.GetComponent<Rigidbody2D>().AddForce(force);
         }
 
         public float GetStatFinalValue(string statName)

@@ -30,6 +30,7 @@ namespace Game.Scripts.Battle.Main
             TestInstaller();
 
             Container.BindInstance<Camera>(mainCamera);
+            Container.Bind<LeavelBoundary>().AsSingle();
             Container.Bind<ITimeProvider>().To<TimeProvider>().AsSingle();
             Container.Bind<ICameraProvider>().To<CameraProvider>().AsSingle();
             Container.Bind<IMoveable>().To<Moveable>().AsSingle();
