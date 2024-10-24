@@ -77,10 +77,10 @@ namespace Game.Scripts.Enemy
 
         private void Update()
         {
-            Debug.Log(this + $"{_data._domaindata.life}");
+            // Debug.Log(this + $"{_data._domaindata.life}");
 
             // 如果是_data.hp已經分開了
-            Debug.Log(this + $"{_data.hp}");
+            // Debug.Log(this + $"{_data.hp}");
         }
 
         #endregion
@@ -210,7 +210,8 @@ namespace Game.Scripts.Enemy
 
         private void InitStats()
         {
-            _stats.Add(new Stat(_data.hp));
+            _data._domaindata.Datas.ForEach(data => _stats.Add(new Stat(data)));
+            // _stats.Add(new Stat(_data.hp));
         }
 
         #endregion

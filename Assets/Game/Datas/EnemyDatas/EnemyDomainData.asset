@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0714309563cf13b44827a59275b2d5b6, type: 3}
   m_Name: EnemyDomainData
   m_EditorClassIdentifier: 
-  life: 10
-  mp: 0.83
-  speed: 4.19
-  x: 5.07
-  y: 1.76
+  Datas:
+  - name: Hp
+    amount: 10
+  - name: MoveSpeed
+    amount: 5

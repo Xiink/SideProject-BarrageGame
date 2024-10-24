@@ -1,5 +1,6 @@
 using Game.Scripts.Battle.Misc;
 using Game.Scripts.Enemy.Data;
+using Game.Scripts.Names;
 using UnityEngine;
 using Zenject;
 
@@ -25,7 +26,8 @@ namespace Game.Scripts.Enemy.Handlers
         {
             if(_enemy.Moveable == false) return;
 
-            var moveSpeed = _data._domaindata.speed;
+            // var moveSpeed = _data._domaindata.speed;
+            var moveSpeed = _enemy.GetStatFinalValue(StatNames.MoveSpeed);
             var movement = _timeProvider.GetDeltaTime() * moveSpeed * MoveDirection;
             var newPos = movement + _enemy.GetPosition();
 

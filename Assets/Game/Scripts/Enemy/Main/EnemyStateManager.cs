@@ -41,7 +41,7 @@ namespace Game.Scripts.Enemy.Main
             // if(_enemy.Moveable == false) return;
             //
             // _currentStateHandler.FixedUpdate();
-
+            _enemyFollowState.FixedUpdate();
             fsm.OnLogic();
         }
 
