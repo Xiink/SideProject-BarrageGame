@@ -34,14 +34,16 @@ namespace Game.Scripts.Enemy
 
         public bool Moveable => _moveable.GetState();
 
-        [Inject] public EnemyData _data { get; set; }
+        [Inject]
+        public EnemyData _data { get; set; }
 
         /// <summary>
         /// 敵人身上擁有的屬性
         /// </summary>
         public ReadOnlyCollection<Stat> Stats => _stats.Contents;
 
-        [Inject(Id = "NormalEnemy")] public Rigidbody2D rigidbody2D { get; set; }
+        [Inject(Id = "NormalEnemy")]
+        public Rigidbody2D rigidbody2D { get; set; }
 
         public Transform trans { get; set; }
 
@@ -58,30 +60,19 @@ namespace Game.Scripts.Enemy
 
         #region Private Variables
 
-        [Inject] private IMoveable _moveable;
+        [Inject]
+        private IMoveable _moveable;
 
-        // [Inject]
-        // private IEnemyDataFactory _enemyDataFactory;
+        [Inject(Id = "NormalEnemy")]
+        private EnemyHpBar _enemyHpBarUIHandler;
+
+        [Inject(Id = "NormalEnemy")]
+        private SpriteRenderer _spriteRenderer;
+
+        [Inject]
+        private List<NormalEnemyDieObserver> _normalEnemyDieObserver;
 
         private GenericRepository<Stat> _stats = new GenericRepository<Stat>();
-
-        [Inject(Id = "NormalEnemy")] private EnemyHpBar _enemyHpBarUIHandler;
-
-        [Inject(Id = "NormalEnemy")] private SpriteRenderer _spriteRenderer;
-
-        [Inject] private List<NormalEnemyDieObserver> _normalEnemyDieObserver;
-
-        #endregion
-
-        #region Unity events
-
-        private void Update()
-        {
-            // Debug.Log(this + $"{_data._domaindata.life}");
-
-            // 如果是_data.hp已經分開了
-            // Debug.Log(this + $"{_data.hp}");
-        }
 
         #endregion
 
@@ -96,25 +87,19 @@ namespace Game.Scripts.Enemy
         [Inject]
         public void Construct(EnemyData data)
         {
-            // _data = data;
-            // _data = _enemyDataFactory.Create();
-
             _spriteRenderer.sprite = _data._visualData._Sprite;
         }
 
         public void Die()
         {
-            // Destroy(gameObject);
-
-            Debug.Log("Die");
-
+            // 觸發死亡事件，一一呼叫有繼承INormalEnemyDieObserver的物件
             foreach (var e in _normalEnemyDieObserver)
             {
                 e.OnNormalEnemyDie();
             }
 
             _pool.Despawn(this);
-            Destroy(gameObject);
+            // Destroy(gameObject);
         }
 
         public Vector2 GetPosition()
@@ -165,26 +150,11 @@ namespace Game.Scripts.Enemy
             }
         }
 
-        public void TakeDamage()
+        public void TakeDamage(float damage)
         {
-            // 讀取當前Stat
-            var nowHp = GetStatFinalValue(StatNames.Hp);
-            Debug.Log(nowHp);
+            var newHp = CalculateHp(damage, out var percent);
 
-            // 扣血
-            nowHp -= 1;
-
-            // 設定當前Stat
-            SetStatAmount(StatNames.Hp, nowHp);
-
-            // 取得更新後的Stat
-            var newHp =  GetStatFinalValue(StatNames.Hp);
-            Debug.Log(newHp);
-
-            var percent = newHp / _data.maxhp;
-            _enemyHpBarUIHandler.SetPercent(percent);
-
-            _enemyHpBarUIHandler.DoFlash();
+            UpdateEnemyHpBarUI(percent);
 
             if (newHp <= 0)
             {
@@ -192,10 +162,29 @@ namespace Game.Scripts.Enemy
             }
         }
 
-        [Indent]
-        private void Init()
+        public float CalculateHp(float damage, out float percent)
         {
-            InitStats();
+            // 讀取當前Stat
+            var nowHp = GetStatFinalValue(StatNames.Hp);
+
+            // 扣血
+            nowHp -= damage;
+
+            // 設定當前Stat
+            SetStatAmount(StatNames.Hp, nowHp);
+
+            // 取得更新後的Stat
+            var newHp =  GetStatFinalValue(StatNames.Hp);
+
+            percent = newHp / _data.maxhp;
+            return newHp;
+        }
+
+        private void UpdateEnemyHpBarUI(float percent)
+        {
+            _enemyHpBarUIHandler.SetPercent(percent);
+
+            _enemyHpBarUIHandler.DoFlash();
         }
 
         #endregion
@@ -208,7 +197,13 @@ namespace Game.Scripts.Enemy
             return findStat;
         }
 
-        private void InitStats()
+        [Indent]
+        private void Init()
+        {
+            InitStats();
+        }
+
+        public void InitStats()
         {
             _data._domaindata.Datas.ForEach(data => _stats.Add(new Stat(data)));
             // _stats.Add(new Stat(_data.hp));

@@ -8,19 +8,16 @@ using Zenject;
 
 namespace Game.Scripts.Enemy.States
 {
-    public class EnemyEnterState : IState
+    public class EnemyEnterState : IEnemyState
     {
-        [Inject] private IMover _enemy;
+        #region Public Variables
 
         public float moveSpeed = 5f; // 移動速度
         public float squareSize = 5f; // 正方形邊長
 
-        private Vector3 startPos; // 起始位置
-        private Vector3 targetPos; // 目標位置
+        #endregion
 
-        private Direction currentDirection = Direction.Right;
-
-        private Queue<string> Actions = new Queue<string>();
+        #region Private Variables
 
         enum Direction
         {
@@ -30,27 +27,64 @@ namespace Game.Scripts.Enemy.States
             Down
         };
 
+        [Inject] private IMover _enemy;
+
+        private Vector3 startPos; // 起始位置
+        private Vector3 targetPos; // 目標位置
+
+        private Direction currentDirection = Direction.Right;
+
+        private Queue<string> Actions = new Queue<string>();
+
         private bool finish = true;
 
-        public void OnEnter()
-        {
-            startPos = _enemy.transform.position;
-            targetPos = startPos + Vector3.right * squareSize;
-
-            Actions.Enqueue("Delay");
-            Actions.Enqueue("SquareMove");
-        }
+        // public void OnEnter()
+        // {
+        //     Debug.Log("Enter EnemyEnterState");
+        //     // startPos = _enemy.transform.position;
+        //     // targetPos = startPos + Vector3.right * squareSize;
+        //     //
+        //     // Actions.Enqueue("Delay");
+        //     // Actions.Enqueue("SquareMove");
+        // }
 
 
         string _currentAction = string.Empty;
-        public async void OnUpdate()
+
+        #endregion
+
+        #region Unity events
+
+        public void Update()
         {
         }
 
-        public void OnExit()
+        #endregion
+
+        #region Public Methods
+
+        public void EnterState()
         {
-            throw new System.NotImplementedException();
+            Debug.Log("Enter EnemyEnterState");
         }
+
+        public void ExitState()
+        {
+        }
+
+        public void FixedUpdate()
+        {
+            SquareMove();
+        }
+        // public async void OnUpdate()
+        // {
+        //     SquareMove();
+        // }
+        //
+        // public void OnExit()
+        // {
+        //     // throw new System.NotImplementedException();
+        // }
 
         public bool SquareMove()
         {
@@ -102,10 +136,16 @@ namespace Game.Scripts.Enemy.States
             return result;
         }
 
+        #endregion
+
+        #region Private Methods
+
         async Task<bool> Delay(int time)
         {
             await Task.Delay(time);
             return true;
         }
+
+        #endregion
     }
 }

@@ -24,6 +24,8 @@ namespace Game.Scripts.Enemy.States
 
         public void EnterState()
         {
+            Debug.Log("Enter EnemyFollowState");
+
             _strafeRight = Random.Range(0, 1) == 0;
             _lastStrafeChangeTime = Time.realtimeSinceStartup;
         }

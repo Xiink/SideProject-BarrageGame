@@ -37,9 +37,11 @@ namespace Game.Scripts.Enemy.Main
             // });
 
             Container.BindInterfacesTo<EnemyMoveHandler>().AsSingle().WithArguments(GetComponent<IMover>());
-            Container.BindInterfacesTo<EnemyEnterState>().AsSingle().WithArguments(GetComponent<IMover>());
+            // Container.BindInterfacesTo<EnemyEnterState>().AsSingle().WithArguments(GetComponent<IMover>());
+            Container.BindInterfacesAndSelfTo<EnemyEnterState>().AsSingle().WithArguments(GetComponent<IMover>());
 
-            Container.BindInterfacesAndSelfTo<EnemyStateManager>().AsSingle().WithArguments(GetComponent<IMover>());
+            // Container.BindInterfacesAndSelfTo<EnemyStateManager>().AsSingle().WithArguments(GetComponent<IMover>());
+            Container.BindInterfacesAndSelfTo<EnemyStateManager>().AsSingle();
             Container.BindInterfacesAndSelfTo<EnemyFollowState>().AsSingle().WithArguments(GetComponent<IMover>());
 
             Container.Bind<EnemyFlowControl>().AsSingle();

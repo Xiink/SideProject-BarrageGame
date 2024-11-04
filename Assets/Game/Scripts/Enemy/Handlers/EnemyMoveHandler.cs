@@ -11,8 +11,8 @@ namespace Game.Scripts.Enemy.Handlers
         [Inject]
         private IMover _enemy;
 
-        [Inject]
-        public EnemyData _data;
+        // [Inject]
+        // public EnemyData _data;
 
         [Inject]
         private ITimeProvider _timeProvider;
@@ -26,7 +26,6 @@ namespace Game.Scripts.Enemy.Handlers
         {
             if(_enemy.Moveable == false) return;
 
-            // var moveSpeed = _data._domaindata.speed;
             var moveSpeed = _enemy.GetStatFinalValue(StatNames.MoveSpeed);
             var movement = _timeProvider.GetDeltaTime() * moveSpeed * MoveDirection;
             var newPos = movement + _enemy.GetPosition();

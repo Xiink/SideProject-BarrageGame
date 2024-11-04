@@ -4,6 +4,7 @@ using Game.Scripts.Battle.Misc;
 using Game.Scripts.Enemy;
 using Game.Scripts.Enemy.Data;
 using Game.Scripts.Enemy.Handlers;
+using Game.Scripts.Enemy.UI;
 using Game.Scripts.Names;
 using Game.Scripts.Players.Main;
 using Game.Scripts.RPG;
@@ -23,15 +24,29 @@ namespace Game.Tests
             var moveHandler = Given_A_EnemyMoveHandler();
             var enemy = Resolve<Enemy>();
 
-
-            enemy._data._domaindata = ScriptableObject.CreateInstance<DomainData>();
-            enemy._data._domaindata.speed = 1;
+            enemy._data._domaindata.Datas = new List<Stat.Data>();
+            enemy._data._domaindata.Datas.Add(new Stat.Data(StatNames.MoveSpeed, 1));
+            enemy.InitStats();
 
             moveHandler.Move(new Vector2(1,1));
             enemy.Trans.ShouldTransformPositionBe(1, 1);
-            enemy._data._domaindata.speed = 5;
+            enemy.SetStatAmount(StatNames.MoveSpeed, 5);
             moveHandler.Move(new Vector2(1,1));
             enemy.Trans.ShouldTransformPositionBe(6, 6);
+        }
+
+        [Test(Description = "扣血，正確計算剩餘生命值")]
+        public void Deduct_Enemy_Hp_Correct()
+        {
+            var enemy = NewEnemy();
+
+            enemy._data._domaindata.Datas = new List<Stat.Data>();
+            enemy._data._domaindata.Datas.Add(new Stat.Data(StatNames.Hp, 10));
+            enemy.InitStats();
+
+            enemy.CalculateHp(1, out var percent);
+
+            Assert.AreEqual(9, enemy.GetStatFinalValue(StatNames.Hp));
         }
 
         [Test(Description = "Add Force")]
@@ -74,14 +89,24 @@ namespace Game.Tests
                 moveable.GetState().Returns(true);
             }
 
-            Bind_Instance(ScriptableObject.CreateInstance<DomainData>());
+            // Bind_Instance(ScriptableObject.CreateInstance<DomainData>());
             Bind_Instance(ScriptableObject.CreateInstance<EnemyData>());
+            var enemyData = Container.Resolve<EnemyData>();
+            enemyData._domaindata = ScriptableObject.CreateInstance<DomainData>();
+            enemyData._visualData = ScriptableObject.CreateInstance<VisualData>();
             // Bind_Instance(ScriptableObject.CreateInstance<VisualData>());
             // Container.Bind<EnemyData>().FromScriptableObjectResource("Assets/Game/Datas/NormalEnemyData.asset");
+
             Bind_InterfacesAndSelfTo_From_NewGameObject<Enemy>();
 
-            Container.Bind<Rigidbody2D>().FromNewComponentOnNewGameObject().AsSingle();
-            var rigibody2d = Container.Resolve<Rigidbody2D>();
+            Container.Bind<EnemyHpBar>().WithId("NormalEnemy").FromNewComponentOnNewGameObject().AsSingle();
+            var enemyHpBar = Container.ResolveId<EnemyHpBar>("NormalEnemy");
+
+            Container.Bind<SpriteRenderer>().WithId("NormalEnemy").FromNewComponentOnNewGameObject().AsSingle();
+            var spriteRenderer = Container.ResolveId<SpriteRenderer>("NormalEnemy");
+
+            Container.Bind<Rigidbody2D>().WithId("NormalEnemy").FromNewComponentOnNewGameObject().AsSingle();
+            var rigibody2d = Container.ResolveId<Rigidbody2D>("NormalEnemy");
 
             var enemy = Resolve<Enemy>();
 

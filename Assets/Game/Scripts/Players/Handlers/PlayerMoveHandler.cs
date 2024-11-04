@@ -16,7 +16,7 @@ namespace Game.Scripts.Players.Handlers
         [Inject] private PlayerInputState _playerInputState;
         [Inject] private ITimeProvider _timeProvider;
         [Inject] private ICameraProvider _cameraProvider;
-        [Inject] private LeavelBoundary _leavelBoundary;
+        // [Inject] private LeavelBoundary _leavelBoundary;
 
         public void Tick()
         {
