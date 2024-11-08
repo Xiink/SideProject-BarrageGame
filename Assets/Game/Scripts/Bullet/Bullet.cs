@@ -9,6 +9,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using VInspector.Libs;
 using Zenject;
+using ITimeProvider = Game.Scripts.Battle.Misc.ITimeProvider;
 
 namespace Game.Scripts.Bullet
 {
@@ -19,7 +20,7 @@ namespace Game.Scripts.Bullet
         Other
     }
 
-    public class Bullet : MonoBehaviour,IBullet
+    public class Bullet : MonoBehaviour, IBullet
     {
         #region Public Variables
 
@@ -35,6 +36,8 @@ namespace Game.Scripts.Bullet
 
         [Inject] private Bullet.Data _data;
 
+        [Inject] private ITimeProvider _timeProvider;
+
         private GenericRepository<Stat> _stats = new GenericRepository<Stat>();
 
         #endregion
@@ -43,11 +46,11 @@ namespace Game.Scripts.Bullet
 
         private void Update()
         {
-            transform.Translate(FindStat(StatNames.MoveSpeed).stat.Amount * Time.deltaTime * -1, 0, 0);
+            transform.Translate(FindStat(StatNames.MoveSpeed).stat.Amount * _timeProvider.GetDeltaTime() * -1, 0, 0);
 
-            if (Time.realtimeSinceStartup - _startTime > _lifeTime)
+            if (_timeProvider.GetRealtimeSinceStartup() - _startTime > _lifeTime)
             {
-                this.Destroy();
+                Destroy(gameObject);
                 // _pool.Despawn(this);
                 // Destroy(this);
             }
@@ -76,11 +79,10 @@ namespace Game.Scripts.Bullet
 
         public void OnSpawned(Bullet.SpawnData data, IMemoryPool p3)
         {
-            //speed = speed;
             _type = data.Type;
             _pool = p3;
 
-            _startTime = Time.realtimeSinceStartup;
+            _startTime = _timeProvider.GetRealtimeSinceStartup();
 
             transform.position = data.Position;
             transform.rotation = data.Rotation;
@@ -88,22 +90,11 @@ namespace Game.Scripts.Bullet
 
         public void OnSpawned(Bullet.SpawnData data)
         {
-            _startTime = Time.realtimeSinceStartup;
+            _startTime = _timeProvider.GetRealtimeSinceStartup();
 
             _type = data.Type;
             transform.position = data.Position;
             transform.rotation = data.Rotation;
-        }
-
-        public void OnTriggerEnter(Collider other)
-        {
-            Debug.Log("Enter");
-            var enemy = other.GetComponent<Enemy.Enemy>();
-            if (enemy != null && _type == BulletTypes.FromPlayer)
-            {
-                enemy.TakeDamage(1);
-                _pool.Despawn(this);
-            }
         }
 
         #endregion
@@ -125,28 +116,6 @@ namespace Game.Scripts.Bullet
         private void InitStats()
         {
             _data.statDatas.ForEach(data => _stats.Add(new Stat(data)));
-        }
-
-        private void OnCollisionEnter(Collision other)
-        {
-            Debug.Log("CollisionEnter");
-            var enemy = other.gameObject.GetComponent<Enemy.Enemy>();
-            if (enemy != null && _type == BulletTypes.FromPlayer)
-            {
-                enemy.TakeDamage(1);
-                _pool.Despawn(this);
-            }
-        }
-
-        private void OnCollisionEnter2D(Collision2D other)
-        {
-            Debug.Log("CollisionEnter2D");
-            var enemy = other.gameObject.GetComponent<Enemy.Enemy>();
-            if (enemy != null && _type == BulletTypes.FromPlayer)
-            {
-                enemy.TakeDamage(1);
-                _pool.Despawn(this);
-            }
         }
 
         private void OnTriggerEnter2D(Collider2D other)
@@ -185,7 +154,8 @@ namespace Game.Scripts.Bullet
         }
 
         public class Factory : PlaceholderFactory<Bullet>
-        {}
+        {
+        }
 
         public class SpawnData
         {

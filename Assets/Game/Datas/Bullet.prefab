@@ -116,7 +116,7 @@ MonoBehaviour:
   _components:
   - {fileID: 1673035808008343047}
   _identifier: 
-  _useSceneContext: 0
+  _useSceneContext: 1
   _context: {fileID: 0}
   _bindType: 0
 --- !u!114 &-4324358306981814477
