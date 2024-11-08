@@ -205,6 +205,8 @@ namespace Game.Scripts.Enemy
 
         public void InitStats()
         {
+            _stats = new GenericRepository<Stat>();
+            UpdateEnemyHpBarUI(100);
             _data._domaindata.Datas.ForEach(data => _stats.Add(new Stat(data)));
             // _stats.Add(new Stat(_data.hp));
         }
@@ -217,5 +219,10 @@ namespace Game.Scripts.Enemy
         {}
 
         #endregion
+
+        private void Update()
+        {
+            Debug.Log(FindStat(StatNames.Hp).stat.Amount);
+        }
     }
 }

@@ -17,7 +17,7 @@ MonoBehaviour:
     - name: MoveSpeed
       amount: 30
     - name: Atk
-      amount: 100
+      amount: 5
     - name: BulletLifeTime
       amount: 3
     - name: BulletSize
