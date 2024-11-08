@@ -11,9 +11,17 @@ namespace Game.Scripts.Values
             {"基礎數值 / 移動速度" , StatNames.MoveSpeed},
             {"基礎數值 / 攻擊力" , StatNames.Atk},
             {"基礎數值 / 生命值" , StatNames.Hp},
+            { "子彈數值 / 持續時間", StatNames.BulletLifeTime },
+            { "子彈數值 / 大小", StatNames.BulletSize },
         };
 
         public static ValueDropdownList<string> GetAllStatNames => GetBaseStatNames;
+
+        public static ValueDropdownList<string> GetBulletStatNames = new ValueDropdownList<string>()
+        {
+            { "子彈數值 / 持續時間", StatNames.BulletLifeTime },
+            { "子彈數值 / 大小", StatNames.BulletSize },
+        };
 
         public static ValueDropdownList<DataList> GetStructureNames = new ValueDropdownList<DataList>()
         {

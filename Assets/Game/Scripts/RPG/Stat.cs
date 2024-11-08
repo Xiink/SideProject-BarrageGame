@@ -82,7 +82,7 @@ namespace Game.Scripts.RPG
                 IsUniqueList = true,
                 DropdownHeight = 250, DropdownWidth = 300)]
             private string name;
-
+            
             [MinValue("@MinValue")]
             [MaxValue("@MaxValue")]
             [SuffixLabel("@AmountSuffix", overlay: true, Icon = SdfIconType.ShieldFillExclamation)]

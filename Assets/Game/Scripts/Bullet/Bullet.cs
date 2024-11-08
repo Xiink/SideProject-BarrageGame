@@ -38,7 +38,7 @@ namespace Game.Scripts.Bullet
 
         [Inject] private ITimeProvider _timeProvider;
 
-        private GenericRepository<Stat> _stats = new GenericRepository<Stat>();
+        private GenericRepository<Stat> _basestats = new GenericRepository<Stat>();
 
         #endregion
 
@@ -103,7 +103,7 @@ namespace Game.Scripts.Bullet
 
         private (bool containsStat, Stat stat) FindStat(string statName)
         {
-            (bool contains, Stat stat) findStat = _stats.FindContent(_ => _.Name == statName);
+            (bool contains, Stat stat) findStat = _basestats.FindContent(_ => _.Name == statName);
             return findStat;
         }
 
@@ -115,16 +115,16 @@ namespace Game.Scripts.Bullet
 
         private void InitStats()
         {
-            _data.statDatas.ForEach(data => _stats.Add(new Stat(data)));
+            _data.statDatas.ForEach(data => _basestats.Add(new Stat(data)));
         }
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            Debug.Log("Enter");
             var enemy = other.GetComponent<Enemy.Enemy>();
             if (enemy != null && _type == BulletTypes.FromPlayer)
             {
-                enemy.TakeDamage(1);
+                var damage = FindStat(StatNames.Atk).stat.Amount;
+                enemy.TakeDamage(damage);
                 // _pool.Despawn(this);
             }
         }
