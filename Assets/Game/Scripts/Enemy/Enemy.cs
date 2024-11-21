@@ -197,16 +197,17 @@ namespace Game.Scripts.Enemy
             return findStat;
         }
 
-        [Indent]
-        private void Init()
-        {
-            InitStats();
-        }
+        // [Inject]
+        // private void Init()
+        // {
+        //     InitStats();
+        // }
 
         public void InitStats()
         {
             _stats = new GenericRepository<Stat>();
             UpdateEnemyHpBarUI(100);
+
             _data._domaindata.Datas.ForEach(data => _stats.Add(new Stat(data)));
             // _stats.Add(new Stat(_data.hp));
         }

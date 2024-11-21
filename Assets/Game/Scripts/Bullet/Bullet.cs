@@ -9,7 +9,7 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using VInspector.Libs;
 using Zenject;
-using ITimeProvider = Game.Scripts.Battle.Misc.ITimeProvider;
+using ITimeProvider = Game.Scripts.Battle.Misc.ITimeProvider; // 要使用我自己創的ITimeProvider
 
 namespace Game.Scripts.Bullet
 {
@@ -32,8 +32,8 @@ namespace Game.Scripts.Bullet
         #region Private Variables
 
         float _startTime;
-        float _lifeTime = 3f;
 
+        // 從Prefab上的GameObjectContext進行注入
         [Inject] private Bullet.Data _data;
 
         [Inject] private ITimeProvider _timeProvider;
@@ -47,6 +47,8 @@ namespace Game.Scripts.Bullet
         private void Update()
         {
             transform.Translate(FindStat(StatNames.MoveSpeed).stat.Amount * _timeProvider.GetDeltaTime() * -1, 0, 0);
+
+            var _lifeTime = GetStatFinalValue(StatNames.BulletLifeTime);
 
             if (_timeProvider.GetRealtimeSinceStartup() - _startTime > _lifeTime)
             {
@@ -116,6 +118,14 @@ namespace Game.Scripts.Bullet
         private void InitStats()
         {
             _data.statDatas.ForEach(data => _basestats.Add(new Stat(data)));
+
+            SetVisualStat();
+        }
+
+        private void SetVisualStat()
+        {
+            var size = GetStatFinalValue(StatNames.BulletSize);
+            transform.localScale = new Vector3(transform.localScale.x,transform.localScale.y * size, transform.localScale.z);
         }
 
         private void OnTriggerEnter2D(Collider2D other)
@@ -125,6 +135,7 @@ namespace Game.Scripts.Bullet
             {
                 var damage = FindStat(StatNames.Atk).stat.Amount;
                 enemy.TakeDamage(damage);
+                Destroy(gameObject);
                 // _pool.Despawn(this);
             }
         }

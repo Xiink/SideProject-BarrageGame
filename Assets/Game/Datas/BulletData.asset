@@ -21,4 +21,4 @@ MonoBehaviour:
     - name: BulletLifeTime
       amount: 3
     - name: BulletSize
-      amount: 5
+      amount: 1

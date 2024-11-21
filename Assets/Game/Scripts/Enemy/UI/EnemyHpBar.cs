@@ -37,6 +37,12 @@ namespace Game.Scripts.Enemy.UI
 
         private bool flashEffectExecuting = false;
 
+        public void Init()
+        {
+            // 重置進度條
+            SetPercent(100);
+        }
+
         public void SetPercent(float percent)
         {
             // 0 ~ 1
