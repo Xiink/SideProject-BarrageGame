@@ -20,11 +20,6 @@ using Zenject;
 
 namespace Game.Scripts.Enemy
 {
-    /// <summary>
-    /// TODO:目前可以透過工廠模式來讓每個Enemy有自己的EnemyData，但內部的DomainData還是沒有
-    /// TODO:確認EnemyData中的DomainData及VisualData有沒有更好的設定方式
-    /// </summary>
-
     // [ExecuteInEditMode]
     public class Enemy : MonoBehaviour, IMover, IPoolable<IMemoryPool>
     {
@@ -42,6 +37,9 @@ namespace Game.Scripts.Enemy
         /// </summary>
         public ReadOnlyCollection<Stat> Stats => _stats.Contents;
 
+        /// <summary>
+        /// 自ZenjectBliding的Compoents上注入
+        /// </summary>
         [Inject(Id = "NormalEnemy")]
         public Rigidbody2D rigidbody2D { get; set; }
 
@@ -63,9 +61,15 @@ namespace Game.Scripts.Enemy
         [Inject]
         private IMoveable _moveable;
 
+        /// <summary>
+        /// 自ZenjectBliding的Compoents上注入
+        /// </summary>
         [Inject(Id = "NormalEnemy")]
         private EnemyHpBar _enemyHpBarUIHandler;
 
+        /// <summary>
+        /// 自ZenjectBliding的Compoents上注入
+        /// </summary>
         [Inject(Id = "NormalEnemy")]
         private SpriteRenderer _spriteRenderer;
 

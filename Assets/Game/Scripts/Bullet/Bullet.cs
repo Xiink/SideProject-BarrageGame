@@ -20,6 +20,10 @@ namespace Game.Scripts.Bullet
         Other
     }
 
+    /// <summary>
+    /// 繼承一個IBullet介面，並且實作這個介面
+    /// 有新的Bullet同樣繼承這個介面來讓Factory可以生產
+    /// </summary>
     public class Bullet : MonoBehaviour, IBullet
     {
         #region Public Variables
@@ -164,6 +168,9 @@ namespace Game.Scripts.Bullet
             #endregion
         }
 
+        /// <summary>
+        /// Zenject Factory
+        /// </summary>
         public class Factory : PlaceholderFactory<Bullet>
         {
         }
